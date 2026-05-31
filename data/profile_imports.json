@@ -1,0 +1,39 @@
+{
+  "profiles": [
+    {
+      "profile_id": "xiangyue-脱敏样本",
+      "display_name": "Xiangyue 脱敏样本",
+      "created_at": "2026-05-31T16:32:09",
+      "recent_searches": [
+        "椿庐",
+        "咖啡",
+        "下午茶",
+        "地道江西菜"
+      ],
+      "favorite_pois": [
+        "seed by seed 囍得咖啡酒馆",
+        "SAANCI 山池咖啡馆"
+      ],
+      "browsed_pois": [
+        "安静",
+        "有设计感",
+        "城市地标"
+      ],
+      "favorite_categories": [
+        "咖啡/茶饮",
+        "景点"
+      ],
+      "favorite_districts": [
+        "南山区",
+        "福田区"
+      ],
+      "frequent_districts": [
+        "南山区"
+      ],
+      "budget_preference": 220.0,
+      "max_wait_preference": 18,
+      "walk_preference": "适中",
+      "coupon_sensitive": false
+    }
+  ]
+}
