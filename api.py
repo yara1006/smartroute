@@ -674,7 +674,25 @@ def intent_with_context(
         constraints.max_walk_minutes = min(constraints.max_walk_minutes, 10)
         if not (route_context and route_context.transport_strategy):
             constraints.transport_mode = "短步行+打车"
-    if not constraints.preferred_districts:
+    explicit_context_location = bool(
+        route_context
+        and (
+            route_context.city_hint
+            or route_context.anchor_text
+            or route_context.anchor_location
+            or route_context.selected_pois
+        )
+    )
+    normalized_city = normalize_city_hint(constraints.city or next_intent.city)
+    is_non_shanghai_city = bool(normalized_city and normalized_city != "上海")
+    profile_districts = set(context.favorite_districts + context.frequent_districts)
+    if explicit_context_location or is_non_shanghai_city:
+        constraints.preferred_districts = [
+            district
+            for district in constraints.preferred_districts
+            if district not in profile_districts
+        ]
+    if not constraints.preferred_districts and not explicit_context_location and not is_non_shanghai_city:
         constraints.preferred_districts = context.frequent_districts[:2]
 
     category_values = {category.value for category in constraints.preferred_categories}
@@ -790,6 +808,20 @@ def city_hint_from(query: str, intent: ParsedIntent, route_context: RouteContext
     return ""
 
 
+def requires_live_location_data(query: str, intent: ParsedIntent, route_context: RouteContext | None = None) -> bool:
+    if route_context and (
+        route_context.city_hint
+        or route_context.anchor_text
+        or route_context.anchor_location
+        or route_context.selected_pois
+    ):
+        return True
+    if extract_anchor_text(query, route_context):
+        return True
+    city_hint = normalize_city_hint(city_hint_from(query, intent, route_context))
+    return bool(city_hint and city_hint != "上海")
+
+
 def context_poi_to_poi(
     item: RouteContextPOI,
     amap_client: AMapClient,
@@ -879,6 +911,7 @@ def build_dynamic_candidates(
     intent: ParsedIntent,
     meituan_context: MeituanUserContext,
     amap_client: AMapClient,
+    allow_anchor_fallback: bool = True,
 ) -> tuple[list[tuple[POI, float]], list[POI], AMapAnchor | None, list[str]]:
     route_context = request.route_context
     city_hint = city_hint_from(request.query, intent, route_context)
@@ -908,10 +941,17 @@ def build_dynamic_candidates(
     if amap_pois:
         trace_notes.append(f"高德 POI：围绕 {anchor.text} {radius}m 召回 {len(amap_pois)} 个真实候选。")
     else:
+        amap_error_text = "；".join(amap_client.recent_errors())
         trace_notes.append(
-            f"高德 POI：{'未配置 Web 服务 Key' if not amap_client.enabled else '召回不足'}，使用 {anchor.text} 附近锚点兜底 POI。"
+            f"高德 POI：{'未配置 Web 服务 Key' if not amap_client.enabled else '召回不足或调用失败'}。"
+            + (f" 最近错误：{amap_error_text}" if amap_error_text else "")
         )
-        amap_pois = fallback_pois_around_anchor(anchor, categories)
+        if allow_anchor_fallback:
+            trace_notes.append(f"离线兜底：使用 {anchor.text} 附近锚点 POI，不进入上海本地 RAG。")
+            amap_pois = fallback_pois_around_anchor(anchor, categories)
+        else:
+            trace_notes.append("真实地点模式：已禁止使用本地 RAG，避免跨城生成错误路线。")
+            amap_pois = []
 
     pinned_ids = {poi.id for poi in selected_pois}
     candidates: list[tuple[POI, float]] = [(poi, 3.0) for poi in selected_pois]
@@ -1834,6 +1874,7 @@ def plan_route(request: PlanRequest) -> PlanResponse:
     profile = agents.profile_manager.get_profile(request.user_id)
     intent = agents.intent_parser.parse(request.query, user_profile=profile.model_dump())
     intent = intent_with_context(intent, meituan_context, request.route_context)
+    live_location_required = requires_live_location_data(request.query, intent, request.route_context)
     agents.profile_manager.infer_profile_from_chat(request.user_id, intent.extracted_preferences)
     profile = profile_with_context(agents.profile_manager.get_profile(request.user_id), meituan_context)
     dynamic_candidates, pinned_pois, anchor, context_trace = build_dynamic_candidates(
@@ -1841,9 +1882,13 @@ def plan_route(request: PlanRequest) -> PlanResponse:
         intent,
         meituan_context,
         amap_client,
+        allow_anchor_fallback=not live_location_required,
     )
     if dynamic_candidates:
         candidates = dynamic_candidates
+    elif live_location_required:
+        candidates = [(poi, 3.0) for poi in pinned_pois]
+        context_trace.append("真实地点模式：高德未返回可用候选，未使用本地 RAG 回退。请检查高德 Web 服务 Key、服务权限或地点解析。")
     else:
         candidates = agents.poi_retriever.retrieve(intent, user_profile=profile)
     candidates = apply_context_to_candidates(candidates, meituan_context)
@@ -1921,8 +1966,15 @@ def adjust_route(request: AdjustRequest) -> AdjustResponse:
         intent,
         meituan_context,
         amap_client,
+        allow_anchor_fallback=not requires_live_location_data(request.query, intent, request.route_context),
     )
-    candidates = dynamic_candidates or agents.poi_retriever.retrieve(intent, user_profile=profile, max_candidates=60)
+    if dynamic_candidates:
+        candidates = dynamic_candidates
+    elif requires_live_location_data(request.query, intent, request.route_context):
+        candidates = []
+        context_trace.append("真实地点模式：高德未返回可用调整候选，未使用本地 RAG 回退。")
+    else:
+        candidates = agents.poi_retriever.retrieve(intent, user_profile=profile, max_candidates=60)
     candidates = apply_context_to_candidates(candidates, meituan_context)
 
     llm_adjustment = classify_adjustment_with_deepseek(request.instruction, request.route)
@@ -2116,9 +2168,14 @@ def replace_poi(request: ReplaceRequest) -> ReplaceResponse:
         intent,
         meituan_context,
         amap_client,
+        allow_anchor_fallback=not requires_live_location_data(request.query, intent, replace_context),
     )
-    fallback_candidates = agents.poi_retriever.retrieve(intent, user_profile=profile, max_candidates=40)
-    candidates = dynamic_candidates or fallback_candidates
+    if dynamic_candidates:
+        candidates = dynamic_candidates
+    elif requires_live_location_data(request.query, intent, replace_context):
+        candidates = []
+    else:
+        candidates = agents.poi_retriever.retrieve(intent, user_profile=profile, max_candidates=40)
     candidates = apply_context_to_candidates(candidates, meituan_context)
 
     options: list[ReplacementOption] = []

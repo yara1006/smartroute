@@ -77,6 +77,7 @@ class AMapClient:
     def __init__(self, key: str | None = None, timeout: float = 3.0) -> None:
         self.key = (key if key is not None else os.getenv("AMAP_WEB_SERVICE_KEY", "")).strip()
         self.timeout = timeout
+        self.errors: list[str] = []
 
     @property
     def enabled(self) -> bool:
@@ -116,7 +117,8 @@ class AMapClient:
                     anchor = anchor_from_amap_poi_item(item, clean_text, city_hint)
                     if anchor:
                         return anchor
-            except Exception:
+            except Exception as exc:
+                self._remember_error("place/text", exc)
                 pass
 
         known = resolve_known_anchor(clean_text)
@@ -141,7 +143,8 @@ class AMapClient:
                     if location:
                         city = normalize_city_hint(str(first.get("city") or city_hint or ""))
                         return AMapAnchor(text=clean_text, city=city or "未知城市", location=location, source="amap_geocode")
-            except Exception:
+            except Exception as exc:
+                self._remember_error("geocode/geo", exc)
                 return None
         return None
 
@@ -162,8 +165,8 @@ class AMapClient:
 
         for category in categories:
             type_codes = CATEGORY_TYPE_CODES.get(category, "")
-            query_terms = list(dict.fromkeys([*keywords_for_category(category), *terms]))
-            for keyword in query_terms[:3]:
+            query_terms = list(dict.fromkeys([*keywords_for_category(category), *terms]))[:3]
+            for keyword in [*query_terms, ""]:
                 try:
                     payload = self._get(
                         "/v5/place/around",
@@ -184,7 +187,9 @@ class AMapClient:
                             continue
                         seen.add(poi.id)
                         pois.append(poi)
-                except Exception:
+                except Exception as exc:
+                    label = keyword or "types-only"
+                    self._remember_error(f"place/around:{category.value}:{label}", exc)
                     continue
         return sort_by_anchor_distance(pois)
 
@@ -235,7 +240,8 @@ class AMapClient:
                 polyline=dedupe_polyline(polyline),
                 source="amap_direction",
             )
-        except Exception:
+        except Exception as exc:
+            self._remember_error(f"direction/{api_mode}", exc)
             return None
 
     def _transit_segment(
@@ -285,7 +291,8 @@ class AMapClient:
                 polyline=dedupe_polyline(polyline),
                 source="amap_transit",
             )
-        except Exception:
+        except Exception as exc:
+            self._remember_error("direction/transit", exc)
             return None
 
     def _get(self, path: str, params: dict[str, str]) -> dict[str, Any]:
@@ -300,6 +307,14 @@ class AMapClient:
         if status != "1" or infocode != "10000":
             raise RuntimeError(payload.get("info") or "AMap request failed")
         return payload
+
+    def _remember_error(self, scope: str, error: Exception) -> None:
+        message = str(error).replace(self.key, "***") if self.key else str(error)
+        self.errors.append(f"{scope}: {message}")
+        self.errors = self.errors[-8:]
+
+    def recent_errors(self) -> list[str]:
+        return self.errors[-5:]
 
 
 def normalize_city_hint(city: str | None) -> str | None:

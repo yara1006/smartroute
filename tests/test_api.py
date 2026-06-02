@@ -56,31 +56,51 @@ def test_unknown_poi_prompt_returns_complete_route():
     assert payload["tool_trace"]
 
 
-def test_shenzhen_anchor_uses_dynamic_location_without_amap_key(monkeypatch):
-    monkeypatch.delenv("AMAP_WEB_SERVICE_KEY", raising=False)
+def test_explicit_anchor_does_not_fallback_to_shanghai_local_rag(monkeypatch):
+    class FakeAMapClient:
+        enabled = True
+
+        def resolve_anchor(self, text=None, city_hint=None, anchor_location=None):
+            return api.AMapAnchor(
+                text=text or "北京金鱼胡同",
+                city="北京",
+                location=GeoPoint(latitude=39.915536, longitude=116.415007),
+                source="fake_poi_text",
+            )
+
+        def search_pois(self, anchor, categories, keywords=None, radius_meters=3000, limit_per_category=8):
+            return []
+
+        def route_segment(self, origin, destination, mode="步行+公交", city=None):
+            return None
+
+        def recent_errors(self):
+            return ["place/around: mock no result"]
+
+    monkeypatch.setattr(api, "AMapClient", FakeAMapClient)
     client = TestClient(app)
     response = client.post(
         "/api/plan",
         json={
-            "query": "我下午要去深圳大学附近玩3个小时，帮我规划一个路线",
-            "user_id": "shenzhen-anchor-test-user",
+            "query": "在北京金鱼胡同附近玩3个小时，帮我规划一个路线",
+            "user_id": "beijing-anchor-no-local-rag-test-user",
             "route_context": {
                 "source": "xiaotuan",
-                "city_hint": "深圳",
-                "anchor_text": "深圳大学",
+                "city_hint": "北京",
+                "anchor_text": "北京金鱼胡同",
             },
         },
     )
 
     assert response.status_code == 200
     payload = response.json()
-    route = payload["routes"][0]["route"]
-    assert payload["intent"]["city"] == "深圳"
-    assert payload["intent"]["extracted_preferences"]["anchor_text"] == "深圳大学"
-    assert len(route["stops"]) >= 3
-    assert route["stops"][0]["poi"]["latitude"] < 23
-    assert route["stops"][0]["poi"]["longitude"] < 114.5
-    assert any("高德 POI" in item for item in payload["trace"])
+    assert payload["intent"]["city"] == "北京"
+    assert "黄浦区" not in payload["intent"]["constraints"]["preferred_districts"]
+    assert "徐汇区" not in payload["intent"]["constraints"]["preferred_districts"]
+    assert payload["intent"]["extracted_preferences"]["anchor_text"] == "北京金鱼胡同"
+    assert payload["candidates"] == []
+    assert payload["routes"] == []
+    assert any("未使用本地 RAG" in item for item in payload["trace"])
 
 
 def test_short_xiaotuan_place_query_extracts_anchor_from_planning_phrase(monkeypatch):
@@ -229,7 +249,24 @@ def test_amap_route_polyline_is_exposed_when_adapter_returns_segments(monkeypatc
 
 
 def test_transport_strategy_from_route_context_is_used(monkeypatch):
-    monkeypatch.delenv("AMAP_WEB_SERVICE_KEY", raising=False)
+    class FakeAMapClient:
+        enabled = True
+
+        def resolve_anchor(self, text=None, city_hint=None, anchor_location=None):
+            return api.AMapAnchor(
+                text=text or "深圳大学",
+                city="深圳",
+                location=GeoPoint(latitude=22.53332, longitude=113.93646),
+                source="fake",
+            )
+
+        def search_pois(self, anchor, categories, keywords=None, radius_meters=3000, limit_per_category=8):
+            return api.fallback_pois_around_anchor(anchor, categories, count_per_category=1)
+
+        def route_segment(self, origin, destination, mode="步行+公交"):
+            return None
+
+    monkeypatch.setattr(api, "AMapClient", FakeAMapClient)
     client = TestClient(app)
     response = client.post(
         "/api/plan",
