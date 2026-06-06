@@ -649,12 +649,12 @@ function SmartRouteEntryCard({ title, text, action, onOpen, loading }) {
   );
 }
 
-function SearchScene({ scenario, onOpen, loading }) {
+function SearchScene({ scenario, onOpen, onOpenXiaotuan, loading }) {
   return (
     <div className="meituan-page">
       <div className="mt-header">
         <strong>搜索</strong>
-        <span>问小团</span>
+        <button className="mt-header-link" onClick={onOpenXiaotuan}>问小团</button>
       </div>
       <div className="mt-searchbar">深圳大学 附近 下午怎么玩 <b>搜索</b></div>
       <section className="mt-section">
@@ -680,71 +680,145 @@ function SearchScene({ scenario, onOpen, loading }) {
   );
 }
 
-function XiaotuanScene({ scenario, routeIntent, onAsk, onOpen, loading }) {
+function xiaotuanStatusFor(routeIntent, loading, loadingLabel, plan) {
+  const label = loadingLabel || "";
+  if (loading && (label.includes("小团") || label.includes("SmartRoute"))) {
+    return { label: loadingLabel || "分析中", tone: "thinking", detail: "正在判断是否需要接入路线规划能力。" };
+  }
+  if (!routeIntent) {
+    return null;
+  }
+  if (routeIntent.action === "open_plugin") {
+    return {
+      label: plan ? "已调用 SmartRoute" : "已调用 SmartRoute",
+      tone: "smart-route",
+      detail: plan ? "路线结果已生成，点击查看规划详情。" : "正在进入路线规划流程。",
+    };
+  }
+  if (routeIntent.action === "ask_confirm" || routeIntent.action === "ask_clarification") {
+    return {
+      label: "需要继续确认",
+      tone: "confirm",
+      detail: routeIntent.follow_up_question || routeIntent.reason || "需要补齐信息后再决定是否调用 SmartRoute。",
+    };
+  }
+  return {
+    label: "已转普通小团回答",
+    tone: "normal",
+    detail: routeIntent.reason || "当前问题不需要调用 SmartRoute。",
+  };
+}
+
+function XiaotuanScene({ scenario, routeIntent, plan, onAsk, onOpen, onViewRoute, loading, loadingLabel }) {
   const [draft, setDraft] = useState(scenario.query);
+  const [submitted, setSubmitted] = useState("");
   const slotLabels = {
     location: "地点/区域",
     time: "时间/时长",
     activities: "活动类型",
   };
+  const status = xiaotuanStatusFor(routeIntent, loading, loadingLabel, plan);
+  const submittedText = submitted || (routeIntent ? draft : "");
+  const statusClickable = routeIntent?.action === "ask_confirm" || (routeIntent?.action === "open_plugin" && plan);
 
   useEffect(() => {
     setDraft(scenario.query);
+    setSubmitted("");
   }, [scenario.query]);
 
+  function submit() {
+    const trimmed = draft.trim();
+    if (!trimmed) return;
+    setSubmitted(trimmed);
+    onAsk(trimmed);
+  }
+
+  function openStatusTarget() {
+    if (routeIntent?.action === "open_plugin" && plan) {
+      onViewRoute();
+      return;
+    }
+    if (routeIntent?.action === "ask_confirm") {
+      onOpen(routeIntent.planning_query || submittedText || draft);
+    }
+  }
+
   return (
-    <div className="meituan-page xiaotuan-page">
-      <div className="mt-header">
-        <span>搜索</span>
-        <strong>问小团</strong>
-      </div>
-      <div className="xiaotuan-composer">
-        <textarea
-          value={draft}
-          onChange={(event) => setDraft(event.target.value)}
-          placeholder="附近有什么好吃的？"
-        />
-        <button onClick={() => onAsk(draft)} disabled={loading}>{loading ? "识别中" : "发送"}</button>
-      </div>
-      <section className="mt-section">
-        <h3>试试这样问</h3>
-        <div className="xiaotuan-prompts">
-          {["附近有什么好吃的", "深圳大学附近下午3小时怎么玩", "外滩下午3小时怎么玩"].map((item) => (
-            <button key={item} onClick={() => setDraft(item)}>✦ {item}</button>
-          ))}
+    <div className="xiaotuan-chat-page">
+      <div className="xiaotuan-chat-head">
+        <div className="xiaotuan-round-icon" aria-hidden="true">‹</div>
+        <div className="xiaotuan-title">
+          <span className="xiaotuan-avatar">小</span>
+          <strong>小团</strong>
         </div>
-      </section>
-      {routeIntent && (
-        <section className={`intent-card ${routeIntent.action}`}>
-          <span>{routeIntent.source === "llm" ? "DeepSeek 意图识别" : "规则兜底识别"} · {(routeIntent.confidence * 100).toFixed(0)}%</span>
-          <h3>
-            {routeIntent.action === "open_plugin" && "识别为路线规划需求"}
-            {routeIntent.action === "ask_confirm" && "要不要排成路线？"}
-            {routeIntent.action === "normal_answer" && "先按普通小团回答"}
-          </h3>
-          <p>{routeIntent.follow_up_question || routeIntent.reason}</p>
-          {routeIntent.detected_slots?.missing_slots?.length > 0 && (
-            <div className="missing-slots">
-              还需要确认：{routeIntent.detected_slots.missing_slots.map((slot) => slotLabels[slot] || slot).join("、")}
-            </div>
-          )}
-          {routeIntent.action === "ask_confirm" && (
-            <div className="intent-actions">
-              <button onClick={() => onOpen(routeIntent.planning_query)} disabled={loading}>排路线</button>
-              <button>只看推荐</button>
-            </div>
-          )}
-          {routeIntent.action === "normal_answer" && (
-            <SmartRouteEntryCard
-              title="也可以排成路线"
-              text="如果你想把推荐地点串起来，SmartRoute 可以继续接手。"
-              action="把这些地点排成路线"
-              onOpen={() => onOpen(`${draft}，帮我规划成一条可执行路线`)}
-              loading={loading}
-            />
-          )}
-        </section>
-      )}
+        <div className="xiaotuan-round-icon" aria-hidden="true">≡</div>
+      </div>
+
+      <div className="xiaotuan-chat-body">
+        {submittedText && (
+          <div className="xiaotuan-user-row">
+            <div className="xiaotuan-user-bubble">{submittedText}</div>
+          </div>
+        )}
+
+        {status && (
+          <button
+            className={`xiaotuan-analysis ${status.tone}`}
+            onClick={openStatusTarget}
+            disabled={loading || !statusClickable}
+            title={status.detail}
+          >
+            <span>{status.label}</span>
+            <b>›</b>
+          </button>
+        )}
+
+        {routeIntent?.detected_slots?.missing_slots?.length > 0 && (
+          <div className="xiaotuan-slot-note">
+            还需要确认：{routeIntent.detected_slots.missing_slots.map((slot) => slotLabels[slot] || slot).join("、")}
+          </div>
+        )}
+
+        {routeIntent?.action === "ask_confirm" && (
+          <div className="xiaotuan-inline-actions">
+            <button onClick={() => onOpen(routeIntent.planning_query || submittedText || draft)} disabled={loading}>排路线</button>
+            <button disabled={loading}>只看推荐</button>
+          </div>
+        )}
+
+        {routeIntent?.action === "normal_answer" && (
+          <div className="xiaotuan-other-card">
+            <strong>其他能力处理</strong>
+            <p>{routeIntent.reason || "这个问题先由普通小团回答；如果你想串成路线，可以继续让 SmartRoute 接手。"}</p>
+          </div>
+        )}
+
+        {!submittedText && !status && (
+          <div className="xiaotuan-empty-prompts">
+            {["深圳湾公园附近有什么好玩的", "云南大学玩3个小时", "中国美术馆附近逛街吃饭"].map((item) => (
+              <button key={item} onClick={() => setDraft(item)}>{item}</button>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <div className="xiaotuan-chat-footer">
+        <button className="xiaotuan-think" type="button">✣ 深度思考</button>
+        <div className="xiaotuan-input-bar">
+          <input
+            value={draft}
+            onChange={(event) => setDraft(event.target.value)}
+            onKeyDown={(event) => {
+              if (event.key === "Enter") {
+                event.preventDefault();
+                submit();
+              }
+            }}
+            placeholder="发消息或按住说话"
+          />
+          <button onClick={submit} disabled={loading || !draft.trim()} title="发送">↑</button>
+        </div>
+      </div>
     </div>
   );
 }
@@ -1218,6 +1292,8 @@ function PhoneExperience({
   routeIntent,
   onOpenRoute,
   onAskXiaotuan,
+  onViewRoute,
+  onOpenXiaotuanScene,
   profileMode,
   profileSource,
   profileSources,
@@ -1265,14 +1341,24 @@ function PhoneExperience({
         <span>5G</span>
       </div>
       <div className="phone-content meituan-shell">
-        {scenario.id === "search" && <SearchScene scenario={scenario} onOpen={onOpenRoute} loading={loading} />}
+        {scenario.id === "search" && (
+          <SearchScene
+            scenario={scenario}
+            onOpen={onOpenRoute}
+            onOpenXiaotuan={onOpenXiaotuanScene}
+            loading={loading}
+          />
+        )}
         {scenario.id === "xiaotuan" && (
           <XiaotuanScene
             scenario={scenario}
             routeIntent={routeIntent}
+            plan={plan}
             onAsk={onAskXiaotuan}
             onOpen={onOpenRoute}
+            onViewRoute={onViewRoute}
             loading={loading}
+            loadingLabel={loadingLabel}
           />
         )}
         {scenario.id === "favorites" && <FavoritesScene scenario={scenario} onOpen={onOpenRoute} loading={loading} />}
@@ -1870,14 +1956,14 @@ export default function App() {
     }
   }
 
-  async function requestPlanWithPreference(nextQuery, explicitContext = null, label = "规划中") {
+  async function requestPlanWithPreference(nextQuery, explicitContext = null, label = "规划中", openRoute = true) {
     const nextContext = contextForScenario(activeScenario, nextQuery, explicitContext);
     if (!sessionProfileReady) {
-      setPendingPlan({ query: nextQuery, context: nextContext, label });
+      setPendingPlan({ query: nextQuery, context: nextContext, label, openRoute });
       setPreferenceModalOpen(true);
       return;
     }
-    await generatePlan(nextQuery, true, profileMode, label, profileSource, importedProfileId, nextContext);
+    await generatePlan(nextQuery, openRoute, profileMode, label, profileSource, importedProfileId, nextContext);
   }
 
   async function submitJudgePreference(answers) {
@@ -1904,7 +1990,7 @@ export default function App() {
       setPreferenceModalOpen(false);
       setPendingPlan(null);
       setFeedbackStatus("已生成评委即时画像，本次路线会按这些偏好规划。");
-      await generatePlan(pending.query, true, profileMode, pending.label || "评委画像规划中", "manual_import", nextProfileId, nextContext);
+      await generatePlan(pending.query, pending.openRoute ?? true, profileMode, pending.label || "评委画像规划中", "manual_import", nextProfileId, nextContext);
     } catch (err) {
       setError(err.message || "评委画像生成失败");
     } finally {
@@ -1922,7 +2008,7 @@ export default function App() {
     setSessionProfileReady(true);
     setPreferenceModalOpen(false);
     setPendingPlan(null);
-    generatePlan(pending.query, true, profileMode, pending.label || "规划中", profileSource, importedProfileId, pending.context);
+    generatePlan(pending.query, pending.openRoute ?? true, profileMode, pending.label || "规划中", profileSource, importedProfileId, pending.context);
   }
 
   function selectScenario(scenario) {
@@ -2017,7 +2103,7 @@ export default function App() {
           city_hint: inferCityHint(payload.planning_query || trimmed) || activeRouteContext?.city_hint || activeScenario.routeContext?.city_hint || APP_CURRENT_CITY,
           anchor_text: inferAnchorText(payload.planning_query || trimmed),
         });
-        await requestPlanWithPreference(payload.planning_query || trimmed, nextContext, "规划中");
+        await requestPlanWithPreference(payload.planning_query || trimmed, nextContext, "SmartRoute 调用中", false);
       }
     } catch (err) {
       setError(err.message || "意图识别失败");
@@ -2169,6 +2255,8 @@ export default function App() {
             requestPlanWithPreference(nextQuery, explicitContext, "规划中");
           }}
           onAskXiaotuan={askXiaotuan}
+          onViewRoute={() => setPhoneMode("route")}
+          onOpenXiaotuanScene={() => selectScenario(SCENARIOS.find((scenario) => scenario.id === "xiaotuan") || activeScenario)}
           profileMode={profileMode}
           profileSource={profileSource}
           profileSources={profileSources}

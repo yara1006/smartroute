@@ -31,6 +31,7 @@ body {
 }
 
 button,
+input,
 textarea {
   font: inherit;
 }
@@ -360,6 +361,16 @@ main {
   color: #777;
 }
 
+.mt-header-link {
+  margin: 0;
+  border: 0;
+  background: transparent;
+  color: #777;
+  padding: 0;
+  font-size: 26px;
+  font-weight: 800;
+}
+
 .mt-searchbar {
   height: 48px;
   border: 2px solid var(--yellow);
@@ -518,47 +529,238 @@ main {
     #e8e8e8;
 }
 
-.xiaotuan-page {
-  background: linear-gradient(180deg, #fbf7ff, #fff 160px);
-}
-
-.xiaotuan-composer {
-  border: 2px solid #8f5cff;
-  border-radius: 22px;
+.xiaotuan-chat-page {
+  min-height: 100%;
+  height: 100%;
   background: #fff;
-  padding: 14px;
   display: grid;
+  grid-template-rows: 96px 1fr 142px;
+  overflow: hidden;
+}
+
+.xiaotuan-chat-head {
+  display: grid;
+  grid-template-columns: 56px 1fr 56px;
+  align-items: center;
+  padding: 16px 18px 8px;
+}
+
+.xiaotuan-round-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  justify-self: center;
+  background: #fff;
+  color: #171717;
+  font-size: 34px;
+  line-height: 1;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.08);
+}
+
+.xiaotuan-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-width: 0;
+}
+
+.xiaotuan-title strong {
+  font-size: 25px;
+  letter-spacing: 0;
+}
+
+.xiaotuan-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 950;
+  background:
+    radial-gradient(circle at 25% 25%, #fff 0 8%, transparent 9%),
+    linear-gradient(135deg, #ffdc5f, #e875ff 48%, #58d0ff);
+}
+
+.xiaotuan-chat-body {
+  min-height: 0;
+  overflow: auto;
+  padding: 24px 28px 14px;
+}
+
+.xiaotuan-user-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 54px;
+}
+
+.xiaotuan-user-bubble {
+  max-width: 290px;
+  border-radius: 15px 15px 4px 15px;
+  padding: 14px 16px;
+  background: #efecff;
+  color: #191921;
+  font-size: 19px;
+  line-height: 1.45;
+  word-break: break-word;
+}
+
+.xiaotuan-analysis {
+  border: 0;
+  background: transparent;
+  color: #8d8d93;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0;
+  font-size: 21px;
+  letter-spacing: 0;
+}
+
+.xiaotuan-analysis b {
+  font-size: 28px;
+  line-height: 1;
+  color: #a2a2aa;
+}
+
+.xiaotuan-analysis.smart-route {
+  color: #7a4bd8;
+  font-weight: 900;
+}
+
+.xiaotuan-analysis.confirm {
+  color: #9b6a00;
+}
+
+.xiaotuan-analysis.normal {
+  color: #6b7280;
+}
+
+.xiaotuan-analysis:disabled {
+  cursor: default;
+  opacity: 1;
+}
+
+.xiaotuan-slot-note,
+.xiaotuan-other-card {
+  margin-top: 18px;
+  border-radius: 16px;
+  padding: 12px 14px;
+  background: #f8f8f8;
+  border: 1px solid #eeeeee;
+  color: #5f626a;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.xiaotuan-inline-actions {
+  margin-top: 14px;
+  display: flex;
+  gap: 10px;
+}
+
+.xiaotuan-inline-actions button {
+  height: 36px;
+  border-radius: 999px;
+  border: 1px solid #ded8f8;
+  padding: 0 14px;
+  background: #fff;
+  color: #6c43c7;
+  font-weight: 900;
+}
+
+.xiaotuan-inline-actions button:first-child {
+  background: #7a4bd8;
+  color: #fff;
+  border-color: #7a4bd8;
+}
+
+.xiaotuan-other-card strong {
+  display: block;
+  margin-bottom: 6px;
+  color: #24242a;
+}
+
+.xiaotuan-other-card p {
+  margin: 0;
+}
+
+.xiaotuan-empty-prompts {
+  display: grid;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.xiaotuan-empty-prompts button {
+  min-height: 38px;
+  border-radius: 999px;
+  border: 1px solid #eee;
+  background: #fff;
+  color: #73737d;
+  padding: 0 14px;
+  text-align: left;
+}
+
+.xiaotuan-chat-footer {
+  padding: 10px 18px 18px;
+  display: grid;
+  align-content: end;
   gap: 12px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0), #fff 28%);
 }
 
-.xiaotuan-composer textarea {
-  border: 0;
-  min-height: 92px;
-  resize: none;
-  outline: none;
-  font-size: 18px;
-  line-height: 1.5;
-}
-
-.xiaotuan-composer button {
-  justify-self: end;
-  border: 0;
+.xiaotuan-think {
+  width: max-content;
   height: 38px;
   border-radius: 999px;
-  background: #8f5cff;
-  color: #fff;
-  padding: 0 18px;
-  font-weight: 950;
+  border: 2px solid #8d60dd;
+  background: #fff;
+  color: #7d4ed4;
+  padding: 0 16px;
+  font-size: 17px;
+  font-weight: 900;
+  box-shadow: 0 8px 18px rgba(125, 78, 212, 0.08);
 }
 
-.xiaotuan-prompts {
+.xiaotuan-input-bar {
+  height: 66px;
+  border-radius: 999px;
+  border: 1px solid #ececf0;
+  background: #fff;
+  box-shadow: 0 16px 38px rgba(0, 0, 0, 0.1);
   display: grid;
+  grid-template-columns: 1fr 48px;
+  align-items: center;
+  gap: 8px;
+  padding: 0 11px 0 22px;
 }
 
-.xiaotuan-prompts button {
-  text-align: left;
-  color: #5f36c8;
-  border-radius: 14px;
+.xiaotuan-input-bar input {
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  color: #202027;
+  font-size: 18px;
+}
+
+.xiaotuan-input-bar input::placeholder {
+  color: #a8a8ad;
+}
+
+.xiaotuan-input-bar button {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 2px solid #111;
+  background: #fff;
+  color: #111;
+  font-size: 23px;
+  line-height: 1;
+  font-weight: 950;
 }
 
 .intent-card {
