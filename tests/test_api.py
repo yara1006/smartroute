@@ -800,6 +800,127 @@ def test_adjust_api_repairs_too_many_cafes(monkeypatch):
     assert "kind=reduce_category" in payload["tool_trace"][0]["output"]
 
 
+def test_adjust_reduce_cafes_prefers_walk_or_culture_over_nearest_restaurant(monkeypatch):
+    monkeypatch.setattr(api, "classify_adjustment_with_deepseek", lambda *_args, **_kwargs: None)
+
+    def make_candidate(name, category, index, price=50, rating=4.6):
+        data = make_adjust_test_poi(name, category, index, price=price, rating=rating)
+        return POI(**data)
+
+    class FakeAMapClient:
+        enabled = True
+
+        def resolve_anchor(self, text=None, city_hint=None, anchor_location=None):
+            return api.AMapAnchor(
+                text=text or "广州永庆坊",
+                city="广州",
+                location=GeoPoint(latitude=23.114, longitude=113.25),
+                source="fake_poi_text",
+            )
+
+        def search_pois(self, anchor, categories, keywords=None, radius_meters=3000, limit_per_category=8):
+            return [
+                make_candidate("陶陶居酒家", POICategory.RESTAURANT, 5, price=98, rating=4.7),
+                make_candidate("粤剧艺术博物馆", POICategory.ATTRACTION, 30, price=20, rating=4.8),
+                make_candidate("荔湾湖公园散步点", POICategory.SHOPPING, 31, price=10, rating=4.7),
+            ]
+
+        def route_segment(self, origin, destination, mode="步行+公交", city=None):
+            return None
+
+        def recent_errors(self):
+            return []
+
+    monkeypatch.setattr(api, "AMapClient", FakeAMapClient)
+    client = TestClient(app)
+    current_pois = [
+        make_adjust_test_poi("红门咖啡", POICategory.CAFE, 1, price=42, rating=4.6),
+        make_adjust_test_poi("永庆坊", POICategory.ATTRACTION, 2, price=0, rating=4.8),
+        make_adjust_test_poi("CAFE FLOWERYARDS", POICategory.CAFE, 3, price=48, rating=4.5),
+        make_adjust_test_poi("西关84 History Art Cafe", POICategory.CAFE, 4, price=52, rating=4.5),
+    ]
+
+    response = client.post(
+        "/api/adjust",
+        json={
+            "query": "广州永庆坊附近逛吃5小时，用户画像偏向咖啡店",
+            "instruction": "不要这么多咖啡，换成更适合散步的点",
+            "route": make_adjust_test_route(current_pois),
+            "user_id": "adjust-cafe-prefers-walk-user",
+            "profile_mode": "文艺体验型",
+            "route_context": {"source": "xiaotuan", "city_hint": "广州", "anchor_text": "广州永庆坊"},
+        },
+    )
+
+    assert response.status_code == 200
+    payload = response.json()
+    route_stops = payload["route"]["route"]["stops"]
+    categories = [stop["poi"]["category"] for stop in route_stops]
+    names = [stop["poi"]["name"] for stop in route_stops]
+    assert payload["adjustment_status"] in {"applied", "partial"}
+    assert categories.count("咖啡/茶饮") <= 1
+    assert any(name in names for name in ["粤剧艺术博物馆", "荔湾湖公园散步点"])
+    assert "陶陶居酒家" not in names
+
+
+def test_adjust_avoid_cafe_keeps_cafe_out_of_rebuilt_route(monkeypatch):
+    monkeypatch.setattr(api, "classify_adjustment_with_deepseek", lambda *_args, **_kwargs: None)
+
+    def make_candidate(name, category, index, price=50, rating=4.6):
+        data = make_adjust_test_poi(name, category, index, price=price, rating=rating)
+        return POI(**data)
+
+    class FakeAMapClient:
+        enabled = True
+
+        def resolve_anchor(self, text=None, city_hint=None, anchor_location=None):
+            return api.AMapAnchor(
+                text=text or "广州永庆坊",
+                city="广州",
+                location=GeoPoint(latitude=23.114, longitude=113.25),
+                source="fake_poi_text",
+            )
+
+        def search_pois(self, anchor, categories, keywords=None, radius_meters=3000, limit_per_category=8):
+            return [
+                make_candidate("陶陶居酒家", POICategory.RESTAURANT, 5, price=98, rating=4.7),
+                make_candidate("粤剧艺术博物馆", POICategory.ATTRACTION, 20, price=20, rating=4.8),
+                make_candidate("荔湾湖公园散步点", POICategory.SHOPPING, 21, price=10, rating=4.7),
+            ]
+
+        def route_segment(self, origin, destination, mode="步行+公交", city=None):
+            return None
+
+        def recent_errors(self):
+            return []
+
+    monkeypatch.setattr(api, "AMapClient", FakeAMapClient)
+    client = TestClient(app)
+    current_pois = [
+        make_adjust_test_poi("CAFE FLOWERYARDS", POICategory.CAFE, 1, price=42, rating=4.6),
+        make_adjust_test_poi("永庆坊", POICategory.ATTRACTION, 2, price=0, rating=4.8),
+        make_adjust_test_poi("LOCKER ROOM", POICategory.SHOPPING, 3, price=40, rating=4.5),
+    ]
+
+    response = client.post(
+        "/api/adjust",
+        json={
+            "query": "广州永庆坊附近逛3小时，想喝点东西，有文化点和散步地方",
+            "instruction": "不要咖啡，换成散步点",
+            "route": make_adjust_test_route(current_pois),
+            "user_id": "adjust-avoid-cafe-user",
+            "profile_mode": "文艺体验型",
+            "route_context": {"source": "xiaotuan", "city_hint": "广州", "anchor_text": "广州永庆坊"},
+        },
+    )
+
+    assert response.status_code == 200
+    payload = response.json()
+    categories = [stop["poi"]["category"] for stop in payload["route"]["route"]["stops"]]
+    assert payload["adjustment_status"] in {"applied", "partial"}
+    assert "咖啡/茶饮" not in categories
+
+
 def test_route_intent_rules_fallback(monkeypatch):
     monkeypatch.delenv("DEEPSEEK_API_KEY", raising=False)
     load_agents.cache_clear()

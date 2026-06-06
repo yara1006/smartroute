@@ -295,11 +295,16 @@ class RoutePlannerAgent:
             poi
             for poi in self.poi_db.values()
             if poi.category in categories
+            and poi.category not in constraints.avoid_categories
             and poi.id not in disliked
             and (not constraints.preferred_districts or poi.district in constraints.preferred_districts)
         ]
         if not pois and constraints.preferred_districts:
-            pois = [poi for poi in self.poi_db.values() if poi.category in categories and poi.id not in disliked]
+            pois = [
+                poi
+                for poi in self.poi_db.values()
+                if poi.category in categories and poi.category not in constraints.avoid_categories and poi.id not in disliked
+            ]
         return sorted(
             pois,
             key=lambda poi: (
@@ -486,6 +491,8 @@ class RoutePlannerAgent:
     def _can_add_poi(self, selected: list[POI], poi: POI, intent: ParsedIntent, pinned: bool) -> bool:
         if pinned:
             return True
+        if poi.category in intent.constraints.avoid_categories:
+            return False
         if poi.category not in CORE_ROUTE_CATEGORIES:
             return False
         category_count = sum(1 for item in selected if item.category == poi.category)
@@ -649,13 +656,17 @@ class RoutePlannerAgent:
 
     def _missing_required_roles(self, intent: ParsedIntent, pois: list[POI]) -> list[str]:
         required: list[tuple[str, str]] = []
-        if self._wants_drink(intent):
+        if self._wants_drink(intent) and POICategory.CAFE not in intent.constraints.avoid_categories:
             required.append(("drink", "喝点东西/休息点"))
         if self._wants_culture(intent):
             required.append(("culture", "文化点"))
         if self._wants_walk(intent):
             required.append(("walk", "散步点"))
-        if self._wants_meal(intent) and len(pois) >= 4:
+        if (
+            self._wants_meal(intent)
+            and len(pois) >= 4
+            and POICategory.RESTAURANT not in intent.constraints.avoid_categories
+        ):
             required.append(("meal", "正餐餐厅"))
         return [label for role, label in required if not any(self._poi_matches_role(poi, role, intent) for poi in pois)]
 

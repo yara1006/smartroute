@@ -2270,6 +2270,10 @@ def adjust_route(request: AdjustRequest) -> AdjustResponse:
     categories = adjustment_intent.categories
     adjustment_source = adjustment_intent.source
     adjustment_reason = adjustment_intent.reason
+    if kind == "avoid_category" and categories:
+        for category in categories:
+            if category not in intent.constraints.avoid_categories:
+                intent.constraints.avoid_categories.append(category)
     target_index = adjustment_intent.target_index if adjustment_intent.target_index is not None else choose_adjustment_target(request.route, kind)
     if adjustment_intent.target_index is None and kind in {"avoid_category", "reduce_category"}:
         candidate = None
