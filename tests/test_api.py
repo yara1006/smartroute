@@ -6,6 +6,59 @@ from core.agents.intent_parser import IntentParserAgent
 from core.models import GeoPoint, POI, POICategory
 
 
+def make_adjust_test_poi(name, category, index, price=60, wait=8, rating=4.6):
+    return {
+        "id": f"adjust-poi-{index}",
+        "name": name,
+        "category": category.value,
+        "address": "广州永庆坊附近",
+        "district": "广州",
+        "latitude": 23.114 + index * 0.001,
+        "longitude": 113.25 + index * 0.001,
+        "rating": rating,
+        "review_count": 500,
+        "price_per_person": price,
+        "avg_wait_minutes": wait,
+        "business_hours": {"open": "10:00", "close": "22:00"},
+        "tags": [category.value],
+        "ugc_summary": f"{name} 测试候选",
+        "visit_duration_minutes": 45,
+        "source": "amap",
+        "distance_from_anchor_meters": 200 + index * 100,
+    }
+
+
+def make_adjust_test_route(pois):
+    stops = []
+    for index, poi in enumerate(pois, start=1):
+        hour = 14 + index - 1
+        stops.append(
+            {
+                "order": index,
+                "poi": poi,
+                "arrival_time": f"{hour:02d}:00",
+                "departure_time": f"{hour:02d}:50",
+                "duration_minutes": 50,
+                "wait_minutes": poi["avg_wait_minutes"],
+                "transit_to_next": "步行约6分钟",
+                "transit_minutes": 6 if index < len(pois) else 0,
+                "tips": "测试路线",
+            }
+        )
+    return {
+        "id": "coffee-heavy-adjust-route",
+        "title": "荔湾文艺实时调整",
+        "description": "测试咖啡过多的调整链路",
+        "stops": stops,
+        "total_time_minutes": 260,
+        "total_cost_per_person": sum(poi["price_per_person"] for poi in pois),
+        "total_wait_minutes": sum(poi["avg_wait_minutes"] for poi in pois),
+        "total_transit_minutes": 18,
+        "highlights": ["测试路线"],
+        "warnings": [],
+    }
+
+
 def test_plan_api_returns_real_routes():
     client = TestClient(app)
     response = client.post(
@@ -620,6 +673,69 @@ def test_adjust_api_does_not_fake_improvement_when_no_better_option():
     assert payload["adjustment_status"] == "not_applied"
     assert payload["metric_deltas"]["total_wait_minutes"] == 0
     assert payload["suggested_relaxations"]
+
+
+def test_adjust_api_repairs_too_many_cafes(monkeypatch):
+    monkeypatch.setattr(api, "classify_adjustment_with_deepseek", lambda *_args, **_kwargs: None)
+
+    def make_candidate(name, category, index, price=50, rating=4.6):
+        data = make_adjust_test_poi(name, category, index, price=price, rating=rating)
+        return POI(**data)
+
+    class FakeAMapClient:
+        enabled = True
+
+        def resolve_anchor(self, text=None, city_hint=None, anchor_location=None):
+            return api.AMapAnchor(
+                text=text or "广州永庆坊",
+                city="广州",
+                location=GeoPoint(latitude=23.114, longitude=113.25),
+                source="fake_poi_text",
+            )
+
+        def search_pois(self, anchor, categories, keywords=None, radius_meters=3000, limit_per_category=8):
+            return [
+                make_candidate("粤剧艺术博物馆", POICategory.ATTRACTION, 20, price=20, rating=4.8),
+                make_candidate("荔湾湖公园散步点", POICategory.SHOPPING, 21, price=10, rating=4.7),
+                make_candidate("珠影市三宫影城", POICategory.ENTERTAINMENT, 22, price=55, rating=4.6),
+                make_candidate("西关粤菜小馆", POICategory.RESTAURANT, 23, price=88, rating=4.5),
+            ]
+
+        def route_segment(self, origin, destination, mode="步行+公交", city=None):
+            return None
+
+        def recent_errors(self):
+            return []
+
+    monkeypatch.setattr(api, "AMapClient", FakeAMapClient)
+    client = TestClient(app)
+    current_pois = [
+        make_adjust_test_poi("红门咖啡", POICategory.CAFE, 1, price=42, rating=4.6),
+        make_adjust_test_poi("永庆坊", POICategory.ATTRACTION, 2, price=0, rating=4.8),
+        make_adjust_test_poi("CAFE FLOWERYARDS", POICategory.CAFE, 3, price=48, rating=4.5),
+        make_adjust_test_poi("西关84 History Art Cafe", POICategory.CAFE, 4, price=52, rating=4.5),
+    ]
+
+    response = client.post(
+        "/api/adjust",
+        json={
+            "query": "广州永庆坊附近逛吃5小时，用户画像偏向咖啡店",
+            "instruction": "不要这么多咖啡，换成更适合散步的点",
+            "route": make_adjust_test_route(current_pois),
+            "user_id": "adjust-too-many-cafes-user",
+            "profile_mode": "文艺体验型",
+            "route_context": {"source": "xiaotuan", "city_hint": "广州", "anchor_text": "广州永庆坊"},
+        },
+    )
+
+    assert response.status_code == 200
+    payload = response.json()
+    categories = [stop["poi"]["category"] for stop in payload["route"]["route"]["stops"]]
+    assert payload["adjustment_status"] in {"applied", "partial"}
+    assert categories.count("咖啡/茶饮") <= 1
+    assert any(category in {"景点", "娱乐", "购物"} for category in categories)
+    assert payload["changed_stops"]
+    assert "kind=focus" in payload["tool_trace"][0]["output"]
 
 
 def test_route_intent_rules_fallback(monkeypatch):

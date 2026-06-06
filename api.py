@@ -1488,9 +1488,11 @@ def suggested_relaxations_for(
 
 def detect_adjustment_kind(instruction: str) -> tuple[str, set[POICategory] | None]:
     text = instruction.strip()
-    if any(word in text for word in ["太多餐厅", "太多吃的", "不要这么多餐厅"]):
+    if any(word in text for word in ["太多餐厅", "太多吃的", "不要这么多餐厅", "别这么多餐厅", "全是餐厅", "都是餐厅", "餐厅太多", "少点餐厅", "少一点餐厅"]):
         return "focus", {POICategory.ATTRACTION, POICategory.ENTERTAINMENT, POICategory.SHOPPING, POICategory.CAFE}
-    if any(word in text for word in ["换个重点", "重点", "不想都是", "太多咖啡", "太多同类", "更丰富", "换一类"]):
+    if any(word in text for word in ["不要这么多咖啡", "别这么多咖啡", "全是咖啡", "都是咖啡", "咖啡太多", "太多咖啡", "少点咖啡", "少一点咖啡", "不要全是咖啡"]):
+        return "focus", {POICategory.ATTRACTION, POICategory.ENTERTAINMENT, POICategory.SHOPPING, POICategory.RESTAURANT}
+    if any(word in text for word in ["换个重点", "重点", "不想都是", "太多同类", "更丰富", "换一类"]):
         return "focus", {POICategory.ATTRACTION, POICategory.ENTERTAINMENT, POICategory.SHOPPING, POICategory.RESTAURANT}
     if any(word in text for word in ["少走", "近一点", "距离", "别太远", "打车少"]):
         return "walk", None
@@ -1534,7 +1536,15 @@ def find_adjustment_candidate(
     if not options:
         return None
     if kind == "focus":
-        return sorted(options, key=lambda poi: (-poi.rating, poi.avg_wait_minutes, poi.price_per_person))[0]
+        return sorted(
+            options,
+            key=lambda poi: (
+                poi.category in {POICategory.RESTAURANT, POICategory.CAFE},
+                -poi.rating,
+                poi.avg_wait_minutes,
+                poi.price_per_person,
+            ),
+        )[0]
     if kind == "cheaper":
         cheaper = [poi for poi in options if poi.price_per_person < target_stop.poi.price_per_person]
         if not cheaper:
@@ -2059,6 +2069,18 @@ def adjust_route(request: AdjustRequest) -> AdjustResponse:
     adjusted_route = None
     if should_rebuild_route:
         adjusted_route = agents.route_planner.build_route_from_pois(intent, next_pois, "实时调整")
+        if adjusted_route is None and kind == "focus" and candidates:
+            repaired_pois = agents.route_planner._repair_selected_stops(
+                intent,
+                next_pois,
+                candidates,
+                max_stops=max(3, len(request.route.stops)),
+                budget=intent.constraints.budget_per_person,
+                pinned_pois=[],
+            )
+            repaired_route = agents.route_planner.build_route_from_pois(intent, repaired_pois, "实时调整")
+            if repaired_route is not None:
+                adjusted_route = repaired_route
         if adjusted_route is not None:
             adjusted_route = enrich_route_with_amap_segments(adjusted_route, amap_client, intent.constraints.transport_mode)
             structure_issues = agents.route_planner._structure_warnings(intent, [stop.poi for stop in adjusted_route.stops])

@@ -1137,7 +1137,7 @@ function RouteLoadingState({ label }) {
 
 function AdjustComposer({ onSubmit, loading }) {
   const [draft, setDraft] = useState("");
-  const quickAdjustments = ["少走路", "不要排队", "便宜点", "加晚餐", "加展览", "换个重点"];
+  const quickAdjustments = ["少走路", "不要排队", "便宜点", "不要这么多咖啡", "不要这么多餐厅", "加展览", "换个重点"];
   function submit(value = draft) {
     const trimmed = value.trim();
     if (!trimmed) return;
@@ -2113,10 +2113,10 @@ export default function App() {
         route: selectedRouteView.route,
         user_id: USER_ID,
         profile_mode: profileMode,
-          profile_source: profileSource,
-          profile_id: profileSource === "manual_import" ? importedProfileId : null,
-          route_context: activeRouteContext,
-        });
+        profile_source: profileSource,
+        profile_id: profileSource === "manual_import" ? importedProfileId : null,
+        route_context: activeRouteContext,
+      });
       const nextRoutes = plan.routes.map((routeView, index) => (
         index === selectedRouteIndex ? payload.route : routeView
       ));
@@ -2132,6 +2132,7 @@ export default function App() {
         tool_trace: plan.tool_trace || [],
       });
       setLatestAdjustment(payload);
+      setFeedbackStatus(`${statusText(payload.adjustment_status)}：${payload.adjustment_summary}`);
       const deltas = payload.metric_deltas || {};
       setAdjustmentHistory((items) => [
         ...items,

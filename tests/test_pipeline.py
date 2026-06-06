@@ -134,3 +134,24 @@ def test_route_planner_allows_explicit_restaurant_hopping():
     categories = [stop.poi.category for stop in routes[0].stops]
     assert categories.count(POICategory.RESTAURANT) >= 2
     assert any(category in {POICategory.ATTRACTION, POICategory.ENTERTAINMENT} for category in categories)
+
+
+def test_route_planner_limits_coffee_bias_for_casual_long_route():
+    pois = [
+        make_test_poi("红门咖啡", POICategory.CAFE, 1, price=42, rating=4.9),
+        make_test_poi("CAFE FLOWERYARDS", POICategory.CAFE, 2, price=48, rating=4.8),
+        make_test_poi("西关84 History Art Cafe", POICategory.CAFE, 3, price=52, rating=4.7),
+        make_test_poi("永庆坊", POICategory.ATTRACTION, 4, price=0, rating=4.8),
+        make_test_poi("粤剧艺术博物馆", POICategory.ATTRACTION, 5, price=20, rating=4.7),
+        make_test_poi("荔湾湖公园散步点", POICategory.SHOPPING, 6, price=10, rating=4.5),
+        make_test_poi("西关粤菜小馆", POICategory.RESTAURANT, 7, price=90, rating=4.6),
+    ]
+    intent = IntentParserAgent().parse("广州永庆坊附近逛吃5小时，用户画像偏向咖啡店")
+    candidates = [(poi, 9.0 - index * 0.1) for index, poi in enumerate(pois)]
+    routes = RoutePlannerAgent({poi.id: poi for poi in pois}).plan(intent, candidates, n_routes=1)
+
+    assert routes
+    categories = [stop.poi.category for stop in routes[0].stops]
+    assert categories.count(POICategory.CAFE) <= 1
+    assert categories.count(POICategory.RESTAURANT) <= 1
+    assert any(category in {POICategory.ATTRACTION, POICategory.ENTERTAINMENT, POICategory.SHOPPING} for category in categories)
