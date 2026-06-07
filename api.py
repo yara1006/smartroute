@@ -30,6 +30,7 @@ from core.models import (
     RouteContext,
     RouteContextPOI,
     RouteIntentResult,
+    RouteStop,
     UserProfile,
 )
 from core.rag.vector_store import POIVectorStore, haversine_km, transit_minutes
@@ -1560,7 +1561,7 @@ def detect_adjustment_kind(instruction: str) -> tuple[str, set[POICategory] | No
         return "cheaper", None
     if any(word in text for word in ["不排队", "少排队", "等待", "等位", "排队"]):
         return "wait", None
-    if any(word in text for word in ["晚餐", "吃饭", "餐厅", "正餐"]):
+    if any(word in text for word in ["晚餐", "吃饭", "餐厅", "正餐", "粤菜", "菜馆", "酒楼", "饭店"]):
         return "add", {POICategory.RESTAURANT}
     if any(word in text for word in ["咖啡", "下午茶", "甜品", "休息"]):
         return "add", {POICategory.CAFE}
@@ -1783,6 +1784,55 @@ def find_adjustment_candidate(
     return sorted(options, key=lambda poi: (poi.avg_wait_minutes, -poi.rating, poi.price_per_person))[0]
 
 
+def is_core_route_stop(stop: RouteStop, route: Route) -> bool:
+    anchor_words = ["永庆坊", "大学", "公园", "博物馆", "美术馆", "艺术馆", "景区", "古镇", "步行街"]
+    if stop.poi.category in {POICategory.ATTRACTION, POICategory.ENTERTAINMENT}:
+        return True
+    if any(word in stop.poi.name for word in anchor_words):
+        return True
+    return len(route.stops) <= 3 and stop.order == 2 and stop.poi.category == POICategory.SHOPPING
+
+
+def choose_add_target(route: Route, categories: set[POICategory] | None) -> int:
+    desired = categories or set()
+    if POICategory.RESTAURANT in desired:
+        replaceable_priority = [
+            POICategory.SHOPPING,
+            POICategory.CAFE,
+            POICategory.ENTERTAINMENT,
+        ]
+    elif POICategory.CAFE in desired:
+        replaceable_priority = [
+            POICategory.SHOPPING,
+            POICategory.RESTAURANT,
+            POICategory.ENTERTAINMENT,
+        ]
+    else:
+        replaceable_priority = [
+            POICategory.SHOPPING,
+            POICategory.CAFE,
+            POICategory.RESTAURANT,
+        ]
+
+    for category in replaceable_priority:
+        matches = [
+            (index, stop.poi.rating, stop.wait_minutes)
+            for index, stop in enumerate(route.stops)
+            if stop.poi.category == category and not is_core_route_stop(stop, route)
+        ]
+        if matches:
+            return min(matches, key=lambda item: (item[1], -item[2]))[0]
+
+    non_core = [
+        (index, stop.poi.rating, stop.wait_minutes)
+        for index, stop in enumerate(route.stops)
+        if not is_core_route_stop(stop, route)
+    ]
+    if non_core:
+        return min(non_core, key=lambda item: (item[1], -item[2]))[0]
+    return len(route.stops) - 1
+
+
 def choose_adjustment_target(route: Route, kind: str) -> int:
     if kind == "focus":
         seen_categories: set[POICategory] = set()
@@ -1816,6 +1866,12 @@ def choose_adjustment_target(route: Route, kind: str) -> int:
         max_index = max(transit_pairs, key=lambda item: item[1])[0]
         return min(max_index + 1, len(route.stops) - 1)
     return len(route.stops) - 1
+
+
+def add_intent_satisfied(categories: set[POICategory] | None, route: Route) -> bool:
+    if not categories:
+        return True
+    return any(stop.poi.category in categories for stop in route.stops)
 
 
 def adjustment_summary(
@@ -2282,7 +2338,12 @@ def adjust_route(request: AdjustRequest) -> AdjustResponse:
         for category in categories:
             if category not in intent.constraints.avoid_categories:
                 intent.constraints.avoid_categories.append(category)
-    target_index = adjustment_intent.target_index if adjustment_intent.target_index is not None else choose_adjustment_target(request.route, kind)
+    if adjustment_intent.target_index is not None:
+        target_index = adjustment_intent.target_index
+    elif kind == "add":
+        target_index = choose_add_target(request.route, categories)
+    else:
+        target_index = choose_adjustment_target(request.route, kind)
     if adjustment_intent.target_index is None and kind in {"avoid_category", "reduce_category"}:
         candidate = None
     else:
@@ -2306,6 +2367,15 @@ def adjust_route(request: AdjustRequest) -> AdjustResponse:
     adjusted_route = None
     if should_rebuild_route:
         adjusted_route = agents.route_planner.build_route_from_pois(intent, next_pois, "实时调整")
+        if (
+            kind == "add"
+            and candidate
+            and len(request.route.stops) < 5
+            and (adjusted_route is None or not add_intent_satisfied(categories, adjusted_route))
+        ):
+            replacement_pois = [stop.poi for stop in request.route.stops]
+            replacement_pois[target_index] = candidate
+            adjusted_route = agents.route_planner.build_route_from_pois(intent, replacement_pois, "实时调整")
         if adjusted_route is None and kind in {"focus", "reduce_category", "avoid_category"} and candidates:
             repaired_pois = agents.route_planner._repair_selected_stops(
                 intent,
@@ -2354,6 +2424,11 @@ def adjust_route(request: AdjustRequest) -> AdjustResponse:
     status = adjustment_status_for(kind, request.route, adjusted_route, changed_stops, deltas, candidate)
     if route_build_failed:
         status = "not_applied"
+    elif kind == "add" and not add_intent_satisfied(categories, adjusted_route):
+        status = "not_applied"
+        adjusted_route.warnings = list(
+            dict.fromkeys([*adjusted_route.warnings, "当前调整没有成功加入目标类型站点，已保留路线完整性优先。"])
+        )[:5]
     elif status == "applied" and not adjustment_intent_satisfied(adjustment_intent, adjusted_route):
         status = "partial"
     structure_issues = agents.route_planner._structure_warnings(intent, [stop.poi for stop in adjusted_route.stops])

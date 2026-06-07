@@ -863,6 +863,68 @@ def test_adjust_reduce_cafes_prefers_walk_or_culture_over_nearest_restaurant(mon
     assert "陶陶居酒家" not in names
 
 
+def test_adjust_add_cantonese_restaurant_keeps_culture_stop(monkeypatch):
+    monkeypatch.setattr(api, "classify_adjustment_with_deepseek", lambda *_args, **_kwargs: None)
+
+    def make_candidate(name, category, index, price=80, wait=8, rating=4.6):
+        data = make_adjust_test_poi(name, category, index, price=price, wait=wait, rating=rating)
+        return POI(**data)
+
+    class FakeAMapClient:
+        enabled = True
+
+        def resolve_anchor(self, text=None, city_hint=None, anchor_location=None):
+            return api.AMapAnchor(
+                text=text or "广州永庆坊",
+                city="广州",
+                location=GeoPoint(latitude=23.114, longitude=113.25),
+                source="fake_poi_text",
+            )
+
+        def search_pois(self, anchor, categories, keywords=None, radius_meters=3000, limit_per_category=8):
+            return [
+                make_candidate("广州非遗街区(永庆坊)", POICategory.ATTRACTION, 60, price=0, wait=4, rating=4.6),
+                make_candidate("陶陶居粤菜馆(永庆坊店)", POICategory.RESTAURANT, 61, price=98, wait=10, rating=4.7),
+            ]
+
+        def route_segment(self, origin, destination, mode="步行+公交", city=None):
+            return None
+
+        def recent_errors(self):
+            return []
+
+    monkeypatch.setattr(api, "AMapClient", FakeAMapClient)
+    client = TestClient(app)
+    current_pois = [
+        make_adjust_test_poi("CAFE FLOWERYARDS", POICategory.CAFE, 1, price=42, wait=8, rating=4.5),
+        make_adjust_test_poi("永庆坊", POICategory.ATTRACTION, 2, price=0, wait=29, rating=4.8),
+        make_adjust_test_poi("LOCKER ROOM", POICategory.SHOPPING, 3, price=88, wait=5, rating=4.6),
+    ]
+
+    response = client.post(
+        "/api/adjust",
+        json={
+            "query": "广州永庆坊附近逛3小时，想喝点东西，有文化点和散步地方",
+            "instruction": "加一家地道粤菜馆",
+            "route": make_adjust_test_route(current_pois),
+            "user_id": "adjust-add-cantonese-user",
+            "profile_mode": "文艺体验型",
+            "route_context": {"source": "xiaotuan", "city_hint": "广州", "anchor_text": "广州永庆坊"},
+        },
+    )
+
+    assert response.status_code == 200
+    payload = response.json()
+    names = [stop["poi"]["name"] for stop in payload["route"]["route"]["stops"]]
+    categories = [stop["poi"]["category"] for stop in payload["route"]["route"]["stops"]]
+    assert payload["adjustment_status"] in {"applied", "partial"}
+    assert "永庆坊" in names
+    assert "LOCKER ROOM" not in names
+    assert "陶陶居粤菜馆(永庆坊店)" in names
+    assert "餐饮" in categories
+    assert "kind=add" in payload["tool_trace"][0]["output"]
+
+
 def test_adjust_avoid_cafe_keeps_cafe_out_of_rebuilt_route(monkeypatch):
     monkeypatch.setattr(api, "classify_adjustment_with_deepseek", lambda *_args, **_kwargs: None)
 
