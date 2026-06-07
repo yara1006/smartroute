@@ -155,3 +155,32 @@ def test_route_planner_limits_coffee_bias_for_casual_long_route():
     assert categories.count(POICategory.CAFE) <= 1
     assert categories.count(POICategory.RESTAURANT) <= 1
     assert any(category in {POICategory.ATTRACTION, POICategory.ENTERTAINMENT, POICategory.SHOPPING} for category in categories)
+
+
+def test_fixed_restaurant_start_counts_as_meal_but_allows_explicit_drink_stop():
+    gaga = make_test_poi("gaga（金地威新中心店）", POICategory.RESTAURANT, 1, price=78, rating=4.5)
+    gaga.id = "fav-gaga-jdw"
+    pois = [
+        make_test_poi("科技园咖啡休息点", POICategory.CAFE, 2, price=42, rating=4.7),
+        make_test_poi("深圳湾艺文空间", POICategory.ATTRACTION, 3, price=20, rating=4.6),
+        make_test_poi("科技园街区漫步", POICategory.SHOPPING, 4, price=20, rating=4.6),
+        make_test_poi("另一家轻食餐厅", POICategory.RESTAURANT, 5, price=88, rating=4.8),
+    ]
+    intent = IntentParserAgent().parse("从gaga金地威新中心店出发，下午4小时想喝点东西，有文化点和散步地方")
+    intent.extracted_preferences["fixed_start_poi_id"] = "fav-gaga-jdw"
+    intent.extracted_preferences["pinned_policy"] = "fixed_start"
+    intent.extracted_preferences["raw_query"] = "从gaga金地威新中心店出发，下午4小时想喝点东西，有文化点和散步地方"
+    candidates = [(poi, 8.0 - index * 0.1) for index, poi in enumerate(pois)]
+    routes = RoutePlannerAgent({poi.id: poi for poi in [gaga, *pois]}).plan(
+        intent,
+        candidates,
+        pinned_pois=[gaga],
+        n_routes=1,
+    )
+
+    assert routes
+    categories = [stop.poi.category for stop in routes[0].stops]
+    assert routes[0].stops[0].poi.id == "fav-gaga-jdw"
+    assert categories.count(POICategory.RESTAURANT) == 1
+    assert categories.count(POICategory.CAFE) == 1
+    assert any(category in {POICategory.ATTRACTION, POICategory.SHOPPING} for category in categories)

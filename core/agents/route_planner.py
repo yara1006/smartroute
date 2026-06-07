@@ -418,9 +418,23 @@ class RoutePlannerAgent:
             return 3 if intent.constraints.total_time_hours < 5 else 4
         return 1
 
-    def _foodish_limit(self, intent: ParsedIntent) -> int:
+    def _fixed_start_category(self, intent: ParsedIntent, pois: list[POI] | None) -> POICategory | None:
+        if intent.extracted_preferences.get("pinned_policy") != "fixed_start":
+            return None
+        fixed_start_id = str(intent.extracted_preferences.get("fixed_start_poi_id") or "")
+        if not fixed_start_id or not pois:
+            return None
+        fixed_start = next((poi for poi in pois if poi.id == fixed_start_id), None)
+        return fixed_start.category if fixed_start else None
+
+    def _foodish_limit(self, intent: ParsedIntent, pois: list[POI] | None = None) -> int:
         if self._allows_multiple_restaurants(intent) or self._allows_multiple_cafes(intent):
             return max(2, self._restaurant_limit(intent) + min(1, self._cafe_limit(intent)))
+        fixed_start_category = self._fixed_start_category(intent, pois)
+        if fixed_start_category == POICategory.RESTAURANT:
+            return 2 if self._wants_drink(intent) and POICategory.CAFE not in intent.constraints.avoid_categories else 1
+        if fixed_start_category == POICategory.CAFE:
+            return 2 if self._wants_meal(intent) and POICategory.RESTAURANT not in intent.constraints.avoid_categories else 1
         return 2 if self._wants_drink(intent) and self._wants_meal(intent) else 1
 
     def _role_sequence(self, intent: ParsedIntent) -> list[str]:
@@ -503,7 +517,7 @@ class RoutePlannerAgent:
             return False
         if poi.category == POICategory.CAFE and category_count >= self._cafe_limit(intent):
             return False
-        if poi.category in FOODISH_CATEGORIES and foodish_count >= self._foodish_limit(intent):
+        if poi.category in FOODISH_CATEGORIES and foodish_count >= self._foodish_limit(intent, selected):
             return False
         if category_count >= 2 and poi.category not in FOODISH_CATEGORIES:
             return False
@@ -569,7 +583,8 @@ class RoutePlannerAgent:
                 foodish_count = sum(1 for selected, _ in reranked if selected.category in FOODISH_CATEGORIES)
                 cafe_penalty = 1.6 if poi.category == POICategory.CAFE and same_category_count and not self._allows_multiple_cafes(intent) else 0.0
                 restaurant_penalty = 1.8 if poi.category == POICategory.RESTAURANT and same_category_count and not self._allows_multiple_restaurants(intent) else 0.0
-                foodish_penalty = 0.8 if poi.category in FOODISH_CATEGORIES and foodish_count >= self._foodish_limit(intent) else 0.0
+                reranked_pois = [chosen_poi for chosen_poi, _ in reranked]
+                foodish_penalty = 0.8 if poi.category in FOODISH_CATEGORIES and foodish_count >= self._foodish_limit(intent, reranked_pois) else 0.0
                 repeat_penalty = same_category_count * 0.38
                 adjacency_penalty = 0.35 if reranked and reranked[-1][0].category == poi.category else 0.0
                 coverage_bonus = 0.22 if poi.category in EXPERIENCE_CATEGORIES and not any(selected.category in EXPERIENCE_CATEGORIES for selected, _ in reranked) else 0.0
@@ -635,8 +650,9 @@ class RoutePlannerAgent:
             if restaurant_count > self._restaurant_limit(intent):
                 score -= 140 * (restaurant_count - self._restaurant_limit(intent))
             foodish_count = sum(1 for category in categories if category in FOODISH_CATEGORIES)
-            if foodish_count > self._foodish_limit(intent):
-                score -= 120 * (foodish_count - self._foodish_limit(intent))
+            foodish_limit = self._foodish_limit(intent, list(order))
+            if foodish_count > foodish_limit:
+                score -= 120 * (foodish_count - foodish_limit)
             distance = sum(
                 haversine_km(order[index - 1].latitude, order[index - 1].longitude, order[index].latitude, order[index].longitude)
                 for index in range(1, len(order))
@@ -655,7 +671,7 @@ class RoutePlannerAgent:
             warnings.append("当前候选咖啡/茶饮过多，已尽量压缩为休息点；如需咖啡打卡可明确说明。")
         if not self._allows_multiple_restaurants(intent) and sum(1 for poi in pois if poi.category == POICategory.RESTAURANT) > 1:
             warnings.append("当前路线出现多个正餐餐厅，真实出行不建议一下午连续吃多家；可改成美食探店路线。")
-        if sum(1 for poi in pois if poi.category in FOODISH_CATEGORIES) > self._foodish_limit(intent):
+        if sum(1 for poi in pois if poi.category in FOODISH_CATEGORIES) > self._foodish_limit(intent, pois):
             warnings.append("餐饮/饮品站点偏多，建议保留一个休息点，其余替换成文化或散步点。")
         if any(pois[index].category == pois[index - 1].category for index in range(1, len(pois))):
             warnings.append("路线中仍存在相邻同类站点，建议放宽区域或增加文化/娱乐类偏好。")
@@ -688,7 +704,7 @@ class RoutePlannerAgent:
             return False
         if not self._allows_multiple_cafes(intent) and sum(1 for poi in pois if poi.category == POICategory.CAFE) > self._cafe_limit(intent):
             return False
-        if sum(1 for poi in pois if poi.category in FOODISH_CATEGORIES) > self._foodish_limit(intent):
+        if sum(1 for poi in pois if poi.category in FOODISH_CATEGORIES) > self._foodish_limit(intent, pois):
             return False
         if self._missing_required_roles(intent, pois):
             return False

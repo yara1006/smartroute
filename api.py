@@ -1010,6 +1010,21 @@ def route_role_keywords(query: str, intent: ParsedIntent) -> list[str]:
     return list(dict.fromkeys(keywords))[:10]
 
 
+def hard_pinned_pois_for_context(route_context: RouteContext | None, selected_pois: list[POI]) -> list[POI]:
+    if not route_context:
+        return selected_pois
+    if route_context.pinned_policy == "fixed_start" and route_context.fixed_start_poi_id:
+        return [poi for poi in selected_pois if poi.id == route_context.fixed_start_poi_id][:1]
+    return selected_pois
+
+
+def fixed_start_pois_from_route(route_context: RouteContext | None, route: Route) -> list[POI]:
+    if not route_context or route_context.pinned_policy != "fixed_start" or not route_context.fixed_start_poi_id:
+        return []
+    fixed_start_id = route_context.fixed_start_poi_id
+    return [stop.poi for stop in route.stops if stop.poi.id == fixed_start_id][:1]
+
+
 def build_dynamic_candidates(
     request: PlanRequest,
     intent: ParsedIntent,
@@ -1061,6 +1076,7 @@ def build_dynamic_candidates(
             trace_notes.append("真实地点模式：已禁止使用本地 RAG，避免跨城生成错误路线。")
             amap_pois = []
 
+    hard_pinned_pois = hard_pinned_pois_for_context(route_context, selected_pois)
     pinned_ids = {poi.id for poi in selected_pois}
     candidates: list[tuple[POI, float]] = [(poi, 3.0) for poi in selected_pois]
     for poi in amap_pois:
@@ -1072,7 +1088,7 @@ def build_dynamic_candidates(
         source_boost = 0.35 if poi.source == "amap" else 0.08
         score = 0.82 + poi.rating / 5 + distance_factor + source_boost
         candidates.append((poi, round(score, 4)))
-    return candidates, selected_pois, anchor, trace_notes
+    return candidates, hard_pinned_pois, anchor, trace_notes
 
 
 def enrich_route_with_amap_segments(route: Route, amap_client: AMapClient, transport_mode: str) -> Route:
@@ -2492,7 +2508,7 @@ def adjust_route(request: AdjustRequest) -> AdjustResponse:
         profile_id=request.profile_id,
         route_context=request.route_context,
     )
-    dynamic_candidates, _, anchor, context_trace = build_dynamic_candidates(
+    dynamic_candidates, context_pinned_pois, anchor, context_trace = build_dynamic_candidates(
         pseudo_plan_request,
         intent,
         meituan_context,
@@ -2507,6 +2523,7 @@ def adjust_route(request: AdjustRequest) -> AdjustResponse:
     else:
         candidates = agents.poi_retriever.retrieve(intent, user_profile=profile, max_candidates=60)
     candidates = apply_context_to_candidates(candidates, meituan_context)
+    hard_pinned_pois = context_pinned_pois or fixed_start_pois_from_route(request.route_context, request.route)
 
     llm_adjustment = classify_adjustment_with_deepseek(request.instruction, request.route)
     adjustment_intent = parse_adjustment_intent(request.instruction, request.route, llm_adjustment)
@@ -2597,7 +2614,7 @@ def adjust_route(request: AdjustRequest) -> AdjustResponse:
                 candidates,
                 max_stops=max(3, len(request.route.stops)),
                 budget=intent.constraints.budget_per_person,
-                pinned_pois=[],
+                pinned_pois=hard_pinned_pois,
             )
             repaired_route = agents.route_planner.build_route_from_pois(intent, repaired_pois, "实时调整")
             if repaired_route is not None:
@@ -2612,7 +2629,7 @@ def adjust_route(request: AdjustRequest) -> AdjustResponse:
                     candidates,
                     max_stops=max(3, len(adjusted_route.stops)),
                     budget=intent.constraints.budget_per_person,
-                    pinned_pois=[],
+                    pinned_pois=hard_pinned_pois,
                 )
                 repaired_route = agents.route_planner.build_route_from_pois(intent, repaired_pois, "实时调整")
                 if repaired_route is not None:

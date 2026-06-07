@@ -430,6 +430,46 @@ def test_poi_detail_fixed_start_stays_first_after_plan_and_adjust(monkeypatch):
                     external_id="detail-cafe",
                     distance_from_anchor_meters=300,
                 ),
+                POI(
+                    id="detail-restaurant-a",
+                    name="科技园顺路粤菜馆",
+                    category=POICategory.RESTAURANT,
+                    address="深圳市南山区",
+                    district="南山区",
+                    latitude=22.534,
+                    longitude=113.941,
+                    rating=4.8,
+                    review_count=700,
+                    price_per_person=108,
+                    avg_wait_minutes=10,
+                    business_hours={"open": "10:00", "close": "22:00"},
+                    tags=["粤菜"],
+                    ugc_summary="另一个餐饮候选，不能在 gaga 详情页被硬塞进普通路线。",
+                    visit_duration_minutes=60,
+                    source="amap",
+                    external_id="detail-restaurant-a",
+                    distance_from_anchor_meters=180,
+                ),
+                POI(
+                    id="detail-restaurant-b",
+                    name="科技园轻食二店",
+                    category=POICategory.RESTAURANT,
+                    address="深圳市南山区",
+                    district="南山区",
+                    latitude=22.533,
+                    longitude=113.942,
+                    rating=4.7,
+                    review_count=500,
+                    price_per_person=86,
+                    avg_wait_minutes=8,
+                    business_hours={"open": "10:00", "close": "22:00"},
+                    tags=["轻食"],
+                    ugc_summary="另一个餐饮候选，不能造成多餐厅路线。",
+                    visit_duration_minutes=55,
+                    source="amap",
+                    external_id="detail-restaurant-b",
+                    distance_from_anchor_meters=240,
+                ),
             ]
 
         def route_segment(self, *args, **kwargs):
@@ -458,12 +498,30 @@ def test_poi_detail_fixed_start_stays_first_after_plan_and_adjust(monkeypatch):
         "visit_duration_minutes": 60,
         "source": "context",
     }
+    accidental_extra_food = {
+        "id": "fav-extra-food",
+        "name": "误带入的第二家餐厅",
+        "category": "餐饮",
+        "address": "深圳市南山区科技园",
+        "district": "南山区",
+        "latitude": 22.535,
+        "longitude": 113.941,
+        "rating": 4.7,
+        "review_count": 500,
+        "price_per_person": 90,
+        "avg_wait_minutes": 12,
+        "business_hours": {"open": "10:00", "close": "22:00"},
+        "tags": ["粤菜"],
+        "ugc_summary": "详情页上下文误带入的餐饮候选，不能作为硬固定站点。",
+        "visit_duration_minutes": 60,
+        "source": "context",
+    }
     route_context = {
         "source": "detail",
         "city_hint": "深圳",
         "anchor_text": "gaga金地威新中心店",
         "anchor_location": {"latitude": 22.53461, "longitude": 113.94016},
-        "selected_pois": [gaga],
+        "selected_pois": [gaga, accidental_extra_food],
         "fixed_start_poi_id": "fav-gaga-jdw",
         "pinned_policy": "fixed_start",
     }
@@ -479,6 +537,7 @@ def test_poi_detail_fixed_start_stays_first_after_plan_and_adjust(monkeypatch):
     assert plan_response.status_code == 200
     route = plan_response.json()["routes"][0]["route"]
     assert route["stops"][0]["poi"]["id"] == "fav-gaga-jdw"
+    assert sum(1 for stop in route["stops"] if stop["poi"]["category"] == "餐饮") == 1
 
     adjust_response = client.post(
         "/api/adjust",
@@ -494,6 +553,25 @@ def test_poi_detail_fixed_start_stays_first_after_plan_and_adjust(monkeypatch):
     assert adjust_response.status_code == 200
     adjusted_route = adjust_response.json()["route"]["route"]
     assert adjusted_route["stops"][0]["poi"]["id"] == "fav-gaga-jdw"
+    assert sum(1 for stop in adjusted_route["stops"] if stop["poi"]["category"] == "餐饮") == 1
+
+    add_food_response = client.post(
+        "/api/adjust",
+        json={
+            "query": "从gaga金地威新中心店出发，下午3小时顺路逛逛，少走路",
+            "instruction": "加一家粤菜馆",
+            "route": route,
+            "user_id": "fixed-start-detail-user",
+            "route_context": route_context,
+        },
+    )
+
+    assert add_food_response.status_code == 200
+    add_food_payload = add_food_response.json()
+    add_food_route = add_food_payload["route"]["route"]
+    assert add_food_route["stops"][0]["poi"]["id"] == "fav-gaga-jdw"
+    assert sum(1 for stop in add_food_route["stops"] if stop["poi"]["category"] == "餐饮") == 1
+    assert add_food_payload["adjustment_status"] in {"partial", "not_applied"}
 
 
 def test_search_preview_returns_real_candidates_and_plan_context(monkeypatch):
