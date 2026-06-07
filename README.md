@@ -1,5 +1,10 @@
 # SmartRoute AI
 
+## 项目链接
+
+- 项目文档：https://pan.baidu.com/s/1bAIzRwzzNYDD4qt8w6-B8g?pwd=aa65
+- 在线访问：http://42.193.138.163
+
 SmartRoute AI 是一个面向美团 AI 黑客松的本地生活路线规划插件 / 子 Agent。它不是独立 App，也不是替代小团 AI 的通用聊天助手，而是嵌入美团 App 的垂直能力：把用户的吃喝玩乐意图、美团 POI、UGC、预算、排队、时间、距离和历史偏好组织成可执行路线。
 
 它既支持用户已经选中多个 POI 后“一键排路线”，也支持用户未知具体 POI 时直接说：
