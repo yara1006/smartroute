@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+"""Route intent router - determines if a XiaoTuan query should trigger the SmartRoute plugin."""
+
 import json
 import os
 import re

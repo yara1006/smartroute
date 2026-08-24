@@ -1,3 +1,4 @@
+"""SmartRoute API — FastAPI route handlers for route planning, adjustment, and user profiles."""
 from __future__ import annotations
 
 import json
@@ -69,6 +70,7 @@ from schemas import (
 
 @dataclass
 class Agents:
+    """Container for all singleton agent instances, loaded once via lru_cache."""
     route_intent_router: RouteIntentRouterAgent
     intent_parser: IntentParserAgent
     poi_retriever: POIRetrieverAgent
@@ -77,6 +79,7 @@ class Agents:
 
 
 def ensure_data() -> None:
+    """Generate mock POI data files if they don't already exist in DATA_DIR."""
     DATA_DIR.mkdir(exist_ok=True)
     if not POI_PATH.exists():
         pois = generate_mock_pois(500)
@@ -89,6 +92,7 @@ def ensure_data() -> None:
 
 @lru_cache(maxsize=1)
 def load_poi_database() -> dict[str, POI]:
+    """Load all POIs from the JSON data file into a dict keyed by POI id."""
     ensure_data()
     raw = json.loads(POI_PATH.read_text(encoding="utf-8"))
     return {item["id"]: POI(**item) for item in raw}
@@ -96,6 +100,7 @@ def load_poi_database() -> dict[str, POI]:
 
 @lru_cache(maxsize=1)
 def load_vector_store() -> POIVectorStore:
+    """Load (or build) the local POI vector index used by the RAG retriever."""
     ensure_data()
     store = POIVectorStore(str(INDEX_DIR))
     if store.count == 0:
@@ -106,6 +111,7 @@ def load_vector_store() -> POIVectorStore:
 
 @lru_cache(maxsize=1)
 def load_agents() -> Agents:
+    """Initialize and cache all agent singletons (router, parser, retriever, planner, profile manager)."""
     poi_db = load_poi_database()
     vector_store = load_vector_store()
     return Agents(
@@ -193,6 +199,7 @@ app.add_middleware(
 
 @app.get("/api/health")
 def health() -> dict[str, Any]:
+    """Health check endpoint — reports POI count, index size, and external service status."""
     agents = load_agents()
     amap_client = AMapClient()
     return {
@@ -206,6 +213,7 @@ def health() -> dict[str, Any]:
 
 @app.get("/api/examples")
 def examples() -> dict[str, list[str]]:
+    """Return a list of example user queries for the frontend demo."""
     return {
         "examples": [
             "我下午要去深圳大学附近玩3个小时，帮我规划一个路线",
@@ -219,6 +227,7 @@ def examples() -> dict[str, list[str]]:
 
 @app.post("/api/route-intent", response_model=RouteIntentResult)
 def route_intent(request: RouteIntentRequest) -> RouteIntentResult:
+    """Classify whether the user query should trigger the SmartRoute route-planning plugin."""
     agents = load_agents()
     return agents.route_intent_router.route(
         request.query,
@@ -232,6 +241,7 @@ def route_intent(request: RouteIntentRequest) -> RouteIntentResult:
 
 @app.post("/api/search-preview", response_model=SearchPreviewResponse)
 def search_preview(request: SearchPreviewRequest) -> SearchPreviewResponse:
+    """Lightweight POI preview — resolve anchor, recall candidates, and build trigger copy."""
     agents = load_agents()
     amap_client = AMapClient()
     meituan_context, profile_source, resolved_profile_id, _, _ = resolve_profile_context(
@@ -305,6 +315,7 @@ def search_preview(request: SearchPreviewRequest) -> SearchPreviewResponse:
 
 @app.get("/api/profile-sources", response_model=ProfileSourcesResponse)
 def profile_sources() -> ProfileSourcesResponse:
+    """List all available profile sources (preset, manual import, official API) with their profiles."""
     preset_profiles = [
         ImportedProfileView(
             profile_id=mode,
@@ -346,6 +357,7 @@ def profile_sources() -> ProfileSourcesResponse:
 
 @app.post("/api/profile/import", response_model=ProfileImportResponse)
 def import_profile(request: ManualProfileImportRequest) -> ProfileImportResponse:
+    """Validate and persist a desensitized user profile import, returning the saved view."""
     validate_import_payload(request)
     record = import_request_to_record(request)
     save_imported_profile_record(record)
@@ -360,6 +372,7 @@ def import_profile(request: ManualProfileImportRequest) -> ProfileImportResponse
 
 @app.post("/api/plan", response_model=PlanResponse)
 def plan_route(request: PlanRequest) -> PlanResponse:
+    """Generate 1–3 route options from a natural-language query, user profile, and context."""
     started = time.perf_counter()
     agents = load_agents()
     amap_client = AMapClient()
@@ -438,6 +451,7 @@ def plan_route(request: PlanRequest) -> PlanResponse:
 
 @app.post("/api/adjust", response_model=AdjustResponse)
 def adjust_route(request: AdjustRequest) -> AdjustResponse:
+    """路线局部调整：解析调整指令 → 替换/重排站点 → 返回变更。"""
     started = time.perf_counter()
     agents = load_agents()
     amap_client = AMapClient()
@@ -699,6 +713,7 @@ def adjust_route(request: AdjustRequest) -> AdjustResponse:
 
 @app.post("/api/feedback")
 def feedback(request: FeedbackRequest) -> dict[str, Any]:
+    """用户反馈：将喜欢/不喜欢写入 SQLite 用户画像。"""
     agents = load_agents()
     agents.profile_manager.update_from_route(
         request.user_id,
@@ -711,6 +726,7 @@ def feedback(request: FeedbackRequest) -> dict[str, Any]:
 
 @app.post("/api/replace", response_model=ReplaceResponse)
 def replace_poi(request: ReplaceRequest) -> ReplaceResponse:
+    """站点替换：为指定站点找同类可替换 POI 并展示影响。"""
     agents = load_agents()
     if request.stop_order > len(request.route.stops):
         raise HTTPException(status_code=404, detail="stop_order 超出当前路线范围")

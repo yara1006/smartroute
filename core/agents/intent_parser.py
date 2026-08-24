@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+"""Intent parser agent - parses natural language into structured ParsedIntent with DeepSeek LLM + rules fallback."""
+
 import json
 import os
 import re

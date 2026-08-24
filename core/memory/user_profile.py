@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+"""User profile manager - SQLite-backed user preferences, feedback and route history."""
+
 import json
 import os
 import sqlite3
@@ -9,6 +11,7 @@ from core.models import UserProfile
 
 
 class UserProfileManager:
+    """用户画像管理器：SQLite 存储偏好、反馈、路线历史。"""
     def __init__(self, db_path: str | None = None):
         self.db_path = db_path or os.getenv("USER_DB_PATH", "./data/user_profiles.db")
         os.makedirs(os.path.dirname(self.db_path), exist_ok=True)

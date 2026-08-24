@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+"""Core domain models for SmartRoute - POI, Route, UserConstraints, UserProfile and related types."""
+
 from datetime import datetime
 from enum import Enum
 from typing import Any

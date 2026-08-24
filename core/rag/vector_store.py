@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+"""Lightweight local POI vector store - lexical search with Chinese bigram tokenization."""
+
 import json
 import math
 import os

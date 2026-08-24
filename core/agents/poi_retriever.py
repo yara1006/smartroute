@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+"""POI retriever agent - vector search with category-specific templates and user profile boosting."""
+
 from core.models import POI, ParsedIntent, UserProfile
 from core.rag.vector_store import POIVectorStore
 
@@ -15,6 +17,7 @@ CATEGORY_QUERY_TEMPLATES = {
 
 
 class POIRetrieverAgent:
+    """POI 召回 Agent：向量检索 + 类别模板 + 画像加权。"""
     def __init__(self, vector_store: POIVectorStore, poi_db: dict[str, POI]):
         self.vector_store = vector_store
         self.poi_db = poi_db

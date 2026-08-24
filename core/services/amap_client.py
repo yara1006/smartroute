@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+"""AMap (高德) Web Service client - POI search, geocoding, direction routing with TTL cache."""
+
 import hashlib
 import json
 import math

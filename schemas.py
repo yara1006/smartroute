@@ -59,6 +59,7 @@ class CandidateView(BaseModel):
 
 
 class SearchAnchorView(BaseModel):
+    """Resolved geographic anchor (location + city) used for POI search."""
     text: str
     city: str
     latitude: float
@@ -67,6 +68,7 @@ class SearchAnchorView(BaseModel):
 
 
 class SearchPreviewResponse(BaseModel):
+    """Response for /api/search-preview — anchor, candidate POIs, and trigger copy."""
     anchor: SearchAnchorView | None = None
     candidates: list[CandidateView]
     route_context: RouteContext
@@ -76,6 +78,7 @@ class SearchPreviewResponse(BaseModel):
 
 
 class RouteInsight(BaseModel):
+    """Qualitative assessment of a generated route — constraint hits, risks, fit scores."""
     route_id: str
     confidence_score: int
     constraint_hits: list[str]
@@ -89,6 +92,7 @@ class RouteInsight(BaseModel):
 
 
 class RouteCompleteness(BaseModel):
+    """Whether a route covers essential roles (meal, culture/entertainment) and stop count."""
     stop_count: int
     has_meal: bool
     has_culture_or_entertainment: bool
@@ -97,6 +101,7 @@ class RouteCompleteness(BaseModel):
 
 
 class ProfileInfluence(BaseModel):
+    """How a specific user-profile signal influenced the generated route."""
     signal: str
     source: str
     effect: str
@@ -105,18 +110,21 @@ class ProfileInfluence(BaseModel):
 
 
 class FollowUpOption(BaseModel):
+    """A single chip-style follow-up suggestion shown to the user after a route."""
     label: str
     instruction: str
     expected_effect: str
 
 
 class FollowUp(BaseModel):
+    """Follow-up question and chip options offered to refine the current route."""
     question: str
     options: list[FollowUpOption]
     reason: str
 
 
 class RouteMetrics(BaseModel):
+    """Aggregate numeric metrics for a route (time, cost, wait, transit)."""
     stop_count: int
     total_time_minutes: int
     total_cost_per_person: float
@@ -125,6 +133,7 @@ class RouteMetrics(BaseModel):
 
 
 class MetricDeltas(BaseModel):
+    """Difference in aggregate metrics between the before and after adjustment routes."""
     stop_count: int
     total_time_minutes: int
     total_cost_per_person: float
@@ -133,6 +142,7 @@ class MetricDeltas(BaseModel):
 
 
 class ChangedStop(BaseModel):
+    """Description of a single stop that changed during route adjustment."""
     order: int
     action: str
     before_poi: str | None = None
@@ -141,6 +151,7 @@ class ChangedStop(BaseModel):
 
 
 class AgentTraceStep(BaseModel):
+    """One step in the agent tool-call trace shown in the UI."""
     step: str
     tool: str
     input: str
@@ -149,11 +160,13 @@ class AgentTraceStep(BaseModel):
 
 
 class RouteView(BaseModel):
+    """A generated route paired with its qualitative insight assessment."""
     route: Route
     insight: RouteInsight
 
 
 class PlanResponse(BaseModel):
+    """Full response for /api/plan — intent, profile, candidates, routes, and trace."""
     user_id: str
     query: str
     intent: ParsedIntent
@@ -177,12 +190,14 @@ class PlanResponse(BaseModel):
 
 
 class FeedbackRequest(BaseModel):
+    """Request body for /api/feedback — user thumbs-up/down on a generated route."""
     user_id: str = "demo-user"
     route: dict[str, Any]
     feedback: int = Field(ge=-1, le=1)
 
 
 class ReplaceRequest(BaseModel):
+    """Request body for /api/replace — find alternatives for a specific route stop."""
     query: str = Field(min_length=2)
     route: Route
     stop_order: int = Field(ge=1)
@@ -194,6 +209,7 @@ class ReplaceRequest(BaseModel):
 
 
 class ReplacementOption(BaseModel):
+    """A candidate POI that could replace a route stop, with cost/wait/duration deltas."""
     poi: POI
     score: float
     cost_delta: float
@@ -204,12 +220,14 @@ class ReplacementOption(BaseModel):
 
 
 class ReplaceResponse(BaseModel):
+    """Response for /api/replace — ranked replacement options for a given stop."""
     stop_order: int
     current_poi_id: str
     options: list[ReplacementOption]
 
 
 class AdjustRequest(BaseModel):
+    """Request body for /api/adjust — modify an existing route by natural-language instruction."""
     query: str = Field(min_length=2)
     instruction: str = Field(min_length=1)
     route: Route
@@ -221,6 +239,7 @@ class AdjustRequest(BaseModel):
 
 
 class AdjustResponse(BaseModel):
+    """Full response for /api/adjust — adjusted route, deltas, status, and trace."""
     route: RouteView
     adjustment_summary: str
     adjustment_status: Literal["applied", "partial", "not_applied"]
@@ -241,6 +260,7 @@ class AdjustResponse(BaseModel):
 
 @dataclass
 class AdjustmentIntent:
+    """Structured representation of a route-adjustment command (kind, target, categories)."""
     kind: str
     categories: set[POICategory] | None = None
     target_index: int | None = None
@@ -251,6 +271,7 @@ class AdjustmentIntent:
 
 
 class ManualProfileImportRequest(BaseModel):
+    """Request body for /api/profile/import — desensitized user profile data for manual import."""
     model_config = ConfigDict(extra="allow")
 
     profile_id: str | None = None
@@ -268,6 +289,7 @@ class ManualProfileImportRequest(BaseModel):
 
 
 class ImportedProfileView(BaseModel):
+    """Summary view of a desensitized imported user profile."""
     profile_id: str
     display_name: str
     profile_source: str = "manual_import"
@@ -277,6 +299,7 @@ class ImportedProfileView(BaseModel):
 
 
 class ProfileSourceView(BaseModel):
+    """Describes one profile source (preset / manual import / official API) with its profiles."""
     source: str
     label: str
     enabled: bool
@@ -285,10 +308,12 @@ class ProfileSourceView(BaseModel):
 
 
 class ProfileSourcesResponse(BaseModel):
+    """Response for /api/profile-sources — all available profile sources and their profiles."""
     sources: list[ProfileSourceView]
 
 
 class ProfileImportResponse(BaseModel):
+    """Response for /api/profile/import — confirmation of a successful profile import."""
     status: str
     profile: ImportedProfileView
     context: MeituanUserContext

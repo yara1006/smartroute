@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+"""Route planning agent - generates optimized multi-stop routes with category diversity."""
+
 import uuid
 from collections import defaultdict
 from datetime import datetime, timedelta
@@ -27,6 +29,7 @@ CORE_ROUTE_CATEGORIES = {
 
 
 class RoutePlannerAgent:
+    """路线规划 Agent：从候选 POI 生成 1-3 条差异化路线。"""
     def __init__(self, poi_db: dict[str, POI]):
         self.poi_db = poi_db
 
@@ -111,6 +114,7 @@ class RoutePlannerAgent:
         return self.build_route_from_pois(intent, selected, theme)
 
     def build_route_from_pois(self, intent: ParsedIntent, selected: list[POI], theme: str) -> Route | None:
+        """从 POI 列表构建完整路线：排序 → 时间分配 → 交通估算。"""
         constraints = intent.constraints
         selected = self._best_itinerary_order(intent, selected)
         start_dt = datetime.strptime(constraints.start_time, "%H:%M")
@@ -573,6 +577,7 @@ class RoutePlannerAgent:
         return self._best_itinerary_order(intent, repaired)
 
     def _diversity_rerank(self, candidates: list[tuple[POI, float]], intent: ParsedIntent) -> list[tuple[POI, float]]:
+        """多样性重排：惩罚同类别相邻，奖励体验覆盖。"""
         remaining = list(candidates)
         reranked: list[tuple[POI, float]] = []
         while remaining:
@@ -595,6 +600,7 @@ class RoutePlannerAgent:
         return reranked
 
     def _best_itinerary_order(self, intent: ParsedIntent, pois: list[POI]) -> list[POI]:
+        """贪心最近邻排序：O(n^2) 替代 O(n!) 排列穷举。"""
         unique_pois = []
         seen = set()
         for poi in pois:
