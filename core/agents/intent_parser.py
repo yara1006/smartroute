@@ -1,6 +1,5 @@
+"""Intent parser agent — parses natural language into structured ParsedIntent with DeepSeek + rules fallback."""
 from __future__ import annotations
-
-"""Intent parser agent - parses natural language into structured ParsedIntent with DeepSeek LLM + rules fallback."""
 
 import json
 import os
@@ -76,6 +75,7 @@ class IntentParserAgent:
         conversation_history: list[dict[str, str]] | None = None,
         user_profile: dict[str, Any] | None = None,
     ) -> ParsedIntent:
+        """Parse user input into a ParsedIntent — try DeepSeek first, fall back to rules."""
         rules_intent = self._parse_with_rules(user_input, user_profile=user_profile)
         if self.api_key:
             llm_intent = self._parse_with_llm(user_input, rules_intent, conversation_history, user_profile)
@@ -88,6 +88,7 @@ class IntentParserAgent:
         user_input: str,
         user_profile: dict[str, Any] | None = None,
     ) -> ParsedIntent:
+        """Extract structured constraints from the query using keyword/regex heuristics."""
         text = user_input.strip()
         profile = user_profile or {}
         constraints = UserConstraints()
@@ -142,6 +143,7 @@ class IntentParserAgent:
         conversation_history: list[dict[str, str]] | None = None,
         user_profile: dict[str, Any] | None = None,
     ) -> ParsedIntent | None:
+        """Call DeepSeek to parse the query into structured slots; returns None on failure."""
         client = OpenAI(api_key=self.api_key, base_url=self.base_url, timeout=5.0)
         system_prompt = (
             "你是美团 SmartRoute 的结构化出行需求解析器。"

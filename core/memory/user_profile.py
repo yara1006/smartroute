@@ -1,6 +1,5 @@
+"""User profile manager — SQLite-backed user preferences, feedback, and route history."""
 from __future__ import annotations
-
-"""User profile manager - SQLite-backed user preferences, feedback and route history."""
 
 import json
 import os
@@ -44,6 +43,7 @@ class UserProfileManager:
             conn.commit()
 
     def get_profile(self, user_id: str) -> UserProfile:
+        """Load a user profile from SQLite; create a blank one if it doesn't exist."""
         with sqlite3.connect(self.db_path) as conn:
             row = conn.execute("SELECT data FROM user_profiles WHERE user_id = ?", (user_id,)).fetchone()
         if not row:
@@ -53,6 +53,7 @@ class UserProfileManager:
         return UserProfile(**json.loads(row[0]))
 
     def save_profile(self, profile: UserProfile) -> None:
+        """Persist a user profile to SQLite (upsert by user_id)."""
         now = datetime.now().isoformat(timespec="seconds")
         data = profile.model_dump_json()
         with sqlite3.connect(self.db_path) as conn:
@@ -75,6 +76,7 @@ class UserProfileManager:
         self.save_profile(profile)
 
     def update_from_route(self, user_id: str, route_data: dict, feedback: int = 0) -> None:
+        """Learn user preferences from a completed route — record visits, likes/dislikes, and history."""
         profile = self.get_profile(user_id)
         for stop in route_data.get("stops", []):
             poi = stop.get("poi", {})

@@ -1,6 +1,5 @@
+"""Core domain models for SmartRoute."""
 from __future__ import annotations
-
-"""Core domain models for SmartRoute - POI, Route, UserConstraints, UserProfile and related types."""
 
 from datetime import datetime
 from enum import Enum
@@ -10,6 +9,7 @@ from pydantic import BaseModel, Field
 
 
 class POICategory(str, Enum):
+    """Enumeration of supported POI categories (restaurant, attraction, shopping, etc.)."""
     RESTAURANT = "餐饮"
     ATTRACTION = "景点"
     SHOPPING = "购物"
@@ -19,6 +19,7 @@ class POICategory(str, Enum):
 
 
 class POI(BaseModel):
+    """A point of interest — restaurant, attraction, cafe, etc. with location, rating, and pricing."""
     id: str
     name: str
     category: POICategory
@@ -42,6 +43,7 @@ class POI(BaseModel):
 
 
 class UserConstraints(BaseModel):
+    """User-specified constraints for route planning — city, budget, time, party size, etc."""
     city: str = "上海"
     start_location: str | None = None
     start_time: str = "14:00"
@@ -58,6 +60,7 @@ class UserConstraints(BaseModel):
 
 
 class RouteStop(BaseModel):
+    """A single stop in a route — POI + arrival/departure times, wait, and transit info."""
     order: int
     poi: POI
     arrival_time: str
@@ -71,6 +74,7 @@ class RouteStop(BaseModel):
 
 
 class Route(BaseModel):
+    """A complete generated route — ordered stops, totals, polyline, highlights, and warnings."""
     id: str
     title: str
     description: str
@@ -87,11 +91,13 @@ class Route(BaseModel):
 
 
 class GeoPoint(BaseModel):
+    """A geographic coordinate (latitude, longitude)."""
     latitude: float
     longitude: float
 
 
 class RouteContextPOI(BaseModel):
+    """A POI provided by the frontend context (e.g. user-selected from search preview)."""
     id: str | None = None
     name: str
     category: POICategory | str = POICategory.RESTAURANT
@@ -112,6 +118,7 @@ class RouteContextPOI(BaseModel):
 
 
 class RouteContext(BaseModel):
+    """Runtime context for a planning request — anchor, city, selected POIs, transport strategy."""
     source: str = "manual"
     city_hint: str | None = None
     anchor_text: str | None = None
@@ -123,6 +130,7 @@ class RouteContext(BaseModel):
 
 
 class UserProfile(BaseModel):
+    """Learned user preferences from past routes and feedback — categories, budget, liked/disliked POIs."""
     user_id: str
     preferred_categories: list[str] = Field(default_factory=list)
     disliked_categories: list[str] = Field(default_factory=list)
@@ -136,6 +144,7 @@ class UserProfile(BaseModel):
 
 
 class MeituanUserContext(BaseModel):
+    """Simulated or imported Meituan-style user context — search preferences, budget, wait tolerance."""
     profile_mode: str = "文艺体验型"
     search_preferences: list[str] = Field(default_factory=list)
     favorite_categories: list[str] = Field(default_factory=list)
@@ -150,6 +159,7 @@ class MeituanUserContext(BaseModel):
 
 
 class ParsedIntent(BaseModel):
+    """Structured output of intent parsing — city, constraints, preferences, parser metadata."""
     city: str = "上海"
     query_type: str = "路线规划"
     constraints: UserConstraints
@@ -163,6 +173,7 @@ class ParsedIntent(BaseModel):
 
 
 class RouteIntentResult(BaseModel):
+    """Result of route-intent classification — action (open_plugin / ask_confirm / normal_answer) plus slots."""
     action: str
     confidence: float = Field(ge=0, le=1)
     reason: str

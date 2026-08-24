@@ -1,6 +1,5 @@
+"""Core route-planning agent — generates optimized multi-stop routes with category diversity."""
 from __future__ import annotations
-
-"""Route planning agent - generates optimized multi-stop routes with category diversity."""
 
 import uuid
 from collections import defaultdict
@@ -41,6 +40,7 @@ class RoutePlannerAgent:
         n_routes: int = 2,
         pinned_pois: list[POI] | None = None,
     ) -> list[Route]:
+        """Generate up to n_routes diverse route variants (compact, quality, easy) from scored candidates."""
         if not candidates:
             return []
         pinned_pois = pinned_pois or []
@@ -225,6 +225,7 @@ class RoutePlannerAgent:
         budget: float | None,
         pinned_pois: list[POI] | None = None,
     ) -> list[POI]:
+        """Pick POIs that satisfy role sequence (meal/drink/culture/walk) while respecting budget and time."""
         pinned_pois = pinned_pois or []
         role_sequence = self._role_sequence(intent)
         base_max = 5 if total_hours >= 6 else 4 if total_hours >= 4 else 3

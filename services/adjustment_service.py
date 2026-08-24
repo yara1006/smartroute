@@ -118,6 +118,7 @@ def adjustment_status_for(
     deltas: MetricDeltas,
     candidate: POI | None,
 ) -> Literal["applied", "partial", "not_applied"]:
+    """Determine the adjustment outcome — applied, partial, or not_applied — by comparing before/after routes."""
     before_signature = [stop.poi.id for stop in before.stops]
     after_signature = [stop.poi.id for stop in after.stops]
     route_changed = before_signature != after_signature or len(before.stops) != len(after.stops)
@@ -305,6 +306,7 @@ def parse_adjustment_intent(
     route: Route,
     llm_adjustment: tuple[str, set[POICategory] | None, str, str] | None = None,
 ) -> AdjustmentIntent:
+    """Parse a natural-language adjustment instruction into a structured AdjustmentIntent (kind, target, categories)."""
     mentioned_index = mentioned_stop_index(route, instruction)
     if mentioned_index is not None:
         stop = route.stops[mentioned_index]
@@ -357,6 +359,7 @@ def find_adjustment_candidate(
     target_index: int,
     categories: set[POICategory] | None = None,
 ) -> POI | None:
+    """Find the best replacement POI for the target stop from the candidate pool, given the adjustment kind."""
     current_ids = {stop.poi.id for stop in route.stops}
     target_stop = route.stops[target_index]
     category_filter = categories or {target_stop.poi.category}

@@ -1,6 +1,5 @@
+"""AMap (高德) Web Service client — POI search, geocoding, direction routing with TTL cache."""
 from __future__ import annotations
-
-"""AMap (高德) Web Service client - POI search, geocoding, direction routing with TTL cache."""
 
 import hashlib
 import json
@@ -110,6 +109,7 @@ class AMapClient:
         city_hint: str | None = None,
         anchor_location: GeoPoint | None = None,
     ) -> AMapAnchor | None:
+        """Resolve a text/location hint into a geographic anchor via AMap geocoding or known-anchors table."""
         clean_text = (text or "").strip()
         if anchor_location:
             return AMapAnchor(
@@ -176,6 +176,7 @@ class AMapClient:
         radius_meters: int = DEFAULT_RADIUS_METERS,
         limit_per_category: int = 8,
     ) -> list[POI]:
+        """Search AMap for POIs around an anchor by category, with keyword and radius filters."""
         if not self.enabled:
             return []
 
@@ -298,6 +299,7 @@ class AMapClient:
         mode: str = "步行+公交",
         city: str | None = None,
     ) -> AMapRouteSegment | None:
+        """Get a route segment (distance, duration, polyline) between two POIs via AMap directions API."""
         if not self.enabled:
             return None
         api_mode = transport_api_mode(mode)

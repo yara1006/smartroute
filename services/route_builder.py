@@ -77,6 +77,7 @@ def build_dynamic_candidates(
     amap_client: AMapClient,
     allow_anchor_fallback: bool = True,
 ) -> tuple[list[tuple[POI, float]], list[POI], AMapAnchor | None, list[str]]:
+    """Build candidate POIs dynamically from AMap around a resolved anchor, with offline fallback."""
     route_context = request.route_context
     city_hint = city_hint_from(request.query, intent, route_context)
     selected_pois = [
@@ -139,6 +140,7 @@ def build_dynamic_candidates(
 
 
 def enrich_route_with_amap_segments(route: Route, amap_client: AMapClient, transport_mode: str) -> Route:
+    """Enrich a route with real AMap transit segments (polyline, duration, distance) between consecutive stops."""
     if len(route.stops) < 2:
         return route
     segments: list[dict[str, Any]] = []
@@ -228,6 +230,7 @@ def apply_context_to_candidates(
     candidates: list[tuple[POI, float]],
     context: MeituanUserContext,
 ) -> list[tuple[POI, float]]:
+    """Re-score POI candidates using the MeituanUserContext — boost matching categories, districts, tags, and budget."""
     favorite_categories = set(context.favorite_categories)
     preferred_districts = set(context.favorite_districts + context.frequent_districts)
     tags = set(context.browsed_tags + context.search_preferences)

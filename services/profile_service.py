@@ -369,6 +369,7 @@ def resolve_profile_context(
     profile_mode: str | None,
     profile_id: str | None,
 ) -> tuple[MeituanUserContext, str, str | None, str, int]:
+    """Resolve which profile source to use and return the context, source label, and signal count."""
     if profile_source == "official_api":
         raise HTTPException(status_code=400, detail="official_api 当前未启用；需要美团或大赛方授权接口后才能接入。")
     if profile_source == "manual_import":
@@ -383,6 +384,7 @@ def resolve_profile_context(
 
 
 def profile_with_context(profile: UserProfile, context: MeituanUserContext) -> UserProfile:
+    """Merge a MeituanUserContext into a UserProfile — augment categories, budget, and travel style."""
     merged = profile.model_copy(deep=True)
     for category in context.favorite_categories:
         if category not in merged.preferred_categories:
@@ -402,6 +404,7 @@ def intent_with_context(
     context: MeituanUserContext,
     route_context: RouteContext | None = None,
 ) -> ParsedIntent:
+    """Overlay MeituanUserContext constraints (wait, budget, walk, categories) onto a ParsedIntent."""
     next_intent = intent.model_copy(deep=True)
     constraints = next_intent.constraints
     constraints.max_wait_minutes = min(constraints.max_wait_minutes, context.max_wait_preference)

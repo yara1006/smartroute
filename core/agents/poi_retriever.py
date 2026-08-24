@@ -1,6 +1,5 @@
+"""POI retriever agent — vector search with category-specific templates and user profile boosting."""
 from __future__ import annotations
-
-"""POI retriever agent - vector search with category-specific templates and user profile boosting."""
 
 from core.models import POI, ParsedIntent, UserProfile
 from core.rag.vector_store import POIVectorStore
@@ -28,6 +27,7 @@ class POIRetrieverAgent:
         user_profile: UserProfile | None = None,
         max_candidates: int = 28,
     ) -> list[tuple[POI, float]]:
+        """Retrieve and rank POI candidates from the vector store based on parsed intent and user profile."""
         constraints = intent.constraints
         style = intent.extracted_preferences.get("travel_style", "休闲")
         district_text = " ".join(constraints.preferred_districts)

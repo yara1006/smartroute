@@ -60,6 +60,7 @@ PROFILE_IMPORTS_PATH = DATA_DIR / "profile_imports.json"
 load_dotenv(BASE_DIR / ".env")
 
 def extract_anchor_text(query: str, route_context: RouteContext | None = None) -> str | None:
+    """Extract the location/landmark anchor text from the user query or route context."""
     if route_context and route_context.anchor_text:
         return route_context.anchor_text.strip()
     text = query.strip()
@@ -143,6 +144,7 @@ def is_likely_place_anchor(value: str) -> bool:
 
 
 def city_hint_from(query: str, intent: ParsedIntent, route_context: RouteContext | None = None) -> str:
+    """Infer the city name from the query, parsed intent, or route context."""
     if route_context and route_context.city_hint:
         return normalize_city_hint(route_context.city_hint) or route_context.city_hint
     if any(word in query for word in ["深圳", "深大", "深圳大学", "科技园", "南山"]):
@@ -159,6 +161,7 @@ def city_hint_from(query: str, intent: ParsedIntent, route_context: RouteContext
 
 
 def requires_live_location_data(query: str, intent: ParsedIntent, route_context: RouteContext | None = None) -> bool:
+    """Return True if the request needs real AMap data (non-default city, explicit anchor, or selected POIs)."""
     if route_context and (
         route_context.city_hint
         or route_context.anchor_text
@@ -225,6 +228,7 @@ def resolve_route_anchor(
     selected_pois: list[POI],
     amap_client: AMapClient,
 ) -> AMapAnchor | None:
+    """Resolve a geographic anchor for the route — from context, AMap, or first selected POI."""
     city_hint = city_hint_from(query, intent, route_context)
     if selected_pois and route_context and route_context.source in {"favorites", "favorite"}:
         first = selected_pois[0]

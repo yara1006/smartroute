@@ -1,6 +1,5 @@
+"""Lightweight local POI vector store — lexical search with Chinese bigram tokenization."""
 from __future__ import annotations
-
-"""Lightweight local POI vector store - lexical search with Chinese bigram tokenization."""
 
 import json
 import math
@@ -32,6 +31,7 @@ class POIVectorStore:
         return len(self.documents)
 
     def index_pois(self, pois: list[dict[str, Any]]) -> None:
+        """Build the local index from a list of raw POI dicts — tokenize and persist to disk."""
         self.documents = []
         for poi in pois:
             text = self._doc_text(poi)
@@ -66,6 +66,7 @@ class POIVectorStore:
         exclude_ids: list[str] | None = None,
         district_filter: list[str] | None = None,
     ) -> list[dict[str, Any]]:
+        """Search the local POI index by token overlap, with optional category/price/wait/rating/district filters."""
         exclude = set(exclude_ids or [])
         query_tokens = self._tokens(query)
         scored: list[dict[str, Any]] = []
@@ -109,6 +110,7 @@ class POIVectorStore:
         radius_km: float = 2.0,
         n_results: int = 20,
     ) -> list[dict[str, Any]]:
+        """Return POIs within radius_km of (lat, lon), sorted by distance."""
         nearby = []
         for doc in self.documents:
             meta = doc["metadata"]

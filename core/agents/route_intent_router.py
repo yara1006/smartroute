@@ -1,6 +1,5 @@
+"""Route intent router — determines if a XiaoTuan query should trigger the SmartRoute plugin."""
 from __future__ import annotations
-
-"""Route intent router - determines if a XiaoTuan query should trigger the SmartRoute plugin."""
 
 import json
 import os
@@ -46,6 +45,7 @@ class RouteIntentRouterAgent:
         conversation_id: str | None = None,
         user_reply_type: str = "free_text",
     ) -> RouteIntentResult:
+        """Classify the query as open_plugin / ask_confirm / normal_answer and fill route-planning slots."""
         text = query.strip()
         context = context or {}
         conversation_id = conversation_id or previous_intent.conversation_id if previous_intent else conversation_id
@@ -84,6 +84,7 @@ class RouteIntentRouterAgent:
         context: dict[str, Any],
         signals: dict[str, Any],
     ) -> RouteIntentResult | None:
+        """Use DeepSeek to classify route intent; returns None on network/parse failure."""
         client = OpenAI(api_key=self.api_key, base_url=self.base_url, timeout=4.0)
         system_prompt = (
             "你是美团小团 AI 的路线意图识别器。你的任务是判断是否调起 SmartRoute 路线规划插件。"
@@ -161,6 +162,7 @@ class RouteIntentRouterAgent:
         context: dict[str, Any],
         signals: dict[str, Any],
     ) -> RouteIntentResult:
+        """Rule-based route-intent classification using keyword signals and context."""
         strong_route = (
             signals["route_hit"]
             or signals["duration_hit"]
@@ -229,6 +231,7 @@ class RouteIntentRouterAgent:
         llm_result: RouteIntentResult | None,
         signals: dict[str, Any],
     ) -> RouteIntentResult:
+        """Fuse rules-based and LLM-based route-intent results with guardrails for edge cases."""
         if llm_result is None:
             result = rules_result.model_copy(update={"fusion": {"strategy": "rules_only", "final_action": rules_result.action}})
             return self._apply_core_slot_policy(query, self._sanitize_result(result, query), signals)
