@@ -1,0 +1,1922 @@
+[
+  {
+    "poi_id": "poi_001",
+    "review_id": "r_001",
+    "content": "云间食堂（豫园店）在豫园附近人气稳定，主打性价比高、上海味道、小聚会。用户评价口味比较稳，人均约168元，高峰大约等待40分钟，适合提前收藏后按路线顺路安排。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "medium",
+      "price": "premium"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_002",
+    "review_id": "r_002",
+    "content": "胶片咖啡（徐家汇店）氛围安静，常被评价为插座友好、安静、拍照出片。人均约87元，适合放在路线中段休息聊天，下午光线更舒服。",
+    "rating": 5,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "medium",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_003",
+    "review_id": "r_003",
+    "content": "光影展馆（南京东路店）适合城市漫步和拍照，城市地标、免费、拍照出片是高频评价。整体评分约4.2，游览节奏轻松，建议避开周末正午人流。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "medium",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_004",
+    "review_id": "r_004",
+    "content": "沪上茶餐厅（豫园店）在豫园附近人气稳定，主打性价比高、本地人推荐、适合朋友。用户评价口味比较稳，人均约184元，高峰大约等待14分钟，适合提前收藏后按路线顺路安排。",
+    "rating": 5,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "medium",
+      "price": "premium"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_005",
+    "review_id": "r_005",
+    "content": "白昼烘焙所（愚园路店）氛围安静，常被评价为有设计感、适合聊天、安静。人均约39元，适合放在路线中段休息聊天，下午光线更舒服。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "medium",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_006",
+    "review_id": "r_006",
+    "content": "转角茶饮实验室（南京东路店）氛围安静，常被评价为有设计感、下午茶、适合约会。人均约85元，适合放在路线中段休息聊天，下午光线更舒服。",
+    "rating": 4,
+    "sentiment": "neutral",
+    "aspects": {
+      "wait_time": "short",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_007",
+    "review_id": "r_007",
+    "content": "玩家电影院（五角场店）偏夜间体验，用户常提到适合年轻人、夜生活、周末热门。建议提前看场次或预约，人均约116元，适合朋友结尾加一站。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "medium",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_008",
+    "review_id": "r_008",
+    "content": "星幕密室（世纪公园店）偏夜间体验，用户常提到朋友聚会、周末热门、适合年轻人。建议提前看场次或预约，人均约117元，适合朋友结尾加一站。",
+    "rating": 4,
+    "sentiment": "neutral",
+    "aspects": {
+      "wait_time": "short",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_009",
+    "review_id": "r_009",
+    "content": "有光潮流广场（愚园路店）适合边逛边休息，特点是周末市集、小众店铺、室内。店铺密度高，预算弹性大，雨天或临时调整路线时很适合作为缓冲点。",
+    "rating": 5,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "short",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_010",
+    "review_id": "r_010",
+    "content": "光影美术馆（张江店）适合城市漫步和拍照，城市地标、拍照出片、亲子友好是高频评价。整体评分约3.8，游览节奏轻松，建议避开周末正午人流。",
+    "rating": 4,
+    "sentiment": "neutral",
+    "aspects": {
+      "wait_time": "short",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_011",
+    "review_id": "r_011",
+    "content": "星幕桌游社（创智天地店）偏夜间体验，用户常提到周末热门、朋友聚会、室内。建议提前看场次或预约，人均约140元，适合朋友结尾加一站。",
+    "rating": 4,
+    "sentiment": "neutral",
+    "aspects": {
+      "wait_time": "medium",
+      "price": "premium"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_012",
+    "review_id": "r_012",
+    "content": "万象购物中心（中山公园店）适合边逛边休息，特点是室内、设计感、逛街。店铺密度高，预算弹性大，雨天或临时调整路线时很适合作为缓冲点。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "short",
+      "price": "premium"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_013",
+    "review_id": "r_013",
+    "content": "云间小海鲜（创智天地店）在创智天地附近人气稳定，主打招牌菜、上海味道、本地人推荐。用户评价口味比较稳，人均约54元，高峰大约等待12分钟，适合提前收藏后按路线顺路安排。",
+    "rating": 4,
+    "sentiment": "neutral",
+    "aspects": {
+      "wait_time": "medium",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_014",
+    "review_id": "r_014",
+    "content": "寻味茶餐厅（陆家嘴店）在陆家嘴附近人气稳定，主打适合朋友、招牌菜、上海味道。用户评价口味比较稳，人均约216元，高峰大约等待34分钟，适合提前收藏后按路线顺路安排。",
+    "rating": 5,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "medium",
+      "price": "premium"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_015",
+    "review_id": "r_015",
+    "content": "有味面馆（虹桥天地店）在虹桥天地附近人气稳定，主打招牌菜、适合朋友、本地人推荐。用户评价口味比较稳，人均约58元，基本不用等位，适合提前收藏后按路线顺路安排。",
+    "rating": 5,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "short",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_016",
+    "review_id": "r_016",
+    "content": "星幕桌游社（世纪公园店）偏夜间体验，用户常提到朋友聚会、适合年轻人、室内。建议提前看场次或预约，人均约190元，适合朋友结尾加一站。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "short",
+      "price": "premium"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_017",
+    "review_id": "r_017",
+    "content": "梧桐小海鲜（张江店）在张江附近人气稳定，主打上海味道、招牌菜、不踩雷。用户评价口味比较稳，人均约247元，基本不用等位，适合提前收藏后按路线顺路安排。",
+    "rating": 4,
+    "sentiment": "neutral",
+    "aspects": {
+      "wait_time": "short",
+      "price": "premium"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_018",
+    "review_id": "r_018",
+    "content": "弄堂食堂（大学路店）在大学路附近人气稳定，主打本地人推荐、性价比高、小聚会。用户评价口味比较稳，人均约58元，基本不用等位，适合提前收藏后按路线顺路安排。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "short",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_019",
+    "review_id": "r_019",
+    "content": "有风甜品店（虹桥路店）氛围安静，常被评价为插座友好、有设计感、安静。人均约70元，适合放在路线中段休息聊天，下午光线更舒服。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "short",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_020",
+    "review_id": "r_020",
+    "content": "梧桐小馆（虹桥天地店）在虹桥天地附近人气稳定，主打小聚会、本地人推荐、招牌菜。用户评价口味比较稳，人均约101元，基本不用等位，适合提前收藏后按路线顺路安排。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "short",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_021",
+    "review_id": "r_021",
+    "content": "南里烧鸟（南京东路店）在南京东路附近人气稳定，主打需要预约、小聚会、不踩雷。用户评价口味比较稳，人均约171元，高峰大约等待14分钟，适合提前收藏后按路线顺路安排。",
+    "rating": 5,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "medium",
+      "price": "premium"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_022",
+    "review_id": "r_022",
+    "content": "云间融合菜（人民广场店）在人民广场附近人气稳定，主打上海味道、适合朋友、招牌菜。用户评价口味比较稳，人均约224元，高峰大约等待38分钟，适合提前收藏后按路线顺路安排。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "medium",
+      "price": "premium"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_023",
+    "review_id": "r_023",
+    "content": "星幕Livehouse（虹桥天地店）偏夜间体验，用户常提到朋友聚会、室内、适合年轻人。建议提前看场次或预约，人均约104元，适合朋友结尾加一站。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "short",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_024",
+    "review_id": "r_024",
+    "content": "寻味食堂（虹桥天地店）在虹桥天地附近人气稳定，主打上海味道、需要预约、不踩雷。用户评价口味比较稳，人均约166元，高峰大约等待19分钟，适合提前收藏后按路线顺路安排。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "medium",
+      "price": "premium"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_025",
+    "review_id": "r_025",
+    "content": "沪上食堂（苏河湾店）在苏河湾附近人气稳定，主打小聚会、适合朋友、招牌菜。用户评价口味比较稳，人均约161元，高峰大约等待31分钟，适合提前收藏后按路线顺路安排。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "medium",
+      "price": "premium"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_026",
+    "review_id": "r_026",
+    "content": "海派私房菜（虹桥天地店）在虹桥天地附近人气稳定，主打性价比高、适合朋友、本地人推荐。用户评价口味比较稳，人均约235元，高峰大约等待10分钟，适合提前收藏后按路线顺路安排。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "short",
+      "price": "premium"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_027",
+    "review_id": "r_027",
+    "content": "南里小海鲜（徐家汇店）在徐家汇附近人气稳定，主打需要预约、招牌菜、本地人推荐。用户评价口味比较稳，人均约68元，基本不用等位，适合提前收藏后按路线顺路安排。",
+    "rating": 5,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "short",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_028",
+    "review_id": "r_028",
+    "content": "海派展馆（张江店）适合城市漫步和拍照，适合散步、雨天可去、城市地标是高频评价。整体评分约3.8，游览节奏轻松，建议避开周末正午人流。",
+    "rating": 4,
+    "sentiment": "neutral",
+    "aspects": {
+      "wait_time": "medium",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_029",
+    "review_id": "r_029",
+    "content": "微醺酒吧（蟠龙天地店）偏夜间体验，用户常提到需预约、夜生活、适合年轻人。建议提前看场次或预约，人均约120元，适合朋友结尾加一站。",
+    "rating": 4,
+    "sentiment": "neutral",
+    "aspects": {
+      "wait_time": "short",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_030",
+    "review_id": "r_030",
+    "content": "泊岸民宿（国家会展中心店）位置方便，评价集中在近地铁、行李寄存、干净。适合需要行李寄存、短暂休息或跨天行程的人群，建议提前确认房态。",
+    "rating": 5,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "short",
+      "price": "premium"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_031",
+    "review_id": "r_031",
+    "content": "云上艺术中心（创智天地店）适合城市漫步和拍照，适合散步、亲子友好、历史建筑是高频评价。整体评分约4.1，游览节奏轻松，建议避开周末正午人流。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "short",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_032",
+    "review_id": "r_032",
+    "content": "寻味私房菜（创智天地店）在创智天地附近人气稳定，主打性价比高、招牌菜、上海味道。用户评价口味比较稳，人均约68元，高峰大约等待49分钟，适合提前收藏后按路线顺路安排。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "medium",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_033",
+    "review_id": "r_033",
+    "content": "海派历史街区（虹桥天地店）适合城市漫步和拍照，适合散步、免费、城市地标是高频评价。整体评分约4.3，游览节奏轻松，建议避开周末正午人流。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "short",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_034",
+    "review_id": "r_034",
+    "content": "春见烧鸟（新华路店）在新华路附近人气稳定，主打招牌菜、小聚会、本地人推荐。用户评价口味比较稳，人均约255元，高峰大约等待41分钟，适合提前收藏后按路线顺路安排。",
+    "rating": 4,
+    "sentiment": "neutral",
+    "aspects": {
+      "wait_time": "medium",
+      "price": "premium"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_035",
+    "review_id": "r_035",
+    "content": "慢半拍咖啡（人民广场店）氛围安静，常被评价为拍照出片、适合约会、下午茶。人均约30元，适合放在路线中段休息聊天，下午光线更舒服。",
+    "rating": 4,
+    "sentiment": "neutral",
+    "aspects": {
+      "wait_time": "short",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_036",
+    "review_id": "r_036",
+    "content": "南里烧鸟（静安寺店）在静安寺附近人气稳定，主打需要预约、小聚会、招牌菜。用户评价口味比较稳，人均约225元，基本不用等位，适合提前收藏后按路线顺路安排。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "short",
+      "price": "premium"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_037",
+    "review_id": "r_037",
+    "content": "沉浸脱口秀（陆家嘴店）偏夜间体验，用户常提到夜生活、室内、适合年轻人。建议提前看场次或预约，人均约90元，适合朋友结尾加一站。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "short",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_038",
+    "review_id": "r_038",
+    "content": "城市酒吧（五角场店）偏夜间体验，用户常提到周末热门、需预约、朋友聚会。建议提前看场次或预约，人均约171元，适合朋友结尾加一站。",
+    "rating": 5,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "medium",
+      "price": "premium"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_039",
+    "review_id": "r_039",
+    "content": "星幕剧场（蟠龙天地店）偏夜间体验，用户常提到周末热门、朋友聚会、夜生活。建议提前看场次或预约，人均约79元，适合朋友结尾加一站。",
+    "rating": 4,
+    "sentiment": "neutral",
+    "aspects": {
+      "wait_time": "short",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_040",
+    "review_id": "r_040",
+    "content": "山野烘焙所（五角场店）氛围安静，常被评价为适合约会、拍照出片、下午茶。人均约51元，适合放在路线中段休息聊天，下午光线更舒服。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "medium",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_041",
+    "review_id": "r_041",
+    "content": "沪上小海鲜（张江店）在张江附近人气稳定，主打需要预约、本地人推荐、小聚会。用户评价口味比较稳，人均约190元，高峰大约等待15分钟，适合提前收藏后按路线顺路安排。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "medium",
+      "price": "premium"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_042",
+    "review_id": "r_042",
+    "content": "弄堂本帮菜（张江店）在张江附近人气稳定，主打适合朋友、小聚会、性价比高。用户评价口味比较稳，人均约193元，高峰大约等待27分钟，适合提前收藏后按路线顺路安排。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "medium",
+      "price": "premium"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_043",
+    "review_id": "r_043",
+    "content": "弄堂小海鲜（愚园路店）在愚园路附近人气稳定，主打适合朋友、小聚会、招牌菜。用户评价口味比较稳，人均约128元，高峰大约等待38分钟，适合提前收藏后按路线顺路安排。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "medium",
+      "price": "premium"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_044",
+    "review_id": "r_044",
+    "content": "慢半拍下午茶（虹桥枢纽店）氛围安静，常被评价为拍照出片、适合聊天、有设计感。人均约103元，适合放在路线中段休息聊天，下午光线更舒服。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "medium",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_045",
+    "review_id": "r_045",
+    "content": "梧桐私房菜（衡山路店）在衡山路附近人气稳定，主打适合朋友、本地人推荐、不踩雷。用户评价口味比较稳，人均约218元，基本不用等位，适合提前收藏后按路线顺路安排。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "short",
+      "price": "premium"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_046",
+    "review_id": "r_046",
+    "content": "银幕桌游社（虹桥天地店）偏夜间体验，用户常提到适合年轻人、需预约、朋友聚会。建议提前看场次或预约，人均约164元，适合朋友结尾加一站。",
+    "rating": 4,
+    "sentiment": "neutral",
+    "aspects": {
+      "wait_time": "medium",
+      "price": "premium"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_047",
+    "review_id": "r_047",
+    "content": "海派私房菜（五角场店）在五角场附近人气稳定，主打性价比高、本地人推荐、适合朋友。用户评价口味比较稳，人均约213元，高峰大约等待9分钟，适合提前收藏后按路线顺路安排。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "short",
+      "price": "premium"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_048",
+    "review_id": "r_048",
+    "content": "巷口手冲咖啡（前滩店）氛围安静，常被评价为安静、插座友好、有设计感。人均约44元，适合放在路线中段休息聊天，下午光线更舒服。",
+    "rating": 4,
+    "sentiment": "neutral",
+    "aspects": {
+      "wait_time": "short",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_049",
+    "review_id": "r_049",
+    "content": "城市市集（豫园店）适合边逛边休息，特点是逛街、周末市集、品牌多。店铺密度高，预算弹性大，雨天或临时调整路线时很适合作为缓冲点。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "short",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_050",
+    "review_id": "r_050",
+    "content": "星幕夜游体验（世纪公园店）偏夜间体验，用户常提到夜生活、朋友聚会、周末热门。建议提前看场次或预约，人均约64元，适合朋友结尾加一站。",
+    "rating": 4,
+    "sentiment": "neutral",
+    "aspects": {
+      "wait_time": "short",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_051",
+    "review_id": "r_051",
+    "content": "海派烧鸟（陆家嘴店）在陆家嘴附近人气稳定，主打适合朋友、本地人推荐、小聚会。用户评价口味比较稳，人均约213元，高峰大约等待35分钟，适合提前收藏后按路线顺路安排。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "medium",
+      "price": "premium"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_052",
+    "review_id": "r_052",
+    "content": "海派美术馆（人民广场店）适合城市漫步和拍照，拍照出片、城市地标、雨天可去是高频评价。整体评分约4.1，游览节奏轻松，建议避开周末正午人流。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "medium",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_053",
+    "review_id": "r_053",
+    "content": "微醺密室（豫园店）偏夜间体验，用户常提到室内、夜生活、需预约。建议提前看场次或预约，人均约206元，适合朋友结尾加一站。",
+    "rating": 5,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "short",
+      "price": "premium"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_054",
+    "review_id": "r_054",
+    "content": "小满本帮菜（陆家嘴店）在陆家嘴附近人气稳定，主打需要预约、招牌菜、性价比高。用户评价口味比较稳，人均约51元，高峰大约等待32分钟，适合提前收藏后按路线顺路安排。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "medium",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_055",
+    "review_id": "r_055",
+    "content": "绿地历史街区（世纪公园店）适合城市漫步和拍照，雨天可去、免费、拍照出片是高频评价。整体评分约4.3，游览节奏轻松，建议避开周末正午人流。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "medium",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_056",
+    "review_id": "r_056",
+    "content": "小满食堂（静安寺店）在静安寺附近人气稳定，主打不踩雷、性价比高、招牌菜。用户评价口味比较稳，人均约222元，高峰大约等待38分钟，适合提前收藏后按路线顺路安排。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "medium",
+      "price": "premium"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_057",
+    "review_id": "r_057",
+    "content": "设计师市集（静安寺店）适合边逛边休息，特点是室内、小众店铺、设计感。店铺密度高，预算弹性大，雨天或临时调整路线时很适合作为缓冲点。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "short",
+      "price": "premium"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_058",
+    "review_id": "r_058",
+    "content": "记忆观景台（创智天地店）适合城市漫步和拍照，历史建筑、亲子友好、城市地标是高频评价。整体评分约3.7，游览节奏轻松，建议避开周末正午人流。",
+    "rating": 4,
+    "sentiment": "neutral",
+    "aspects": {
+      "wait_time": "medium",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_059",
+    "review_id": "r_059",
+    "content": "弄堂私房菜（衡山路店）在衡山路附近人气稳定，主打上海味道、需要预约、本地人推荐。用户评价口味比较稳，人均约166元，基本不用等位，适合提前收藏后按路线顺路安排。",
+    "rating": 5,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "short",
+      "price": "premium"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_060",
+    "review_id": "r_060",
+    "content": "有风甜品店（大学路店）氛围安静，常被评价为适合约会、适合聊天、插座友好。人均约81元，适合放在路线中段休息聊天，下午光线更舒服。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "short",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_061",
+    "review_id": "r_061",
+    "content": "弄堂融合菜（人民广场店）在人民广场附近人气稳定，主打性价比高、上海味道、不踩雷。用户评价口味比较稳，人均约99元，高峰大约等待37分钟，适合提前收藏后按路线顺路安排。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "medium",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_062",
+    "review_id": "r_062",
+    "content": "云集买手店（创智天地店）适合边逛边休息，特点是室内、设计感、适合拍照。店铺密度高，预算弹性大，雨天或临时调整路线时很适合作为缓冲点。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "short",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_063",
+    "review_id": "r_063",
+    "content": "城市漫步区（愚园路店）适合城市漫步和拍照，历史建筑、雨天可去、免费是高频评价。整体评分约4.2，游览节奏轻松，建议避开周末正午人流。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "short",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_064",
+    "review_id": "r_064",
+    "content": "云间茶餐厅（南京东路店）在南京东路附近人气稳定，主打招牌菜、小聚会、不踩雷。用户评价口味比较稳，人均约135元，基本不用等位，适合提前收藏后按路线顺路安排。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "short",
+      "price": "premium"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_065",
+    "review_id": "r_065",
+    "content": "慢半拍咖啡（人民广场店）氛围安静，常被评价为适合约会、安静、下午茶。人均约93元，适合放在路线中段休息聊天，下午光线更舒服。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "medium",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_066",
+    "review_id": "r_066",
+    "content": "摩登奥莱（大宁店）适合边逛边休息，特点是品牌多、适合拍照、设计感。店铺密度高，预算弹性大，雨天或临时调整路线时很适合作为缓冲点。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "short",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_067",
+    "review_id": "r_067",
+    "content": "剧场桌游社（世纪公园店）偏夜间体验，用户常提到适合年轻人、周末热门、夜生活。建议提前看场次或预约，人均约151元，适合朋友结尾加一站。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "medium",
+      "price": "premium"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_068",
+    "review_id": "r_068",
+    "content": "里弄市集（蟠龙天地店）适合边逛边休息，特点是周末市集、品牌多、室内。店铺密度高，预算弹性大，雨天或临时调整路线时很适合作为缓冲点。",
+    "rating": 5,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "short",
+      "price": "premium"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_069",
+    "review_id": "r_069",
+    "content": "南里小海鲜（虹桥路店）在虹桥路附近人气稳定，主打本地人推荐、适合朋友、上海味道。用户评价口味比较稳，人均约105元，基本不用等位，适合提前收藏后按路线顺路安排。",
+    "rating": 4,
+    "sentiment": "neutral",
+    "aspects": {
+      "wait_time": "short",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_070",
+    "review_id": "r_070",
+    "content": "小满私房菜（虹桥枢纽店）在虹桥枢纽附近人气稳定，主打性价比高、招牌菜、本地人推荐。用户评价口味比较稳，人均约123元，基本不用等位，适合提前收藏后按路线顺路安排。",
+    "rating": 4,
+    "sentiment": "neutral",
+    "aspects": {
+      "wait_time": "short",
+      "price": "premium"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_071",
+    "review_id": "r_071",
+    "content": "滨江漫步区（虹桥天地店）适合城市漫步和拍照，适合散步、拍照出片、亲子友好是高频评价。整体评分约4.4，游览节奏轻松，建议避开周末正午人流。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "medium",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_072",
+    "review_id": "r_072",
+    "content": "弄堂面馆（陆家嘴店）在陆家嘴附近人气稳定，主打适合朋友、招牌菜、性价比高。用户评价口味比较稳，人均约82元，高峰大约等待37分钟，适合提前收藏后按路线顺路安排。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "medium",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_073",
+    "review_id": "r_073",
+    "content": "沪上小馆（大宁店）在大宁附近人气稳定，主打招牌菜、性价比高、适合朋友。用户评价口味比较稳，人均约201元，基本不用等位，适合提前收藏后按路线顺路安排。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "short",
+      "price": "premium"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_074",
+    "review_id": "r_074",
+    "content": "绿地美术馆（大学路店）适合城市漫步和拍照，城市地标、适合散步、亲子友好是高频评价。整体评分约3.9，游览节奏轻松，建议避开周末正午人流。",
+    "rating": 4,
+    "sentiment": "neutral",
+    "aspects": {
+      "wait_time": "medium",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_075",
+    "review_id": "r_075",
+    "content": "海派公园（中山公园店）适合城市漫步和拍照，拍照出片、适合散步、免费是高频评价。整体评分约4.3，游览节奏轻松，建议避开周末正午人流。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "medium",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_076",
+    "review_id": "r_076",
+    "content": "日光手冲咖啡（蟠龙天地店）氛围安静，常被评价为适合约会、下午茶、适合聊天。人均约60元，适合放在路线中段休息聊天，下午光线更舒服。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "short",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_077",
+    "review_id": "r_077",
+    "content": "弄堂私房菜（前滩店）在前滩附近人气稳定，主打上海味道、招牌菜、小聚会。用户评价口味比较稳，人均约204元，高峰大约等待39分钟，适合提前收藏后按路线顺路安排。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "medium",
+      "price": "premium"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_078",
+    "review_id": "r_078",
+    "content": "云集潮流广场（张江店）适合边逛边休息，特点是适合拍照、逛街、小众店铺。店铺密度高，预算弹性大，雨天或临时调整路线时很适合作为缓冲点。",
+    "rating": 4,
+    "sentiment": "neutral",
+    "aspects": {
+      "wait_time": "short",
+      "price": "premium"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_079",
+    "review_id": "r_079",
+    "content": "梧桐烧鸟（愚园路店）在愚园路附近人气稳定，主打需要预约、本地人推荐、不踩雷。用户评价口味比较稳，人均约151元，高峰大约等待51分钟，适合提前收藏后按路线顺路安排。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "medium",
+      "price": "premium"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_080",
+    "review_id": "r_080",
+    "content": "转角茶室（外滩店）氛围安静，常被评价为适合约会、有设计感、拍照出片。人均约93元，适合放在路线中段休息聊天，下午光线更舒服。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "medium",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_081",
+    "review_id": "r_081",
+    "content": "梧桐融合菜（南京东路店）在南京东路附近人气稳定，主打性价比高、小聚会、需要预约。用户评价口味比较稳，人均约187元，高峰大约等待55分钟，适合提前收藏后按路线顺路安排。",
+    "rating": 5,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "medium",
+      "price": "premium"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_082",
+    "review_id": "r_082",
+    "content": "南里私房菜（人民广场店）在人民广场附近人气稳定，主打小聚会、上海味道、不踩雷。用户评价口味比较稳，人均约117元，基本不用等位，适合提前收藏后按路线顺路安排。",
+    "rating": 5,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "short",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_083",
+    "review_id": "r_083",
+    "content": "设计师奥莱（国家会展中心店）适合边逛边休息，特点是适合拍照、品牌多、小众店铺。店铺密度高，预算弹性大，雨天或临时调整路线时很适合作为缓冲点。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "short",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_084",
+    "review_id": "r_084",
+    "content": "小满私房菜（南京东路店）在南京东路附近人气稳定，主打上海味道、招牌菜、需要预约。用户评价口味比较稳，人均约74元，高峰大约等待12分钟，适合提前收藏后按路线顺路安排。",
+    "rating": 4,
+    "sentiment": "neutral",
+    "aspects": {
+      "wait_time": "medium",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_085",
+    "review_id": "r_085",
+    "content": "弄堂私房菜（徐家汇店）在徐家汇附近人气稳定，主打上海味道、不踩雷、需要预约。用户评价口味比较稳，人均约99元，基本不用等位，适合提前收藏后按路线顺路安排。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "short",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_086",
+    "review_id": "r_086",
+    "content": "弄堂本帮菜（大宁店）在大宁附近人气稳定，主打性价比高、不踩雷、上海味道。用户评价口味比较稳，人均约102元，高峰大约等待42分钟，适合提前收藏后按路线顺路安排。",
+    "rating": 4,
+    "sentiment": "neutral",
+    "aspects": {
+      "wait_time": "medium",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_087",
+    "review_id": "r_087",
+    "content": "一隅烘焙所（虹桥天地店）氛围安静，常被评价为适合聊天、下午茶、安静。人均约66元，适合放在路线中段休息聊天，下午光线更舒服。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "medium",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_088",
+    "review_id": "r_088",
+    "content": "春见食堂（豫园店）在豫园附近人气稳定，主打性价比高、本地人推荐、小聚会。用户评价口味比较稳，人均约114元，基本不用等位，适合提前收藏后按路线顺路安排。",
+    "rating": 4,
+    "sentiment": "neutral",
+    "aspects": {
+      "wait_time": "short",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_089",
+    "review_id": "r_089",
+    "content": "小满茶餐厅（蟠龙天地店）在蟠龙天地附近人气稳定，主打招牌菜、适合朋友、性价比高。用户评价口味比较稳，人均约126元，基本不用等位，适合提前收藏后按路线顺路安排。",
+    "rating": 4,
+    "sentiment": "neutral",
+    "aspects": {
+      "wait_time": "short",
+      "price": "premium"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_090",
+    "review_id": "r_090",
+    "content": "寻味融合菜（南京东路店）在南京东路附近人气稳定，主打小聚会、上海味道、需要预约。用户评价口味比较稳，人均约72元，高峰大约等待25分钟，适合提前收藏后按路线顺路安排。",
+    "rating": 4,
+    "sentiment": "neutral",
+    "aspects": {
+      "wait_time": "medium",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_091",
+    "review_id": "r_091",
+    "content": "白昼茶室（张江店）氛围安静，常被评价为拍照出片、适合约会、插座友好。人均约89元，适合放在路线中段休息聊天，下午光线更舒服。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "short",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_092",
+    "review_id": "r_092",
+    "content": "有味食堂（南京东路店）在南京东路附近人气稳定，主打上海味道、适合朋友、招牌菜。用户评价口味比较稳，人均约207元，高峰大约等待49分钟，适合提前收藏后按路线顺路安排。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "medium",
+      "price": "premium"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_093",
+    "review_id": "r_093",
+    "content": "方庭潮流广场（人民广场店）适合边逛边休息，特点是设计感、品牌多、适合拍照。店铺密度高，预算弹性大，雨天或临时调整路线时很适合作为缓冲点。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "short",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_094",
+    "review_id": "r_094",
+    "content": "海派火锅（豫园店）在豫园附近人气稳定，主打招牌菜、需要预约、不踩雷。用户评价口味比较稳，人均约61元，高峰大约等待31分钟，适合提前收藏后按路线顺路安排。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "medium",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_095",
+    "review_id": "r_095",
+    "content": "有风烘焙所（国家会展中心店）氛围安静，常被评价为适合聊天、拍照出片、有设计感。人均约63元，适合放在路线中段休息聊天，下午光线更舒服。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "short",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_096",
+    "review_id": "r_096",
+    "content": "梧桐展馆（徐家汇店）适合城市漫步和拍照，拍照出片、历史建筑、城市地标是高频评价。整体评分约4.2，游览节奏轻松，建议避开周末正午人流。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "short",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_097",
+    "review_id": "r_097",
+    "content": "云集集合店（衡山路店）适合边逛边休息，特点是逛街、周末市集、设计感。店铺密度高，预算弹性大，雨天或临时调整路线时很适合作为缓冲点。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "short",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_098",
+    "review_id": "r_098",
+    "content": "星幕脱口秀（国家会展中心店）偏夜间体验，用户常提到夜生活、周末热门、需预约。建议提前看场次或预约，人均约160元，适合朋友结尾加一站。",
+    "rating": 5,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "medium",
+      "price": "premium"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_099",
+    "review_id": "r_099",
+    "content": "滨江历史街区（南京东路店）适合城市漫步和拍照，免费、适合散步、亲子友好是高频评价。整体评分约4.5，游览节奏轻松，建议避开周末正午人流。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "medium",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_100",
+    "review_id": "r_100",
+    "content": "春见小馆（国家会展中心店）在国家会展中心附近人气稳定，主打性价比高、不踩雷、招牌菜。用户评价口味比较稳，人均约160元，高峰大约等待29分钟，适合提前收藏后按路线顺路安排。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "medium",
+      "price": "premium"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_101",
+    "review_id": "r_101",
+    "content": "记忆文化广场（五角场店）适合城市漫步和拍照，亲子友好、城市地标、历史建筑是高频评价。整体评分约4.1，游览节奏轻松，建议避开周末正午人流。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "medium",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_102",
+    "review_id": "r_102",
+    "content": "记忆美术馆（张江店）适合城市漫步和拍照，亲子友好、拍照出片、历史建筑是高频评价。整体评分约3.9，游览节奏轻松，建议避开周末正午人流。",
+    "rating": 4,
+    "sentiment": "neutral",
+    "aspects": {
+      "wait_time": "short",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_103",
+    "review_id": "r_103",
+    "content": "外滩旁公寓酒店（武康路店）位置方便，评价集中在干净、行李寄存、近地铁。适合需要行李寄存、短暂休息或跨天行程的人群，建议提前确认房态。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "short",
+      "price": "premium"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_104",
+    "review_id": "r_104",
+    "content": "巷口甜品店（南京东路店）氛围安静，常被评价为下午茶、拍照出片、适合约会。人均约41元，适合放在路线中段休息聊天，下午光线更舒服。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "medium",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_105",
+    "review_id": "r_105",
+    "content": "弄堂面馆（苏河湾店）在苏河湾附近人气稳定，主打本地人推荐、招牌菜、小聚会。用户评价口味比较稳，人均约222元，高峰大约等待53分钟，适合提前收藏后按路线顺路安排。",
+    "rating": 4,
+    "sentiment": "neutral",
+    "aspects": {
+      "wait_time": "medium",
+      "price": "premium"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_106",
+    "review_id": "r_106",
+    "content": "有风茶饮实验室（虹桥路店）氛围安静，常被评价为插座友好、拍照出片、下午茶。人均约74元，适合放在路线中段休息聊天，下午光线更舒服。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "short",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_107",
+    "review_id": "r_107",
+    "content": "梧桐本帮菜（中山公园店）在中山公园附近人气稳定，主打本地人推荐、适合朋友、招牌菜。用户评价口味比较稳，人均约58元，高峰大约等待51分钟，适合提前收藏后按路线顺路安排。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "medium",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_108",
+    "review_id": "r_108",
+    "content": "摩登商业街（衡山路店）适合边逛边休息，特点是适合拍照、设计感、品牌多。店铺密度高，预算弹性大，雨天或临时调整路线时很适合作为缓冲点。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "short",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_109",
+    "review_id": "r_109",
+    "content": "沪上食堂（南京西路店）在南京西路附近人气稳定，主打性价比高、上海味道、招牌菜。用户评价口味比较稳，人均约105元，高峰大约等待55分钟，适合提前收藏后按路线顺路安排。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "medium",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_110",
+    "review_id": "r_110",
+    "content": "银幕Livehouse（大宁店）偏夜间体验，用户常提到氛围好、周末热门、朋友聚会。建议提前看场次或预约，人均约64元，适合朋友结尾加一站。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "medium",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_111",
+    "review_id": "r_111",
+    "content": "有风茶室（愚园路店）氛围安静，常被评价为下午茶、有设计感、拍照出片。人均约105元，适合放在路线中段休息聊天，下午光线更舒服。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "short",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_112",
+    "review_id": "r_112",
+    "content": "海派小馆（愚园路店）在愚园路附近人气稳定，主打招牌菜、适合朋友、本地人推荐。用户评价口味比较稳，人均约188元，高峰大约等待10分钟，适合提前收藏后按路线顺路安排。",
+    "rating": 4,
+    "sentiment": "neutral",
+    "aspects": {
+      "wait_time": "short",
+      "price": "premium"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_113",
+    "review_id": "r_113",
+    "content": "奇遇夜游体验（蟠龙天地店）偏夜间体验，用户常提到适合年轻人、朋友聚会、周末热门。建议提前看场次或预约，人均约135元，适合朋友结尾加一站。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "short",
+      "price": "premium"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_114",
+    "review_id": "r_114",
+    "content": "海派火锅（人民广场店）在人民广场附近人气稳定，主打需要预约、性价比高、小聚会。用户评价口味比较稳，人均约105元，高峰大约等待21分钟，适合提前收藏后按路线顺路安排。",
+    "rating": 5,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "medium",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_115",
+    "review_id": "r_115",
+    "content": "沉浸桌游社（人民广场店）偏夜间体验，用户常提到氛围好、室内、需预约。建议提前看场次或预约，人均约95元，适合朋友结尾加一站。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "short",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_116",
+    "review_id": "r_116",
+    "content": "有光潮流广场（前滩店）适合边逛边休息，特点是设计感、逛街、小众店铺。店铺密度高，预算弹性大，雨天或临时调整路线时很适合作为缓冲点。",
+    "rating": 4,
+    "sentiment": "neutral",
+    "aspects": {
+      "wait_time": "short",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_117",
+    "review_id": "r_117",
+    "content": "新潮购物中心（大学路店）适合边逛边休息，特点是室内、设计感、小众店铺。店铺密度高，预算弹性大，雨天或临时调整路线时很适合作为缓冲点。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "short",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_118",
+    "review_id": "r_118",
+    "content": "里弄生活馆（世纪公园店）适合边逛边休息，特点是适合拍照、逛街、设计感。店铺密度高，预算弹性大，雨天或临时调整路线时很适合作为缓冲点。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "short",
+      "price": "premium"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_119",
+    "review_id": "r_119",
+    "content": "山野手冲咖啡（虹桥枢纽店）氛围安静，常被评价为适合聊天、有设计感、下午茶。人均约52元，适合放在路线中段休息聊天，下午光线更舒服。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "short",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_120",
+    "review_id": "r_120",
+    "content": "弄堂融合菜（苏河湾店）在苏河湾附近人气稳定，主打不踩雷、性价比高、适合朋友。用户评价口味比较稳，人均约151元，高峰大约等待21分钟，适合提前收藏后按路线顺路安排。",
+    "rating": 5,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "medium",
+      "price": "premium"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_121",
+    "review_id": "r_121",
+    "content": "老街文化广场（静安寺店）适合城市漫步和拍照，适合散步、历史建筑、拍照出片是高频评价。整体评分约4.2，游览节奏轻松，建议避开周末正午人流。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "short",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_122",
+    "review_id": "r_122",
+    "content": "城市商业街（南京西路店）适合边逛边休息，特点是室内、逛街、设计感。店铺密度高，预算弹性大，雨天或临时调整路线时很适合作为缓冲点。",
+    "rating": 4,
+    "sentiment": "neutral",
+    "aspects": {
+      "wait_time": "short",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_123",
+    "review_id": "r_123",
+    "content": "记忆展馆（武康路店）适合城市漫步和拍照，雨天可去、适合散步、城市地标是高频评价。整体评分约4.2，游览节奏轻松，建议避开周末正午人流。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "short",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_124",
+    "review_id": "r_124",
+    "content": "小满私房菜（虹桥路店）在虹桥路附近人气稳定，主打适合朋友、性价比高、不踩雷。用户评价口味比较稳，人均约141元，高峰大约等待11分钟，适合提前收藏后按路线顺路安排。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "medium",
+      "price": "premium"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_125",
+    "review_id": "r_125",
+    "content": "精选购物中心（世纪公园店）适合边逛边休息，特点是室内、品牌多、设计感。店铺密度高，预算弹性大，雨天或临时调整路线时很适合作为缓冲点。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "short",
+      "price": "premium"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_126",
+    "review_id": "r_126",
+    "content": "寻味融合菜（国家会展中心店）在国家会展中心附近人气稳定，主打适合朋友、招牌菜、上海味道。用户评价口味比较稳，人均约86元，高峰大约等待19分钟，适合提前收藏后按路线顺路安排。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "medium",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_127",
+    "review_id": "r_127",
+    "content": "有味私房菜（人民广场店）在人民广场附近人气稳定，主打性价比高、不踩雷、小聚会。用户评价口味比较稳，人均约205元，基本不用等位，适合提前收藏后按路线顺路安排。",
+    "rating": 4,
+    "sentiment": "neutral",
+    "aspects": {
+      "wait_time": "short",
+      "price": "premium"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_128",
+    "review_id": "r_128",
+    "content": "悦庭精品客栈（豫园店）位置方便，评价集中在适合过夜、干净、行李寄存。适合需要行李寄存、短暂休息或跨天行程的人群，建议提前确认房态。",
+    "rating": 4,
+    "sentiment": "neutral",
+    "aspects": {
+      "wait_time": "short",
+      "price": "premium"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_129",
+    "review_id": "r_129",
+    "content": "白昼甜品店（五角场店）氛围安静，常被评价为适合约会、适合聊天、有设计感。人均约97元，适合放在路线中段休息聊天，下午光线更舒服。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "short",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_130",
+    "review_id": "r_130",
+    "content": "山野茶室（静安寺店）氛围安静，常被评价为有设计感、安静、适合聊天。人均约89元，适合放在路线中段休息聊天，下午光线更舒服。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "medium",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_131",
+    "review_id": "r_131",
+    "content": "里弄精品客栈（南京西路店）位置方便，评价集中在行李寄存、适合过夜、近地铁。适合需要行李寄存、短暂休息或跨天行程的人群，建议提前确认房态。",
+    "rating": 4,
+    "sentiment": "neutral",
+    "aspects": {
+      "wait_time": "short",
+      "price": "premium"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_132",
+    "review_id": "r_132",
+    "content": "方庭奥莱（人民广场店）适合边逛边休息，特点是适合拍照、周末市集、逛街。店铺密度高，预算弹性大，雨天或临时调整路线时很适合作为缓冲点。",
+    "rating": 5,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "short",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_133",
+    "review_id": "r_133",
+    "content": "新潮购物中心（中山公园店）适合边逛边休息，特点是小众店铺、周末市集、适合拍照。店铺密度高，预算弹性大，雨天或临时调整路线时很适合作为缓冲点。",
+    "rating": 5,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "short",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_134",
+    "review_id": "r_134",
+    "content": "新潮市集（大学路店）适合边逛边休息，特点是周末市集、设计感、品牌多。店铺密度高，预算弹性大，雨天或临时调整路线时很适合作为缓冲点。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "short",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_135",
+    "review_id": "r_135",
+    "content": "摩登商业街（徐家汇店）适合边逛边休息，特点是室内、设计感、适合拍照。店铺密度高，预算弹性大，雨天或临时调整路线时很适合作为缓冲点。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "short",
+      "price": "premium"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_136",
+    "review_id": "r_136",
+    "content": "精选商业街（静安寺店）适合边逛边休息，特点是适合拍照、小众店铺、周末市集。店铺密度高，预算弹性大，雨天或临时调整路线时很适合作为缓冲点。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "short",
+      "price": "premium"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_137",
+    "review_id": "r_137",
+    "content": "有味私房菜（南京西路店）在南京西路附近人气稳定，主打性价比高、不踩雷、适合朋友。用户评价口味比较稳，人均约220元，高峰大约等待49分钟，适合提前收藏后按路线顺路安排。",
+    "rating": 4,
+    "sentiment": "neutral",
+    "aspects": {
+      "wait_time": "medium",
+      "price": "premium"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_138",
+    "review_id": "r_138",
+    "content": "一隅茶室（南京东路店）氛围安静，常被评价为有设计感、插座友好、适合聊天。人均约60元，适合放在路线中段休息聊天，下午光线更舒服。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "short",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_139",
+    "review_id": "r_139",
+    "content": "慢半拍咖啡（大学路店）氛围安静，常被评价为安静、下午茶、适合约会。人均约98元，适合放在路线中段休息聊天，下午光线更舒服。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "short",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_140",
+    "review_id": "r_140",
+    "content": "寻味小馆（愚园路店）在愚园路附近人气稳定，主打本地人推荐、不踩雷、小聚会。用户评价口味比较稳，人均约168元，高峰大约等待30分钟，适合提前收藏后按路线顺路安排。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "medium",
+      "price": "premium"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_141",
+    "review_id": "r_141",
+    "content": "精选购物中心（虹桥天地店）适合边逛边休息，特点是适合拍照、逛街、周末市集。店铺密度高，预算弹性大，雨天或临时调整路线时很适合作为缓冲点。",
+    "rating": 5,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "short",
+      "price": "premium"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_142",
+    "review_id": "r_142",
+    "content": "有风下午茶（静安寺店）氛围安静，常被评价为下午茶、有设计感、拍照出片。人均约39元，适合放在路线中段休息聊天，下午光线更舒服。",
+    "rating": 4,
+    "sentiment": "neutral",
+    "aspects": {
+      "wait_time": "short",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_143",
+    "review_id": "r_143",
+    "content": "南里小馆（创智天地店）在创智天地附近人气稳定，主打本地人推荐、需要预约、性价比高。用户评价口味比较稳，人均约59元，高峰大约等待15分钟，适合提前收藏后按路线顺路安排。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "medium",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_144",
+    "review_id": "r_144",
+    "content": "记忆漫步区（创智天地店）适合城市漫步和拍照，亲子友好、雨天可去、适合散步是高频评价。整体评分约4.1，游览节奏轻松，建议避开周末正午人流。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "medium",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_145",
+    "review_id": "r_145",
+    "content": "城市历史街区（大学路店）适合城市漫步和拍照，免费、拍照出片、城市地标是高频评价。整体评分约4.4，游览节奏轻松，建议避开周末正午人流。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "short",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_146",
+    "review_id": "r_146",
+    "content": "云栖酒店（外滩店）位置方便，评价集中在干净、近地铁、适合过夜。适合需要行李寄存、短暂休息或跨天行程的人群，建议提前确认房态。",
+    "rating": 4,
+    "sentiment": "neutral",
+    "aspects": {
+      "wait_time": "short",
+      "price": "premium"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_147",
+    "review_id": "r_147",
+    "content": "城市剧场（前滩店）偏夜间体验，用户常提到夜生活、室内、氛围好。建议提前看场次或预约，人均约162元，适合朋友结尾加一站。",
+    "rating": 4,
+    "sentiment": "neutral",
+    "aspects": {
+      "wait_time": "medium",
+      "price": "premium"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_148",
+    "review_id": "r_148",
+    "content": "城市精选酒店（大学路店）位置方便，评价集中在安静、适合过夜、行李寄存。适合需要行李寄存、短暂休息或跨天行程的人群，建议提前确认房态。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "short",
+      "price": "premium"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_149",
+    "review_id": "r_149",
+    "content": "新潮市集（滨江店）适合边逛边休息，特点是适合拍照、周末市集、室内。店铺密度高，预算弹性大，雨天或临时调整路线时很适合作为缓冲点。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "short",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_150",
+    "review_id": "r_150",
+    "content": "微醺夜游体验（蟠龙天地店）偏夜间体验，用户常提到夜生活、适合年轻人、需预约。建议提前看场次或预约，人均约78元，适合朋友结尾加一站。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "short",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_151",
+    "review_id": "r_151",
+    "content": "沉浸电影院（静安寺店）偏夜间体验，用户常提到周末热门、夜生活、朋友聚会。建议提前看场次或预约，人均约165元，适合朋友结尾加一站。",
+    "rating": 5,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "medium",
+      "price": "premium"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_152",
+    "review_id": "r_152",
+    "content": "海派融合菜（杨浦滨江店）在杨浦滨江附近人气稳定，主打小聚会、性价比高、适合朋友。用户评价口味比较稳，人均约157元，基本不用等位，适合提前收藏后按路线顺路安排。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "short",
+      "price": "premium"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_153",
+    "review_id": "r_153",
+    "content": "沉浸脱口秀（虹桥枢纽店）偏夜间体验，用户常提到夜生活、周末热门、适合年轻人。建议提前看场次或预约，人均约144元，适合朋友结尾加一站。",
+    "rating": 4,
+    "sentiment": "neutral",
+    "aspects": {
+      "wait_time": "medium",
+      "price": "premium"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_154",
+    "review_id": "r_154",
+    "content": "艺文美术馆（国家会展中心店）适合城市漫步和拍照，免费、历史建筑、拍照出片是高频评价。整体评分约3.9，游览节奏轻松，建议避开周末正午人流。",
+    "rating": 4,
+    "sentiment": "neutral",
+    "aspects": {
+      "wait_time": "medium",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_155",
+    "review_id": "r_155",
+    "content": "慢半拍茶室（世纪公园店）氛围安静，常被评价为拍照出片、有设计感、适合约会。人均约49元，适合放在路线中段休息聊天，下午光线更舒服。",
+    "rating": 4,
+    "sentiment": "neutral",
+    "aspects": {
+      "wait_time": "short",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_156",
+    "review_id": "r_156",
+    "content": "山野茶室（苏河湾店）氛围安静，常被评价为下午茶、插座友好、拍照出片。人均约102元，适合放在路线中段休息聊天，下午光线更舒服。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "short",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_157",
+    "review_id": "r_157",
+    "content": "小满火锅（蟠龙天地店）在蟠龙天地附近人气稳定，主打上海味道、性价比高、需要预约。用户评价口味比较稳，人均约223元，高峰大约等待13分钟，适合提前收藏后按路线顺路安排。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "medium",
+      "price": "premium"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_158",
+    "review_id": "r_158",
+    "content": "夜航电影院（愚园路店）偏夜间体验，用户常提到适合年轻人、夜生活、氛围好。建议提前看场次或预约，人均约71元，适合朋友结尾加一站。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "short",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_159",
+    "review_id": "r_159",
+    "content": "小满私房菜（苏河湾店）在苏河湾附近人气稳定，主打不踩雷、性价比高、招牌菜。用户评价口味比较稳，人均约231元，高峰大约等待23分钟，适合提前收藏后按路线顺路安排。",
+    "rating": 4,
+    "sentiment": "positive",
+    "aspects": {
+      "wait_time": "medium",
+      "price": "premium"
+    },
+    "date": "2026-05-01"
+  },
+  {
+    "poi_id": "poi_160",
+    "review_id": "r_160",
+    "content": "沪上面馆（创智天地店）在创智天地附近人气稳定，主打小聚会、适合朋友、招牌菜。用户评价口味比较稳，人均约98元，高峰大约等待34分钟，适合提前收藏后按路线顺路安排。",
+    "rating": 4,
+    "sentiment": "neutral",
+    "aspects": {
+      "wait_time": "medium",
+      "price": "reasonable"
+    },
+    "date": "2026-05-01"
+  }
+]

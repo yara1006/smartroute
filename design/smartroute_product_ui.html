@@ -1,0 +1,810 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SmartRoute AI Product UI</title>
+  <style>
+    :root {
+      --mt-yellow: #ffd100;
+      --mt-yellow-2: #ffe56a;
+      --ink: #111111;
+      --text: #222222;
+      --muted: #777777;
+      --line: #e9e9e9;
+      --soft: #f6f6f6;
+      --card: #ffffff;
+      --green: #16a36a;
+      --orange: #f47b20;
+      --red: #e34d59;
+      --blue: #2b6de8;
+      --shadow: 0 18px 45px rgba(0,0,0,.09);
+      --radius: 20px;
+      --font: -apple-system, BlinkMacSystemFont, "PingFang SC", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #ececec;
+      color: var(--text);
+      font-family: var(--font);
+      letter-spacing: 0;
+    }
+
+    .board {
+      width: 1840px;
+      min-height: 100vh;
+      padding: 56px;
+    }
+
+    .cover {
+      width: 1728px;
+      height: 430px;
+      border-radius: 32px;
+      background:
+        radial-gradient(circle at 78% 24%, rgba(255,209,0,.45), transparent 30%),
+        linear-gradient(135deg, #111 0%, #29220a 100%);
+      color: white;
+      padding: 54px 64px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+    .cover h1 { margin: 0; font-size: 62px; line-height: 1.05; letter-spacing: 0; }
+    .cover p { width: 720px; margin: 22px 0 0; color: rgba(255,255,255,.78); font-size: 22px; line-height: 1.65; }
+    .cover-badge {
+      display: inline-flex;
+      gap: 10px;
+      align-items: center;
+      background: var(--mt-yellow);
+      color: #111;
+      font-weight: 800;
+      padding: 10px 16px;
+      border-radius: 999px;
+      margin-bottom: 28px;
+    }
+    .cover-grid {
+      position: absolute;
+      right: 58px;
+      bottom: 50px;
+      display: grid;
+      grid-template-columns: repeat(2, 210px);
+      gap: 14px;
+    }
+    .cover-stat {
+      background: rgba(255,255,255,.11);
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 22px;
+      padding: 20px;
+      backdrop-filter: blur(8px);
+    }
+    .cover-stat strong { display: block; font-size: 30px; color: var(--mt-yellow); }
+    .cover-stat span { display: block; margin-top: 6px; color: rgba(255,255,255,.72); }
+
+    .section-title {
+      margin: 54px 0 24px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+    }
+    .section-title h2 { margin: 0; font-size: 34px; }
+    .section-title p { margin: 0; color: var(--muted); font-size: 16px; }
+
+    .row { display: flex; gap: 28px; align-items: flex-start; flex-wrap: wrap; }
+    .phone {
+      width: 390px;
+      height: 844px;
+      background: #f7f7f7;
+      border-radius: 42px;
+      border: 10px solid #111;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      position: relative;
+    }
+    .phone-inner { height: 100%; display: flex; flex-direction: column; }
+    .status {
+      height: 48px;
+      padding: 16px 22px 0;
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      font-weight: 800;
+      color: #111;
+    }
+    .notch {
+      position: absolute;
+      top: 12px;
+      left: 50%;
+      width: 112px;
+      height: 28px;
+      transform: translateX(-50%);
+      border-radius: 18px;
+      background: #111;
+      z-index: 2;
+    }
+    .appbar {
+      height: 58px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      font-weight: 800;
+      font-size: 18px;
+    }
+    .icon-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: #fff;
+      border: 1px solid var(--line);
+      font-weight: 900;
+    }
+    .content {
+      flex: 1;
+      padding: 0 18px 18px;
+      overflow: hidden;
+    }
+    .hero-card {
+      background: linear-gradient(135deg, var(--mt-yellow), #fff0a8);
+      border-radius: 26px;
+      padding: 24px;
+      min-height: 172px;
+      box-shadow: 0 10px 24px rgba(255,209,0,.2);
+    }
+    .hero-card h3 { margin: 0; font-size: 28px; line-height: 1.18; }
+    .hero-card p { margin: 12px 0 0; color: rgba(0,0,0,.65); font-size: 14px; line-height: 1.55; }
+    .search-box {
+      margin-top: 14px;
+      background: #fff;
+      border-radius: 22px;
+      padding: 16px;
+      box-shadow: var(--shadow);
+    }
+    .textarea {
+      min-height: 92px;
+      color: #333;
+      font-size: 15px;
+      line-height: 1.55;
+      border-bottom: 1px solid #f0f0f0;
+      padding-bottom: 14px;
+    }
+    .send-row {
+      margin-top: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .chips { display: flex; gap: 8px; flex-wrap: wrap; }
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      height: 30px;
+      padding: 0 11px;
+      border-radius: 999px;
+      background: #f6f6f6;
+      color: #333;
+      font-size: 12px;
+      font-weight: 700;
+      border: 1px solid #eeeeee;
+    }
+    .chip.yellow { background: #fff7ca; border-color: #ffe88d; }
+    .chip.green { background: #eaf8f1; color: #087845; border-color: #d2f0df; }
+    .chip.red { background: #fff0f1; color: #bd2f3a; border-color: #ffd9dd; }
+    .primary {
+      height: 40px;
+      border-radius: 999px;
+      padding: 0 18px;
+      border: 0;
+      background: #111;
+      color: #fff;
+      font-weight: 800;
+    }
+    .yellow-btn {
+      height: 44px;
+      border-radius: 999px;
+      padding: 0 22px;
+      border: 0;
+      background: var(--mt-yellow);
+      color: #111;
+      font-weight: 900;
+      box-shadow: 0 8px 20px rgba(255,209,0,.28);
+    }
+    .quick-list { margin-top: 16px; display: grid; gap: 10px; }
+    .quick {
+      background: #fff;
+      border-radius: 18px;
+      padding: 14px 15px;
+      border: 1px solid #eee;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 14px;
+      font-weight: 700;
+    }
+    .panel {
+      background: #fff;
+      border: 1px solid #eee;
+      border-radius: 22px;
+      padding: 16px;
+      margin-top: 12px;
+      box-shadow: 0 10px 28px rgba(0,0,0,.04);
+    }
+    .panel h4 { margin: 0 0 12px; font-size: 16px; }
+    .constraint-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .constraint {
+      min-height: 82px;
+      border-radius: 17px;
+      background: #fafafa;
+      border: 1px solid #efefef;
+      padding: 12px;
+    }
+    .constraint small { color: var(--muted); font-weight: 700; }
+    .constraint strong { display: block; margin-top: 8px; font-size: 18px; }
+    .map {
+      height: 292px;
+      border-radius: 26px;
+      background:
+        linear-gradient(90deg, rgba(255,255,255,.65) 1px, transparent 1px),
+        linear-gradient(rgba(255,255,255,.65) 1px, transparent 1px),
+        linear-gradient(135deg, #dde8d8, #d9e1ed);
+      background-size: 34px 34px, 34px 34px, 100% 100%;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid #dbe2dc;
+    }
+    .map-line {
+      position: absolute;
+      left: 72px;
+      top: 86px;
+      width: 230px;
+      height: 112px;
+      border-top: 4px dashed #111;
+      border-right: 4px dashed #111;
+      border-radius: 28px;
+      transform: rotate(-10deg);
+      opacity: .55;
+    }
+    .pin {
+      position: absolute;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: #111;
+      color: var(--mt-yellow);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      border: 3px solid white;
+      box-shadow: 0 6px 18px rgba(0,0,0,.18);
+    }
+    .pin.p1 { left: 58px; top: 72px; }
+    .pin.p2 { left: 172px; top: 120px; }
+    .pin.p3 { left: 286px; top: 184px; }
+    .bottom-sheet {
+      margin-top: -52px;
+      position: relative;
+      background: #fff;
+      border-radius: 28px 28px 0 0;
+      padding: 18px;
+      box-shadow: 0 -16px 34px rgba(0,0,0,.1);
+    }
+    .route-title { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .route-title h3 { margin: 0; font-size: 20px; }
+    .score {
+      min-width: 58px;
+      text-align: center;
+      background: #111;
+      color: var(--mt-yellow);
+      border-radius: 16px;
+      padding: 7px 8px;
+      font-weight: 900;
+    }
+    .metric-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 14px 0; }
+    .mini-metric {
+      background: #fafafa;
+      border-radius: 14px;
+      padding: 8px 6px;
+      text-align: center;
+      border: 1px solid #eee;
+    }
+    .mini-metric strong { display: block; font-size: 14px; }
+    .mini-metric span { display: block; margin-top: 3px; color: var(--muted); font-size: 11px; }
+    .timeline { display: grid; gap: 10px; }
+    .stop {
+      display: grid;
+      grid-template-columns: 34px 1fr auto;
+      gap: 10px;
+      align-items: start;
+      padding: 12px;
+      border: 1px solid #eee;
+      border-radius: 18px;
+      background: #fff;
+    }
+    .num {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: var(--mt-yellow);
+      color: #111;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+    }
+    .stop h5 { margin: 0; font-size: 14px; }
+    .stop p { margin: 5px 0 0; color: var(--muted); font-size: 12px; line-height: 1.45; }
+    .time { font-size: 12px; color: var(--muted); font-weight: 800; }
+    .replace-card {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      padding: 14px;
+      border-radius: 20px;
+      border: 1px solid #eee;
+      margin-top: 10px;
+      background: #fff;
+    }
+    .impact { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
+    .impact span { font-size: 11px; font-weight: 800; border-radius: 999px; background: #f6f6f6; padding: 5px 8px; }
+    .nav-card {
+      margin-top: 16px;
+      padding: 18px;
+      border-radius: 24px;
+      background: #111;
+      color: white;
+    }
+    .nav-card h3 { margin: 0; font-size: 24px; }
+    .nav-card p { color: rgba(255,255,255,.75); line-height: 1.5; }
+    .feedback-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .feedback {
+      border-radius: 18px;
+      padding: 14px;
+      background: #fff;
+      border: 1px solid #eee;
+      font-weight: 800;
+      min-height: 74px;
+    }
+    .phone-caption {
+      width: 390px;
+      margin-top: 10px;
+      font-size: 15px;
+      font-weight: 900;
+      color: #111;
+      text-align: center;
+    }
+
+    .desktop {
+      width: 1440px;
+      height: 900px;
+      background: #f7f7f7;
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      border: 1px solid #ddd;
+    }
+    .desktop-head {
+      height: 76px;
+      background: #111;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+    }
+    .desktop-head strong { color: var(--mt-yellow); font-size: 22px; }
+    .desktop-body { display: grid; grid-template-columns: 360px 420px 1fr; gap: 18px; padding: 18px; height: 824px; }
+    .desk-panel {
+      background: #fff;
+      border-radius: 24px;
+      border: 1px solid #eee;
+      padding: 18px;
+      overflow: hidden;
+    }
+    .desk-panel h3 { margin: 0 0 14px; font-size: 20px; }
+    .chat-bubble {
+      padding: 14px;
+      border-radius: 18px;
+      margin: 10px 0;
+      line-height: 1.5;
+      font-size: 14px;
+    }
+    .user { background: #fff8d9; }
+    .assistant { background: #f3f3f3; }
+    .step {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      padding: 12px 0;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .step-dot { width: 22px; height: 22px; border-radius: 50%; background: var(--mt-yellow); color: #111; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 900; flex: none; }
+    .poi-row { display: grid; grid-template-columns: 1fr auto; gap: 8px; padding: 12px; border-radius: 16px; border: 1px solid #eee; margin-bottom: 10px; }
+    .compare-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .compare-card { background: white; border: 1px solid #eee; border-radius: 24px; padding: 18px; min-height: 500px; }
+    .compare-card.reco { border: 3px solid var(--mt-yellow); }
+    .reason {
+      border-left: 4px solid var(--mt-yellow);
+      padding: 12px 14px;
+      background: #fffbed;
+      border-radius: 0 14px 14px 0;
+      margin: 10px 0;
+      line-height: 1.55;
+      font-size: 14px;
+    }
+    .map-large {
+      height: 430px;
+      margin-top: 16px;
+      border-radius: 24px;
+      background:
+        linear-gradient(90deg, rgba(255,255,255,.65) 1px, transparent 1px),
+        linear-gradient(rgba(255,255,255,.65) 1px, transparent 1px),
+        linear-gradient(135deg, #dce8d8, #d7e3ef);
+      background-size: 40px 40px, 40px 40px, 100% 100%;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .component-board {
+      width: 1728px;
+      background: #fff;
+      border-radius: 30px;
+      padding: 34px;
+      box-shadow: var(--shadow);
+      display: grid;
+      grid-template-columns: 1.1fr 1fr 1fr;
+      gap: 24px;
+    }
+    .token-row { display: flex; gap: 10px; flex-wrap: wrap; }
+    .swatch { width: 86px; height: 86px; border-radius: 18px; padding: 10px; display: flex; align-items: flex-end; font-size: 12px; font-weight: 900; border: 1px solid #eee; }
+    .note-board {
+      width: 1728px;
+      background: #111;
+      color: white;
+      border-radius: 30px;
+      padding: 34px;
+      box-shadow: var(--shadow);
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 24px;
+    }
+    .note {
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 22px;
+      padding: 22px;
+      min-height: 220px;
+    }
+    .note h3 { margin: 0 0 12px; color: var(--mt-yellow); }
+    .note p, .note li { color: rgba(255,255,255,.75); line-height: 1.65; }
+    .spec-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      margin-top: 10px;
+    }
+    .spec-table td, .spec-table th { border-bottom: 1px solid rgba(255,255,255,.12); padding: 10px 6px; text-align: left; }
+  </style>
+</head>
+<body>
+  <main class="board">
+    <section class="cover">
+      <div class="cover-badge">SmartRoute AI · 美团路线规划子 Agent</div>
+      <h1>把“推荐地点”变成<br />现实可执行路线</h1>
+      <p>双端 UI 设计稿：移动端面向用户真实出行，桌面端面向黑客松答辩和开发调试。重点呈现时间、预算、排队、步行强度、营业状态和替换影响。</p>
+      <div class="cover-grid">
+        <div class="cover-stat"><strong>7</strong><span>移动端核心屏</span></div>
+        <div class="cover-stat"><strong>3</strong><span>桌面端 Demo 视图</span></div>
+        <div class="cover-stat"><strong>12+</strong><span>可复用组件</span></div>
+        <div class="cover-stat"><strong>3</strong><span>答辩演示场景</span></div>
+      </div>
+    </section>
+
+    <div class="section-title">
+      <h2>01 Mobile App · 真实生活使用流</h2>
+      <p>390 x 844 · 美团原生感 · 从输入到出行中反馈</p>
+    </div>
+    <section class="row">
+      <div>
+        <div class="phone">
+          <div class="notch"></div>
+          <div class="phone-inner">
+            <div class="status"><span>18:57</span><span>5G 100%</span></div>
+            <div class="appbar"><span>小团路线</span><span class="icon-btn">?</span></div>
+            <div class="content">
+              <div class="hero-card">
+                <h3>现在出发，路线我来排</h3>
+                <p>说一句时间、预算、同行人和偏好，小团会把吃喝玩乐组合成可执行路线。</p>
+              </div>
+              <div class="search-box">
+                <div class="textarea">帮我规划一个上海外滩附近的文艺下午，时间3小时，两个人，预算200，不想排队</div>
+                <div class="send-row">
+                  <div class="chips"><span class="chip yellow">深度思考</span><span class="chip">找优惠</span></div>
+                  <button class="primary">生成路线</button>
+                </div>
+              </div>
+              <div class="quick-list">
+                <div class="quick">外滩文艺下午 <span>3h</span></div>
+                <div class="quick">上海特色晚餐 <span>低排队</span></div>
+                <div class="quick">带爸妈轻松游 <span>少走路</span></div>
+                <div class="quick">下午茶加逛街 <span>静安寺</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="phone-caption">首页 / AI 输入</div>
+      </div>
+
+      <div>
+        <div class="phone">
+          <div class="notch"></div>
+          <div class="phone-inner">
+            <div class="status"><span>18:58</span><span>5G 100%</span></div>
+            <div class="appbar"><span class="icon-btn">&lt;</span><span>确认约束</span><span class="icon-btn">?</span></div>
+            <div class="content">
+              <div class="panel">
+                <h4>我理解你的计划</h4>
+                <div class="chips"><span class="chip yellow">文艺</span><span class="chip">外滩附近</span><span class="chip green">低排队</span></div>
+              </div>
+              <div class="panel">
+                <h4>出行约束</h4>
+                <div class="constraint-grid">
+                  <div class="constraint"><small>总时间</small><strong>3 小时</strong></div>
+                  <div class="constraint"><small>人均预算</small><strong>200 元</strong></div>
+                  <div class="constraint"><small>排队上限</small><strong>15 分钟</strong></div>
+                  <div class="constraint"><small>步行强度</small><strong>轻松</strong></div>
+                  <div class="constraint"><small>同行人</small><strong>2 人</strong></div>
+                  <div class="constraint"><small>交通方式</small><strong>步行+公交</strong></div>
+                </div>
+              </div>
+              <div class="panel">
+                <h4>可调整偏好</h4>
+                <div class="chips"><span class="chip yellow">咖啡/茶饮</span><span class="chip yellow">景点</span><span class="chip">购物</span><span class="chip">夜游</span></div>
+              </div>
+              <button class="yellow-btn" style="width:100%; margin-top:18px;">确认并规划</button>
+            </div>
+          </div>
+        </div>
+        <div class="phone-caption">约束确认</div>
+      </div>
+
+      <div>
+        <div class="phone">
+          <div class="notch"></div>
+          <div class="phone-inner">
+            <div class="status"><span>18:59</span><span>5G 100%</span></div>
+            <div class="appbar"><span class="icon-btn">&lt;</span><span>2 条路线可选</span><span class="icon-btn">...</span></div>
+            <div class="content" style="padding:0;">
+              <div class="map"><div class="map-line"></div><div class="pin p1">1</div><div class="pin p2">2</div><div class="pin p3">3</div></div>
+              <div class="bottom-sheet">
+                <div class="route-title"><h3>外滩文艺不绕路</h3><div class="score">92</div></div>
+                <div class="chips" style="margin-top:10px;"><span class="chip green">命中预算</span><span class="chip green">低排队</span><span class="chip">适合约会</span></div>
+                <div class="metric-row">
+                  <div class="mini-metric"><strong>3h</strong><span>总时长</span></div>
+                  <div class="mini-metric"><strong>166</strong><span>人均</span></div>
+                  <div class="mini-metric"><strong>14m</strong><span>等待</span></div>
+                  <div class="mini-metric"><strong>1.8km</strong><span>步行</span></div>
+                </div>
+                <div class="timeline">
+                  <div class="stop"><div class="num">1</div><div><h5>云上艺术中心</h5><p>拍照出片，当前开门，排队约3分钟</p></div><div class="time">14:00</div></div>
+                  <div class="stop"><div class="num">2</div><div><h5>转角茶室</h5><p>中途休息，靠窗位更适合聊天</p></div><div class="time">15:56</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="phone-caption">路线结果</div>
+      </div>
+
+      <div>
+        <div class="phone">
+          <div class="notch"></div>
+          <div class="phone-inner">
+            <div class="status"><span>19:00</span><span>5G 100%</span></div>
+            <div class="appbar"><span class="icon-btn">&lt;</span><span>路线详情</span><span class="icon-btn">☆</span></div>
+            <div class="content">
+              <div class="panel">
+                <div class="route-title"><h3>为什么这样排</h3><div class="score">92</div></div>
+                <div class="reason">先去景点再去茶室，避开下午茶高峰；两站距离约1.2km，公交/步行13分钟，整体不绕路。</div>
+                <div class="chips"><span class="chip green">预算剩余34元</span><span class="chip green">开门中</span><span class="chip yellow">排队低</span></div>
+              </div>
+              <div class="timeline" style="margin-top:12px;">
+                <div class="stop"><div class="num">1</div><div><h5>云上艺术中心</h5><p>选择理由：免费、室内外都可逛、适合拍照。可替换为滨江漫步区。</p></div><div class="time">100m</div></div>
+                <div class="stop"><div class="num">2</div><div><h5>转角茶室</h5><p>选择理由：人均93、等待11分钟、有设计感。可替换为胶片咖啡。</p></div><div class="time">53m</div></div>
+              </div>
+              <button class="yellow-btn" style="width:100%; margin-top:16px;">开始出发</button>
+            </div>
+          </div>
+        </div>
+        <div class="phone-caption">路线详情 / 解释</div>
+      </div>
+
+      <div>
+        <div class="phone">
+          <div class="notch"></div>
+          <div class="phone-inner">
+            <div class="status"><span>19:01</span><span>5G 100%</span></div>
+            <div class="appbar"><span class="icon-btn">&lt;</span><span>替换站点</span><span class="icon-btn">筛</span></div>
+            <div class="content">
+              <div class="panel">
+                <h4>替换“转角茶室”</h4>
+                <p style="margin:0;color:#777;line-height:1.5;">以下候选会即时计算对总时长、预算和排队风险的影响。</p>
+              </div>
+              <div class="replace-card"><div><strong>胶片手冲咖啡</strong><p style="margin:5px 0 0;color:#777;">更安静，评分4.6，当前开门</p><div class="impact"><span>+8分钟</span><span>-18元</span><span>排队5m</span></div></div><button class="primary">替换</button></div>
+              <div class="replace-card"><div><strong>巷口下午茶</strong><p style="margin:5px 0 0;color:#777;">甜品更强，适合拍照</p><div class="impact"><span>-3分钟</span><span>+22元</span><span>排队12m</span></div></div><button class="primary">替换</button></div>
+              <div class="replace-card"><div><strong>白昼烘焙所</strong><p style="margin:5px 0 0;color:#777;">可买伴手礼，座位少</p><div class="impact"><span>+15分钟</span><span>-6元</span><span class="red">排队18m</span></div></div><button class="primary">替换</button></div>
+            </div>
+          </div>
+        </div>
+        <div class="phone-caption">一键替换 POI</div>
+      </div>
+
+      <div>
+        <div class="phone">
+          <div class="notch"></div>
+          <div class="phone-inner">
+            <div class="status"><span>15:38</span><span>5G 100%</span></div>
+            <div class="appbar"><span>出行中</span><span class="icon-btn">!</span></div>
+            <div class="content">
+              <div class="map"><div class="map-line"></div><div class="pin p1">✓</div><div class="pin p2">2</div><div class="pin p3">3</div></div>
+              <div class="nav-card">
+                <h3>下一站：转角茶室</h3>
+                <p>距离 1.2km，预计 13 分钟。当前等位约 11 分钟，仍在你的排队上限内。</p>
+                <div class="chips"><span class="chip yellow">导航</span><span class="chip">打车</span><span class="chip">换近一点</span></div>
+              </div>
+              <div class="panel"><h4>实时提醒</h4><p style="color:#777;line-height:1.5;margin:0;">如果 16:05 前未到店，系统建议跳过茶室或替换为更近的胶片手冲咖啡。</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="phone-caption">出行中</div>
+      </div>
+
+      <div>
+        <div class="phone">
+          <div class="notch"></div>
+          <div class="phone-inner">
+            <div class="status"><span>17:10</span><span>5G 100%</span></div>
+            <div class="appbar"><span class="icon-btn">&lt;</span><span>这条路线合适吗</span><span></span></div>
+            <div class="content">
+              <div class="hero-card"><h3>帮我记住你的偏好</h3><p>你的反馈会沉淀为下次路线权重，不会只是一次性聊天记录。</p></div>
+              <div class="panel"><h4>这次体验</h4><div class="feedback-grid"><div class="feedback">很喜欢<br><span style="color:#777;font-weight:600;">继续推荐</span></div><div class="feedback">不合适<br><span style="color:#777;font-weight:600;">降低类似</span></div></div></div>
+              <div class="panel"><h4>原因标签</h4><div class="chips"><span class="chip yellow">路线紧凑</span><span class="chip">咖啡不错</span><span class="chip">走路偏多</span><span class="chip">预算合适</span><span class="chip">排队可接受</span></div></div>
+              <button class="yellow-btn" style="width:100%; margin-top:16px;">保存偏好</button>
+            </div>
+          </div>
+        </div>
+        <div class="phone-caption">反馈与记忆</div>
+      </div>
+    </section>
+
+    <div class="section-title">
+      <h2>02 Desktop Demo · 答辩与开发调试视图</h2>
+      <p>1440 x 900 · 展示多 Agent、RAG、约束命中和路线解释</p>
+    </div>
+    <section class="row">
+      <div class="desktop">
+        <div class="desktop-head"><strong>SmartRoute Demo Cockpit</strong><span>Intent Parser → POI Retriever → Route Planner → Memory</span></div>
+        <div class="desktop-body">
+          <div class="desk-panel">
+            <h3>用户输入</h3>
+            <div class="chat-bubble user">帮我规划一个上海外滩附近的文艺下午，时间3小时，两个人，预算200，不想排队</div>
+            <div class="chat-bubble assistant">已生成 2 条可执行路线。右侧展示约束命中、候选 POI 和路线解释。</div>
+            <h3 style="margin-top:24px;">约束解析</h3>
+            <div class="constraint-grid"><div class="constraint"><small>时间</small><strong>3h</strong></div><div class="constraint"><small>预算</small><strong>200</strong></div><div class="constraint"><small>等待</small><strong>≤15m</strong></div><div class="constraint"><small>区域</small><strong>黄浦</strong></div></div>
+          </div>
+          <div class="desk-panel">
+            <h3>候选 POI 与生成过程</h3>
+            <div class="step"><div class="step-dot">1</div><div><strong>意图解析</strong><br><span style="color:#777">抽取时间、预算、低排队、文艺风格</span></div></div>
+            <div class="step"><div class="step-dot">2</div><div><strong>RAG 检索</strong><br><span style="color:#777">从本地 POI 索引召回 28 个候选</span></div></div>
+            <div class="step"><div class="step-dot">3</div><div><strong>约束过滤</strong><br><span style="color:#777">排除等待超限、预算过高、距离过散</span></div></div>
+            <div class="step"><div class="step-dot">4</div><div><strong>路线规划</strong><br><span style="color:#777">按时长、等待、步行重排站点</span></div></div>
+            <h3 style="margin-top:22px;">Top POI</h3>
+            <div class="poi-row"><span>云上艺术中心</span><strong>2.13</strong></div>
+            <div class="poi-row"><span>转角茶室</span><strong>2.08</strong></div>
+            <div class="poi-row"><span>胶片手冲咖啡</span><strong>1.96</strong></div>
+          </div>
+          <div class="desk-panel">
+            <h3>路线结果</h3>
+            <div class="map-large"><div class="map-line" style="left:160px;top:130px;width:430px;height:210px;"></div><div class="pin p1" style="left:150px;top:120px;">1</div><div class="pin p2" style="left:420px;top:225px;">2</div><div class="pin p3" style="left:635px;top:340px;">3</div></div>
+            <div class="metric-row"><div class="mini-metric"><strong>3h</strong><span>总时长</span></div><div class="mini-metric"><strong>166</strong><span>人均</span></div><div class="mini-metric"><strong>14m</strong><span>等待</span></div><div class="mini-metric"><strong>92</strong><span>可信度</span></div></div>
+            <div class="reason">路线说明：先景点再茶室，减少高峰等待；两站距离约1.2km，总预算仍低于用户上限。</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="desktop">
+        <div class="desktop-head"><strong>Route Compare</strong><span>多方案对比 · 给评委看懂“为什么选它”</span></div>
+        <div style="padding:28px;">
+          <div class="compare-grid">
+            <div class="compare-card reco"><div class="route-title"><h3>外滩文艺不绕路</h3><div class="score">92</div></div><div class="metric-row"><div class="mini-metric"><strong>3h</strong><span>时长</span></div><div class="mini-metric"><strong>166</strong><span>人均</span></div><div class="mini-metric"><strong>14m</strong><span>等位</span></div><div class="mini-metric"><strong>1.8km</strong><span>步行</span></div></div><div class="reason">推荐原因：预算命中、等待低、动线最短。</div><div class="timeline"><div class="stop"><div class="num">1</div><div><h5>云上艺术中心</h5><p>免费，开门中</p></div><div class="time">14:00</div></div><div class="stop"><div class="num">2</div><div><h5>转角茶室</h5><p>等待11m</p></div><div class="time">15:56</div></div></div></div>
+            <div class="compare-card"><div class="route-title"><h3>黄浦高分体验</h3><div class="score">88</div></div><div class="metric-row"><div class="mini-metric"><strong>3h</strong><span>时长</span></div><div class="mini-metric"><strong>135</strong><span>人均</span></div><div class="mini-metric"><strong>16m</strong><span>等位</span></div><div class="mini-metric"><strong>2.4km</strong><span>步行</span></div></div><div class="reason">优势：评分更高；风险：排队略超用户上限。</div></div>
+            <div class="compare-card"><div class="route-title"><h3>省钱轻松版</h3><div class="score">84</div></div><div class="metric-row"><div class="mini-metric"><strong>2.6h</strong><span>时长</span></div><div class="mini-metric"><strong>98</strong><span>人均</span></div><div class="mini-metric"><strong>6m</strong><span>等位</span></div><div class="mini-metric"><strong>1.5km</strong><span>步行</span></div></div><div class="reason">优势：最省钱；风险：体验丰富度较低。</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="desktop">
+        <div class="desktop-head"><strong>Explanation Panel</strong><span>POI / 约束解释 · 开发字段映射</span></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;padding:28px;">
+          <div class="desk-panel"><h3>为什么选这个 POI</h3><div class="reason">云上艺术中心：位于黄浦区，标签包含“拍照出片、免费、室内外可逛”，价格为 73，等待 3 分钟，满足预算与低排队约束。</div><div class="reason">转角茶室：人均 93，等待 11 分钟，有设计感，适合作为中途休息点。</div></div>
+          <div class="desk-panel"><h3>为什么没选</h3><div class="reason">白昼烘焙所：排队 18 分钟，超过用户上限 15 分钟。</div><div class="reason">某热门餐厅：人均 260，导致总预算超出。</div></div>
+          <div class="desk-panel"><h3>可替换项</h3><div class="replace-card"><div><strong>胶片手冲咖啡</strong><div class="impact"><span>+8m</span><span>-18元</span><span>等待5m</span></div></div><button class="primary">替换</button></div></div>
+          <div class="desk-panel"><h3>字段映射</h3><table class="spec-table" style="color:#222"><tr><td>Route.total_time_minutes</td><td>总时长</td></tr><tr><td>POI.avg_wait_minutes</td><td>排队风险</td></tr><tr><td>Route.highlights</td><td>路线亮点</td></tr><tr><td>UserProfile.liked_poi_ids</td><td>偏好记忆</td></tr></table></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="section-title">
+      <h2>03 Components · 设计系统基础</h2>
+      <p>供 Figma 复刻和后续前端实现</p>
+    </div>
+    <section class="component-board">
+      <div>
+        <h3>颜色 Tokens</h3>
+        <div class="token-row">
+          <div class="swatch" style="background:#ffd100;">Meituan Yellow</div>
+          <div class="swatch" style="background:#111;color:white;">Ink</div>
+          <div class="swatch" style="background:#f6f6f6;">Surface</div>
+          <div class="swatch" style="background:#16a36a;color:white;">Success</div>
+          <div class="swatch" style="background:#f47b20;color:white;">Risk</div>
+          <div class="swatch" style="background:#e34d59;color:white;">Alert</div>
+        </div>
+        <h3 style="margin-top:24px;">按钮与 Chips</h3>
+        <button class="yellow-btn">主行动按钮</button>
+        <button class="primary" style="margin-left:8px;">次行动</button>
+        <div class="chips" style="margin-top:14px;"><span class="chip yellow">命中预算</span><span class="chip green">低排队</span><span class="chip red">高风险</span><span class="chip">可替换</span></div>
+      </div>
+      <div>
+        <h3>路线卡组件</h3>
+        <div class="panel"><div class="route-title"><h3>外滩文艺不绕路</h3><div class="score">92</div></div><div class="metric-row"><div class="mini-metric"><strong>3h</strong><span>总时长</span></div><div class="mini-metric"><strong>166</strong><span>人均</span></div><div class="mini-metric"><strong>14m</strong><span>等待</span></div><div class="mini-metric"><strong>1.8km</strong><span>步行</span></div></div></div>
+        <h3>时间轴节点</h3>
+        <div class="stop"><div class="num">1</div><div><h5>云上艺术中心</h5><p>开门中，排队约3分钟</p></div><div class="time">14:00</div></div>
+      </div>
+      <div>
+        <h3>POI 替换组件</h3>
+        <div class="replace-card"><div><strong>胶片手冲咖啡</strong><p style="margin:5px 0 0;color:#777;">更安静，评分4.6</p><div class="impact"><span>+8分钟</span><span>-18元</span><span>等待5m</span></div></div><button class="primary">替换</button></div>
+        <h3>地图标记</h3>
+        <div class="map" style="height:170px;margin-top:10px;"><div class="map-line"></div><div class="pin p1">1</div><div class="pin p2">2</div></div>
+      </div>
+    </section>
+
+    <div class="section-title">
+      <h2>04 Interaction Notes · 交互与数据映射</h2>
+      <p>答辩说明 + 开发落地规格</p>
+    </div>
+    <section class="note-board">
+      <div class="note">
+        <h3>移动端核心闭环</h3>
+        <ul>
+          <li>用户输入自然语言，系统先展示约束确认，避免“AI 误解”。</li>
+          <li>路线结果必须同时展示地图、时间、预算、等待和步行强度。</li>
+          <li>用户可替换单站，界面即时反馈对总路线的影响。</li>
+        </ul>
+      </div>
+      <div class="note">
+        <h3>桌面端答辩叙事</h3>
+        <ul>
+          <li>左侧展示用户输入和结构化意图。</li>
+          <li>中间展示 RAG 候选与约束过滤。</li>
+          <li>右侧展示路线地图、可信度和解释，突出不是简单聊天推荐。</li>
+        </ul>
+      </div>
+      <div class="note">
+        <h3>数据字段映射</h3>
+        <table class="spec-table">
+          <tr><th>UI</th><th>Model</th></tr>
+          <tr><td>预算/等待/步行</td><td>UserConstraints</td></tr>
+          <tr><td>POI 卡</td><td>POI</td></tr>
+          <tr><td>时间轴</td><td>RouteStop</td></tr>
+          <tr><td>路线评分</td><td>Route + 校验规则</td></tr>
+          <tr><td>偏好记忆</td><td>UserProfile</td></tr>
+        </table>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

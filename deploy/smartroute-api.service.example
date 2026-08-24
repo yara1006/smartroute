@@ -1,0 +1,14 @@
+[Unit]
+Description=SmartRoute FastAPI service
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/smartroute
+EnvironmentFile=/opt/smartroute/.env
+ExecStart=/opt/smartroute/.venv/bin/python -m uvicorn api:app --host 127.0.0.1 --port 8000
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

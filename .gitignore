@@ -1,0 +1,14 @@
+.env
+.env.local
+web/.env.local
+web/.env.production
+__pycache__/
+*.pyc
+.pytest_cache/
+.DS_Store
+web/node_modules/
+web/dist/
+data/user_profiles.db
+data/profile_imports.json
+smartroute_verification.png
+web_verification.png
