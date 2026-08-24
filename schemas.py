@@ -1,3 +1,4 @@
+"""SmartRoute API schemas — Pydantic models for all request/response types."""
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -19,6 +20,7 @@ from core.models import (
 
 
 class PlanRequest(BaseModel):
+    """Request body for /api/plan — user query plus profile and routing context."""
     query: str = Field(min_length=2)
     user_id: str = "demo-user"
     n_routes: int = Field(default=2, ge=1, le=3)
@@ -29,6 +31,7 @@ class PlanRequest(BaseModel):
 
 
 class RouteIntentRequest(BaseModel):
+    """Request body for /api/route-intent — classifies whether to open the route plugin."""
     query: str = Field(min_length=1)
     source: str = "xiaotuan"
     context: dict[str, Any] = Field(default_factory=dict)
@@ -38,6 +41,7 @@ class RouteIntentRequest(BaseModel):
 
 
 class SearchPreviewRequest(BaseModel):
+    """Request body for /api/search-preview — lightweight POI preview before full planning."""
     query: str = Field(min_length=1)
     history_terms: list[str] = Field(default_factory=list)
     city_hint: str | None = None
@@ -48,6 +52,7 @@ class SearchPreviewRequest(BaseModel):
 
 
 class CandidateView(BaseModel):
+    """A single POI candidate with relevance score and human-readable reason."""
     poi: POI
     score: float
     reason: str

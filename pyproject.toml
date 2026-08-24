@@ -19,6 +19,20 @@ known-first-party = ["core", "services", "schemas"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 python_files = ["test_*.py"]
+addopts = "-q"
+
+[tool.coverage.run]
+source = ["core", "services", "schemas"]
+omit = ["tests/*", "ui/*", "data/*", "app.py"]
+
+[tool.coverage.report]
+show_missing = true
+fail_under = 60
+exclude_lines = [
+    "pragma: no cover",
+    "if __name__",
+    "raise NotImplementedError",
+]
 
 [tool.mypy]
 python_version = "3.11"
