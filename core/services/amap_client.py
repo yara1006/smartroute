@@ -17,7 +17,21 @@ from core.rag.vector_store import haversine_km
 AMAP_REST_BASE = "https://restapi.amap.com"
 DEFAULT_RADIUS_METERS = 3000
 AMAP_CACHE_TTL_SECONDS = 30 * 60
+AMAP_CACHE_MAX_ENTRIES = 500
 _AMAP_RESPONSE_CACHE: dict[tuple[str, tuple[tuple[str, str], ...]], tuple[float, dict[str, Any]]] = {}
+
+
+def _evict_expired_cache() -> None:
+    """Remove expired entries and enforce max cache size."""
+    now = time.monotonic()
+    expired_keys = [k for k, (ts, _) in _AMAP_RESPONSE_CACHE.items() if now - ts > AMAP_CACHE_TTL_SECONDS]
+    for k in expired_keys:
+        del _AMAP_RESPONSE_CACHE[k]
+    if len(_AMAP_RESPONSE_CACHE) > AMAP_CACHE_MAX_ENTRIES:
+        oldest_keys = sorted(_AMAP_RESPONSE_CACHE, key=lambda k: _AMAP_RESPONSE_CACHE[k][0])
+        for k in oldest_keys[: len(oldest_keys) - AMAP_CACHE_MAX_ENTRIES]:
+            del _AMAP_RESPONSE_CACHE[k]
+
 
 KNOWN_ANCHORS: dict[str, tuple[str, GeoPoint]] = {
     "深圳大学": ("深圳", GeoPoint(latitude=22.53332, longitude=113.93646)),
@@ -122,7 +136,6 @@ class AMapClient:
                         return anchor
             except Exception as exc:
                 self._remember_error("place/text", exc)
-                pass
 
         known = resolve_known_anchor(clean_text)
         if known:
@@ -393,6 +406,7 @@ class AMapClient:
         if status != "1" or infocode != "10000":
             raise RuntimeError(payload.get("info") or "AMap request failed")
         _AMAP_RESPONSE_CACHE[cache_key] = (now, payload)
+        _evict_expired_cache()
         return payload
 
     def _remember_error(self, scope: str, error: Exception) -> None:

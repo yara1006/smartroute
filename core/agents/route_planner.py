@@ -3,7 +3,6 @@ from __future__ import annotations
 import uuid
 from collections import defaultdict
 from datetime import datetime, timedelta
-from itertools import permutations
 
 from core.models import POI, POICategory, ParsedIntent, Route, RouteStop, UserProfile
 from core.rag.vector_store import haversine_km, transit_minutes
@@ -619,51 +618,46 @@ class RoutePlannerAgent:
         raw_query = str(intent.extracted_preferences.get("raw_query", ""))
         is_evening = any(word in raw_query for word in ["晚上", "今晚", "晚餐", "夜"])
 
-        def order_score(order: tuple[POI, ...]) -> float:
+        def pair_score(prev_poi: POI | None, curr_poi: POI, index: int, total: int) -> float:
             score = 0.0
-            categories = [poi.category for poi in order]
-            for index, category in enumerate(categories):
-                if is_evening:
-                    if index == 0 and category == POICategory.RESTAURANT:
-                        score += 18
-                    if index >= 1 and category in EXPERIENCE_CATEGORIES:
-                        score += 10
-                else:
-                    if index == 0 and category in {POICategory.CAFE, POICategory.ATTRACTION, POICategory.SHOPPING}:
-                        score += 12
-                    if index == 1 and category in EXPERIENCE_CATEGORIES:
-                        score += 10
-                    if index >= 2 and category in {POICategory.RESTAURANT, POICategory.ENTERTAINMENT, POICategory.SHOPPING}:
-                        score += 8
-                if index > 0:
-                    prev = categories[index - 1]
-                    if category == prev:
-                        score -= 80
-                    if category in FOODISH_CATEGORIES and prev in FOODISH_CATEGORIES:
-                        score -= 24
-                    if category != prev:
-                        score += 6
-            cafe_count = categories.count(POICategory.CAFE)
-            if cafe_count > 1 and not self._allows_multiple_cafes(intent):
-                score -= 120 * (cafe_count - 1)
-            restaurant_count = categories.count(POICategory.RESTAURANT)
-            if restaurant_count > self._restaurant_limit(intent):
-                score -= 140 * (restaurant_count - self._restaurant_limit(intent))
-            foodish_count = sum(1 for category in categories if category in FOODISH_CATEGORIES)
-            foodish_limit = self._foodish_limit(intent, list(order))
-            if foodish_count > foodish_limit:
-                score -= 120 * (foodish_count - foodish_limit)
-            distance = sum(
-                haversine_km(order[index - 1].latitude, order[index - 1].longitude, order[index].latitude, order[index].longitude)
-                for index in range(1, len(order))
-            )
-            score -= distance * 0.7
+            category = curr_poi.category
+            if is_evening:
+                if index == 0 and category == POICategory.RESTAURANT:
+                    score += 18
+                if index >= 1 and category in EXPERIENCE_CATEGORIES:
+                    score += 10
+            else:
+                if index == 0 and category in {POICategory.CAFE, POICategory.ATTRACTION, POICategory.SHOPPING}:
+                    score += 12
+                if index == 1 and category in EXPERIENCE_CATEGORIES:
+                    score += 10
+                if index >= 2 and category in {POICategory.RESTAURANT, POICategory.ENTERTAINMENT, POICategory.SHOPPING}:
+                    score += 8
+            if prev_poi is not None:
+                if category == prev_poi.category:
+                    score -= 80
+                if category in FOODISH_CATEGORIES and prev_poi.category in FOODISH_CATEGORIES:
+                    score -= 24
+                if category != prev_poi.category:
+                    score += 6
+                distance = haversine_km(prev_poi.latitude, prev_poi.longitude, curr_poi.latitude, curr_poi.longitude)
+                score -= distance * 0.7
             return score
 
+        # Greedy nearest-neighbor with scoring: O(n²) instead of O(n!)
+        ordered: list[POI] = []
+        remaining = list(unique_pois)
         if fixed_start:
-            best_remaining = max(permutations(unique_pois), key=lambda order: order_score((fixed_start, *order)))
-            return [fixed_start, *best_remaining]
-        return list(max(permutations(unique_pois), key=order_score))
+            ordered.append(fixed_start)
+            remaining = [p for p in remaining if p.id != fixed_start.id]
+        else:
+            best_first_idx = max(range(len(remaining)), key=lambda i: pair_score(None, remaining[i], 0, len(remaining)))
+            ordered.append(remaining.pop(best_first_idx))
+        while remaining:
+            prev = ordered[-1]
+            best_idx = max(range(len(remaining)), key=lambda i: pair_score(prev, remaining[i], len(ordered), len(ordered) + len(remaining)))
+            ordered.append(remaining.pop(best_idx))
+        return ordered
 
     def _structure_warnings(self, intent: ParsedIntent, pois: list[POI]) -> list[str]:
         warnings: list[str] = []

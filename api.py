@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import json
 import os
-import re
 import time
 from dataclasses import dataclass
 from datetime import datetime
@@ -13,36 +12,9 @@ from typing import Any, Literal
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
-from openai import OpenAI
-from pydantic import BaseModel, ConfigDict, Field
 
-from core.agents.intent_parser import IntentParserAgent
-from core.agents.poi_retriever import POIRetrieverAgent
-from core.agents.route_intent_router import RouteIntentRouterAgent
-from core.agents.route_planner import RoutePlannerAgent
-from core.memory.user_profile import UserProfileManager
-from core.models import (
-    GeoPoint,
-    MeituanUserContext,
-    POI,
-    POICategory,
-    ParsedIntent,
-    Route,
-    RouteContext,
-    RouteContextPOI,
-    RouteIntentResult,
-    RouteStop,
-    UserProfile,
-)
-from core.rag.vector_store import POIVectorStore, haversine_km, transit_minutes
-from core.services.amap_client import (
-    AMapAnchor,
-    AMapClient,
-    AMapRouteSegment,
-    fallback_pois_around_anchor,
-    normalize_city_hint,
-    resolve_known_anchor,
-)
+from core.models import GeoPoint, POI, POICategory, RouteContext, RouteIntentResult, UserProfile
+from core.services.amap_client import AMapClient, normalize_city_hint
 from data.seed_db import generate_mock_pois, generate_reviews
 
 
