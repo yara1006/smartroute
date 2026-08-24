@@ -10,6 +10,7 @@ from pathlib import Path
 from typing import Any, Literal
 
 from dotenv import load_dotenv
+from fastapi import HTTPException
 from openai import OpenAI
 
 from core.models import (
@@ -34,6 +35,7 @@ from core.services.amap_client import (
     normalize_city_hint,
     resolve_known_anchor,
 )
+from data.seed_db import generate_mock_pois, generate_reviews
 from schemas import (
     AdjustmentIntent,
     AgentTraceStep,
@@ -52,8 +54,20 @@ from schemas import (
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 DATA_DIR = BASE_DIR / "data"
+POI_PATH = DATA_DIR / "pois.json"
 PROFILE_IMPORTS_PATH = DATA_DIR / "profile_imports.json"
 load_dotenv(BASE_DIR / ".env")
+
+
+def ensure_data() -> None:
+    DATA_DIR.mkdir(exist_ok=True)
+    if not POI_PATH.exists():
+        pois = generate_mock_pois(500)
+        POI_PATH.write_text(json.dumps(pois, ensure_ascii=False, indent=2), encoding="utf-8")
+        (DATA_DIR / "ugc_reviews.json").write_text(
+            json.dumps(generate_reviews(pois), ensure_ascii=False, indent=2),
+            encoding="utf-8",
+        )
 
 
 PROFILE_CONTEXTS: dict[str, dict[str, Any]] = {

@@ -13,8 +13,14 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 
+from core.agents.intent_parser import IntentParserAgent
+from core.agents.poi_retriever import POIRetrieverAgent
+from core.agents.route_intent_router import RouteIntentRouterAgent
+from core.agents.route_planner import RoutePlannerAgent
+from core.memory.user_profile import UserProfileManager
 from core.models import GeoPoint, POI, POICategory, RouteContext, RouteIntentResult, UserProfile
-from core.services.amap_client import AMapClient, normalize_city_hint
+from core.rag.vector_store import POIVectorStore, haversine_km
+from core.services.amap_client import AMapAnchor, AMapClient, fallback_pois_around_anchor, normalize_city_hint
 from data.seed_db import generate_mock_pois, generate_reviews
 
 
@@ -161,9 +167,12 @@ from services.route_service import (  # noqa: F401
     trace_step,
     validate_import_payload,
     add_intent_satisfied,
+    adjustment_intent_satisfied,
+    adjustment_search_terms,
     choose_add_target,
     choose_adjustment_target,
     build_meituan_context,
+    ensure_data,
 )
 
 app = FastAPI(
