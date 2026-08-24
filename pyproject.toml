@@ -1,0 +1,27 @@
+[project]
+name = "smartroute"
+version = "0.2.0"
+description = "SmartRoute AI - Local life route planning plugin for Meituan"
+requires-python = ">=3.11"
+
+[tool.ruff]
+target-version = "py311"
+line-length = 120
+src = ["core", "services", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "UP", "B", "SIM"]
+ignore = ["E501", "B008", "N818"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["core", "services", "schemas"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+ignore_missing_imports = true
