@@ -45,6 +45,8 @@ KNOWN_ANCHORS: dict[str, tuple[str, GeoPoint]] = {
     "南京东路": ("上海", GeoPoint(latitude=31.23516, longitude=121.47764)),
     "陆家嘴": ("上海", GeoPoint(latitude=31.23965, longitude=121.50739)),
     "静安寺": ("上海", GeoPoint(latitude=31.22309, longitude=121.44524)),
+    "云南大学": ("昆明", GeoPoint(latitude=25.05213, longitude=102.70566)),
+    "万象天地": ("深圳", GeoPoint(latitude=22.54530, longitude=113.94760)),
 }
 
 CATEGORY_TYPE_CODES: dict[POICategory, str] = {

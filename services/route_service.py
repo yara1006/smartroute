@@ -43,6 +43,7 @@ from schemas import (
     ChangedStop,
     FollowUp,
     FollowUpOption,
+    ImportedProfileView,
     MetricDeltas,
     ProfileInfluence,
     RouteCompleteness,

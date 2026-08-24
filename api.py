@@ -20,7 +20,7 @@ from core.agents.route_planner import RoutePlannerAgent
 from core.memory.user_profile import UserProfileManager
 from core.models import GeoPoint, POI, POICategory, RouteContext, RouteIntentResult, UserProfile
 from core.rag.vector_store import POIVectorStore, haversine_km
-from core.services.amap_client import AMapAnchor, AMapClient, fallback_pois_around_anchor, normalize_city_hint
+from core.services.amap_client import AMapAnchor, AMapClient, AMapRouteSegment, fallback_pois_around_anchor, normalize_city_hint
 from data.seed_db import generate_mock_pois, generate_reviews
 
 
