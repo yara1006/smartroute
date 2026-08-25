@@ -14,6 +14,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 
+from core.config import get_settings
 from core.agents.intent_parser import IntentParserAgent
 from core.agents.poi_retriever import POIRetrieverAgent
 from core.agents.route_intent_router import RouteIntentRouterAgent
@@ -188,13 +189,27 @@ app = FastAPI(
     redoc_url="/api/redoc",
     openapi_url="/api/openapi.json",
 )
+_settings = get_settings()
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=os.getenv("CORS_ORIGINS", "http://127.0.0.1:5173,http://localhost:5173").split(","),
+    allow_origins=_settings.cors_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+@app.on_event("startup")
+def startup_config_diagnosis() -> None:
+    """Print configuration status at startup for quick debugging."""
+    import logging
+    logger = logging.getLogger("smartroute.api")
+    logger.info(
+        "Startup configuration: deepseek=%s amap=%s cors_origins=%s",
+        _settings.deepseek_enabled,
+        _settings.amap_enabled,
+        _settings.cors_origins,
+    )
 
 
 @app.get("/api/health")
@@ -206,8 +221,8 @@ def health() -> dict[str, Any]:
         "status": "ok",
         "poi_count": len(load_poi_database()),
         "index_count": agents.poi_retriever.vector_store.count,
-        "amap_web_service": "configured" if amap_client.enabled else "missing",
-        "deepseek": "configured" if os.getenv("DEEPSEEK_API_KEY", "").strip() else "rules_fallback",
+        "amap_web_service": "configured" if _settings.amap_enabled else "missing",
+        "deepseek": "configured" if _settings.deepseek_enabled else "rules_fallback",
     }
 
 

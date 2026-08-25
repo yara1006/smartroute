@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="260" viewBox="0 0 720 260">
+  <defs>
+    <style>
+      .bg { fill: #0d1117; }
+      .title { fill: #f0f6fc; font-family: system-ui, sans-serif; font-size: 14px; font-weight: 700; }
+      .check { fill: #3fb950; font-size: 14px; }
+      .cross { fill: #f85149; font-size: 14px; }
+      .label { fill: #c9d1d9; font-family: system-ui, sans-serif; font-size: 12px; }
+      .col-header { fill: #58a6ff; font-family: system-ui, sans-serif; font-size: 11px; font-weight: 600; }
+      .line { stroke: #21262d; stroke-width: 1; }
+      .row-bg { fill: #161b22; }
+    </style>
+  </defs>
+
+  <rect class="bg" width="720" height="260" rx="10"/>
+  <text x="20" y="30" class="title">SmartRoute Feature Overview</text>
+
+  <!-- Column headers -->
+  <text x="20" y="60" class="col-header">Feature</text>
+  <text x="320" y="60" class="col-header">SmartRoute</text>
+  <text x="460" y="60" class="col-header">通用地图</text>
+  <text x="600" y="60" class="col-header">通用 LLM</text>
+
+  <!-- Rows -->
+  <rect class="row-bg" x="10" y="70" width="700" height="28" rx="4"/>
+  <text x="20" y="88" class="label">多入口触发（搜索/聊天/收藏/详情）</text>
+  <text x="335" y="88" class="check">✅</text>
+  <text x="475" y="88" class="cross">❌</text>
+  <text x="615" y="88" class="cross">❌</text>
+
+  <text x="20" y="114" class="label">LLM 意图解析 + 规则兜底</text>
+  <text x="335" y="114" class="check">✅</text>
+  <text x="475" y="114" class="cross">❌</text>
+  <text x="615" y="114" class="check">✅</text>
+
+  <rect class="row-bg" x="10" y="126" width="700" height="28" rx="4"/>
+  <text x="20" y="144" class="label">美团 POI / UGC / 价格 / 排队数据</text>
+  <text x="335" y="144" class="check">✅</text>
+  <text x="475" y="144" class="check">✅</text>
+  <text x="615" y="144" class="cross">❌</text>
+
+  <text x="20" y="170" class="label">用户画像驱动的路线排序</text>
+  <text x="335" y="170" class="check">✅</text>
+  <text x="475" y="170" class="cross">❌</text>
+  <text x="615" y="170" class="cross">❌</text>
+
+  <rect class="row-bg" x="10" y="182" width="700" height="28" rx="4"/>
+  <text x="20" y="200" class="label">自然语言路线调整 + Tool Trace</text>
+  <text x="335" y="200" class="check">✅</text>
+  <text x="475" y="200" class="cross"></text>
+  <text x="615" y="200" class="cross">❌</text>
+
+  <text x="20" y="226" class="label">跨城防护（禁止静默回退）</text>
+  <text x="335" y="226" class="check">✅</text>
+  <text x="475" y="226" class="cross"></text>
+  <text x="615" y="226" class="cross">❌</text>
+
+  <text x="20" y="252" class="label">画像信号 → 路线变化解释</text>
+  <text x="335" y="252" class="check">✅</text>
+  <text x="475" y="252" class="cross">❌</text>
+  <text x="615" y="252" class="cross">❌</text>
+</svg>

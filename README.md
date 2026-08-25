@@ -12,8 +12,12 @@
 
 SmartRoute AI 不是一个独立 App，而是嵌入美团 App 的垂直能力插件。它将用户的意图、美团 POI、UGC 评价、预算、排队时间、距离和历史偏好组织成可执行的路线方案。
 
-<!-- TODO: 替换为真实项目截图，建议放在 docs/images/ 目录 -->
-<!-- ![SmartRoute Demo](docs/images/demo-main.png) -->
+<!-- Feature comparison -->
+![Features](docs/images/features-comparison.svg)
+
+## 🏗️ 系统架构
+
+![Architecture](docs/images/architecture.svg)
 
 ## ✨ 核心特性
 
@@ -39,6 +43,8 @@ SmartRoute AI 不是一个独立 App，而是嵌入美团 App 的垂直能力插
 | 部署 | Docker · docker-compose · GitHub Actions CI |
 
 ## 🚀 快速开始
+
+![Terminal Demo](docs/images/terminal-demo.svg)
 
 ### 前置要求
 

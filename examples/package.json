@@ -1,0 +1,6 @@
+{
+  "name": "smartroute-examples",
+  "version": "0.2.0",
+  "description": "End-to-end examples for SmartRoute API",
+  "private": true
+}

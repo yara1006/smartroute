@@ -12,10 +12,10 @@
 
 SmartRoute AI is a vertical capability plugin embedded in the Meituan App. It organizes user intentions, Meituan POIs, UGC reviews, budgets, queue times, distances, and historical preferences into executable route plans.
 
-<!-- TODO: Replace with actual demo screenshot/GIF -->
-<!-- ![SmartRoute Demo](docs/images/demo-main.png) -->
+<!-- Feature comparison -->
+![Features](docs/images/features-comparison.svg)
 
-## ✨ Key Features
+##  Key Features
 
 - 🗺️ **Multiple Entry Points**: Search, XiaoTuan chat, Favorites, POI detail page
 - 🧠 **LLM Intent Parsing**: DeepSeek LLM with rules fallback; parses time, budget, party size, preferences

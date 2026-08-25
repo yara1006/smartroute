@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="420" viewBox="0 0 720 420">
+  <defs>
+    <style>
+      .bg { fill: #0d1117; }
+      .title { fill: #58a6ff; font-family: 'SF Mono', 'Fira Code', monospace; font-size: 14px; font-weight: bold; }
+      .line { fill: #c9d1d9; font-family: 'SF Mono', 'Fira Code', monospace; font-size: 13px; }
+      .green { fill: #3fb950; }
+      .yellow { fill: #d29922; }
+      .blue { fill: #58a6ff; }
+      .gray { fill: #8b949e; }
+      .box { fill: none; stroke: #30363d; stroke-width: 1; rx: 4; }
+      .box-fill { fill: #161b22; stroke: #30363d; stroke-width: 1; rx: 6; }
+      .btn { fill: #238636; rx: 4; }
+      .btn-text { fill: #fff; font-family: sans-serif; font-size: 12px; }
+      .cursor { fill: #58a6ff; }
+    </style>
+  </defs>
+
+  <!-- Terminal background -->
+  <rect class="bg" width="720" height="420" rx="10"/>
+
+  <!-- Title bar -->
+  <rect fill="#161b22" width="720" height="28" rx="10"/>
+  <circle cx="16" cy="14" r="6" fill="#ff5f57"/>
+  <circle cx="34" cy="14" r="6" fill="#febc2e"/>
+  <circle cx="52" cy="14" r="6" fill="#28c840"/>
+  <text x="360" y="18" text-anchor="middle" class="gray" font-size="12">smartroute — zsh</text>
+
+  <!-- Terminal content -->
+  <text x="16" y="52" class="green line">~/smartroute $</text>
+  <text x="130" y="52" class="line">python -m uvicorn api:app --port 8000 &amp;&amp; cd web &amp;&amp; npm run dev</text>
+
+  <text x="16" y="80" class="gray line">INFO:     Uvicorn running on http://127.0.0.1:8000</text>
+  <text x="16" y="100" class="gray line">INFO:     DeepSeek API: <tspan class="green">enabled</tspan></text>
+  <text x="16" y="120" class="gray line">INFO:     AMap Web Service: <tspan class="green">enabled</tspan></text>
+  <text x="16" y="140" class="gray line">INFO:     Loaded 500 POIs, index built</text>
+
+  <text x="16" y="170" class="green line">~/smartroute $</text>
+  <text x="130" y="170" class="line">cd web &amp;&amp; npm run dev</text>
+
+  <text x="16" y="198" class="gray line">  VITE v7.2.4  ready in 412 ms</text>
+  <text x="16" y="218" class="blue line">  ➜  Local:   http://127.0.0.1:5173/</text>
+  <text x="16" y="238" class="green line">    press h + enter to show help</text>
+
+  <!-- Route output preview -->
+  <rect class="box-fill" x="16" y="262" width="688" height="140"/>
+  <text x="28" y="284" class="blue line" font-weight="bold">POST /api/plan</text>
+  <text x="28" y="306" class="gray line">{</text>
+  <text x="28" y="324" class="gray line">  "status": "ok",</text>
+  <text x="28" y="342" class="gray line">  "routes": [</text>
+  <text x="28" y="360" class="green line">    {"title": "科技+咖啡半日游", "stops": 4, "cost": 185, "duration": "3h"</textspan>},</text>
+  <text x="28" y="378" class="green line">    {"title": "文艺漫步路线", "stops": 3, "cost": 120, "duration": "2.5h"}</text>
+  <text x="28" y="396" class="gray line">  ],</text>
+  <text x="28" y="414" class="gray line">  "tool_trace": [{"tool": "IntentParser", "source": "deepseek"}]</text>
+
+  <!-- Cursor -->
+  <rect class="cursor" x="420" y="65" width="8" height="16"/>
+</svg>
