@@ -13,7 +13,7 @@
   "dependencies": {
     "@amap/amap-jsapi-loader": "^1.0.1",
     "@vitejs/plugin-react": "^5.1.1",
-    "react": "^19.2.0",
+    "react": "^19.2.8",
     "react-dom": "^19.2.0",
     "vite": "^7.2.4"
   },
