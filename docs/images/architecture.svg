@@ -1,150 +1,156 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="720" height="520" viewBox="0 0 720 520">
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="580" viewBox="0 0 800 580">
   <defs>
     <style>
       .bg { fill: #ffffff; }
-      .title { fill: #1a1a2e; font-family: system-ui, -apple-system, sans-serif; font-size: 16px; font-weight: 700; }
+      .title { fill: #1a1a2e; font-family: system-ui, -apple-system, sans-serif; font-size: 18px; font-weight: 700; }
       .sub { fill: #666; font-family: system-ui, sans-serif; font-size: 11px; }
-      .box-entry { fill: #e3f2fd; stroke: #1976d2; stroke-width: 1.5; rx: 8; }
-      .box-agent { fill: #fff8e1; stroke: #f9a825; stroke-width: 1.5; rx: 8; }
-      .box-svc { fill: #e8f5e9; stroke: #388e3c; stroke-width: 1.5; rx: 8; }
-      .box-core { fill: #f3e5f5; stroke: #7b1fa2; stroke-width: 1.5; rx: 8; }
-      .box-ext { fill: #fce4ec; stroke: #c2185b; stroke-width: 1.5; rx: 8; }
-      .box-text { fill: #333; font-family: system-ui, sans-serif; font-size: 11px; text-anchor: middle; }
-      .box-text-b { fill: #333; font-family: system-ui, sans-serif; font-size: 10px; text-anchor: middle; font-weight: 600; }
-      .arrow { stroke: #999; stroke-width: 1.5; fill: none; marker-end: url(#ah); }
-      .arrow-r { stroke: #f9a825; stroke-width: 1.5; fill: none; }
-      .section-label { fill: #999; font-family: system-ui, sans-serif; font-size: 10px; font-weight: 600; letter-spacing: 1px; }
+      .box-entry { fill: #e3f2fd; stroke: #1976d2; stroke-width: 1.5; }
+      .box-agent { fill: #fff8e1; stroke: #f9a825; stroke-width: 1.5; }
+      .box-svc { fill: #e8f5e9; stroke: #388e3c; stroke-width: 1.5; }
+      .box-core { fill: #f3e5f5; stroke: #7b1fa2; stroke-width: 1.5; }
+      .box-ext { fill: #fce4ec; stroke: #c2185b; stroke-width: 1.5; }
+      .label-en { fill: #333; font-family: system-ui, sans-serif; font-size: 11px; font-weight: 600; text-anchor: middle; }
+      .label-cn { fill: #666; font-family: system-ui, sans-serif; font-size: 11px; text-anchor: middle; }
+      .api-text { fill: #333; font-family: system-ui, sans-serif; font-size: 12px; font-weight: 600; text-anchor: middle; }
+      .api-sub { fill: #666; font-family: system-ui, sans-serif; font-size: 10px; text-anchor: middle; }
+      .arrow { stroke: #999; stroke-width: 1.5; fill: none; }
+      .section-label { fill: #999; font-family: system-ui, sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 1.5px; }
     </style>
-    <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+    <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
       <path d="M 0 0 L 10 5 L 0 10 z" fill="#999"/>
     </marker>
   </defs>
 
-  <rect class="bg" width="720" height="520"/>
-  <text x="360" y="28" class="title" text-anchor="middle">SmartRoute AI — System Architecture</text>
+  <rect class="bg" width="800" height="580" rx="4"/>
+  <text x="400" y="32" class="title" text-anchor="middle">SmartRoute AI — System Architecture</text>
 
-  <!-- Section labels -->
-  <text x="16" y="56" class="section-label">ENTRY POINTS</text>
-  <text x="16" y="126" class="section-label">API LAYER</text>
-  <text x="16" y="226" class="section-label">AGENT SYSTEM</text>
-  <text x="16" y="336" class="section-label">SERVICES</text>
-  <text x="16" y="430" class="section-label">INFRASTRUCTURE</text>
+  <!-- ===== ENTRY POINTS ===== -->
+  <text x="16" y="62" class="section-label">ENTRY POINTS</text>
 
-  <!-- Entry Points Row -->
-  <rect class="box-entry" x="30" y="62" width="130" height="44"/>
-  <text x="95" y="80" class="box-text-b">搜索页</text>
-  <text x="95" y="94" class="sub" text-anchor="middle">Search</text>
+  <rect class="box-entry" x="30" y="72" width="170" height="48" rx="8"/>
+  <text x="115" y="93" class="label-en">Search</text>
+  <text x="115" y="108" class="label-cn">搜索页</text>
 
-  <rect class="box-entry" x="170" y="62" width="130" height="44"/>
-  <text x="235" y="80" class="box-text-b">问小团</text>
-  <text x="235" y="94" class="sub" text-anchor="middle">XiaoTuan</text>
+  <rect class="box-entry" x="210" y="72" width="170" height="48" rx="8"/>
+  <text x="295" y="93" class="label-en">XiaoTuan</text>
+  <text x="295" y="108" class="label-cn">问小团</text>
 
-  <rect class="box-entry" x="310" y="62" width="130" height="44"/>
-  <text x="375" y="80" class="box-text-b">收藏夹</text>
-  <text x="375" y="94" class="sub" text-anchor="middle">Favorites</text>
+  <rect class="box-entry" x="390" y="72" width="170" height="48" rx="8"/>
+  <text x="475" y="93" class="label-en">Favorites</text>
+  <text x="475" y="108" class="label-cn">收藏夹</text>
 
-  <rect class="box-entry" x="450" y="62" width="130" height="44"/>
-  <text x="515" y="80" class="box-text-b">POI 详情页</text>
-  <text x="515" y="94" class="sub" text-anchor="middle">Detail</text>
+  <rect class="box-entry" x="570" y="72" width="200" height="48" rx="8"/>
+  <text x="670" y="93" class="label-en">POI Detail</text>
+  <text x="670" y="108" class="label-cn">POI 详情页</text>
 
   <!-- Arrows down -->
-  <line class="arrow" x1="95" y1="106" x2="95" y2="126"/>
-  <line class="arrow" x1="235" y1="106" x2="235" y2="126"/>
-  <line class="arrow" x1="375" y1="106" x2="375" y2="126"/>
-  <line class="arrow" x1="515" y1="106" x2="515" y2="126"/>
+  <line class="arrow" x1="115" y1="120" x2="115" y2="148" marker-end="url(#ah)"/>
+  <line class="arrow" x1="295" y1="120" x2="295" y2="148" marker-end="url(#ah)"/>
+  <line class="arrow" x1="475" y1="120" x2="475" y2="148" marker-end="url(#ah)"/>
+  <line class="arrow" x1="670" y1="120" x2="670" y2="148" marker-end="url(#ah)"/>
 
-  <!-- API Layer -->
-  <rect class="box-core" x="130" y="132" width="460" height="44" rx="8"/>
-  <text x="360" y="151" class="box-text-b">FastAPI 路由层</text>
-  <text x="360" y="165" class="sub" text-anchor="middle">/api/plan · /api/adjust · /api/search-preview · /api/route-intent</text>
+  <!-- ===== API LAYER ===== -->
+  <text x="16" y="172" class="section-label">API LAYER</text>
 
-  <!-- Arrows down -->
-  <line class="arrow" x1="360" y1="176" x2="360" y2="220"/>
+  <rect class="box-core" x="100" y="156" width="600" height="40" rx="8"/>
+  <text x="400" y="172" class="api-text">FastAPI 路由层</text>
+  <text x="400" y="187" class="api-sub">/api/plan · /api/adjust · /api/search-preview · /api/route-intent</text>
 
-  <!-- Agent System Row -->
-  <rect class="box-agent" x="30" y="226" width="160" height="44"/>
-  <text x="110" y="244" class="box-text-b">RouteIntentRouter</text>
-  <text x="110" y="258" class="sub" text-anchor="middle">意图置信度分流</text>
+  <!-- Arrow down -->
+  <line class="arrow" x1="400" y1="196" x2="400" y2="228" marker-end="url(#ah)"/>
 
-  <rect class="box-agent" x="200" y="226" width="160" height="44"/>
-  <text x="280" y="244" class="box-text-b">IntentParser</text>
-  <text x="280" y="258" class="sub" text-anchor="middle">DeepSeek + 规则兜底</text>
+  <!-- ===== AGENT SYSTEM ===== -->
+  <text x="16" y="252" class="section-label">AGENT SYSTEM</text>
 
-  <rect class="box-agent" x="370" y="226" width="160" height="44"/>
-  <text x="450" y="244" class="box-text-b">POIRetriever</text>
-  <text x="450" y="258" class="sub" text-anchor="middle">本地向量检索</text>
+  <rect class="box-agent" x="16" y="236" width="180" height="48" rx="8"/>
+  <text x="106" y="257" class="label-en">RouteIntentRouter</text>
+  <text x="106" y="272" class="label-cn">意图置信度分流</text>
 
-  <rect class="box-agent" x="540" y="226" width="160" height="44"/>
-  <text x="620" y="244" class="box-text-b">RoutePlanner</text>
-  <text x="620" y="258" class="sub" text-anchor="middle">贪心 TSP O(n²)</text>
+  <rect class="box-agent" x="206" y="236" width="180" height="48" rx="8"/>
+  <text x="296" y="257" class="label-en">IntentParser</text>
+  <text x="296" y="272" class="label-cn">DeepSeek + 规则兜底</text>
+
+  <rect class="box-agent" x="396" y="236" width="180" height="48" rx="8"/>
+  <text x="486" y="257" class="label-en">POIRetriever</text>
+  <text x="486" y="272" class="label-cn">本地向量检索</text>
+
+  <rect class="box-agent" x="586" y="236" width="198" height="48" rx="8"/>
+  <text x="685" y="257" class="label-en">RoutePlanner</text>
+  <text x="685" y="272" class="label-cn">贪心 TSP O(n²)</text>
 
   <!-- Arrows between agents -->
-  <line class="arrow" x1="190" y1="248" x2="200" y2="248"/>
-  <line class="arrow" x1="360" y1="248" x2="370" y2="248"/>
-  <line class="arrow" x1="530" y1="248" x2="540" y2="248"/>
+  <line class="arrow" x1="196" y1="260" x2="206" y2="260" marker-end="url(#ah)"/>
+  <line class="arrow" x1="386" y1="260" x2="396" y2="260" marker-end="url(#ah)"/>
+  <line class="arrow" x1="576" y1="260" x2="586" y2="260" marker-end="url(#ah)"/>
 
   <!-- Arrows down -->
-  <line class="arrow" x1="110" y1="270" x2="110" y2="330"/>
-  <line class="arrow" x1="280" y1="270" x2="280" y2="330"/>
-  <line class="arrow" x1="450" y1="270" x2="450" y2="330"/>
-  <line class="arrow" x1="620" y1="270" x2="620" y2="330"/>
+  <line class="arrow" x1="106" y1="284" x2="106" y2="320" marker-end="url(#ah)"/>
+  <line class="arrow" x1="296" y1="284" x2="296" y2="320" marker-end="url(#ah)"/>
+  <line class="arrow" x1="486" y1="284" x2="486" y2="320" marker-end="url(#ah)"/>
+  <line class="arrow" x1="685" y1="284" x2="685" y2="320" marker-end="url(#ah)"/>
 
-  <!-- Services Row -->
-  <rect class="box-svc" x="20" y="336" width="110" height="44"/>
-  <text x="75" y="354" class="box-text-b">profile_svc</text>
-  <text x="75" y="368" class="sub" text-anchor="middle">画像管理</text>
+  <!-- ===== SERVICES ===== -->
+  <text x="16" y="348" class="section-label">SERVICES</text>
 
-  <rect class="box-svc" x="140" y="336" width="110" height="44"/>
-  <text x="195" y="354" class="box-text-b">anchor_svc</text>
-  <text x="195" y="368" class="sub" text-anchor="middle">地点解析</text>
+  <rect class="box-svc" x="10" y="328" width="120" height="44" rx="8"/>
+  <text x="70" y="346" class="label-en">profile_svc</text>
+  <text x="70" y="361" class="label-cn">画像管理</text>
 
-  <rect class="box-svc" x="260" y="336" width="110" height="44"/>
-  <text x="315" y="354" class="box-text-b">route_builder</text>
-  <text x="315" y="368" class="sub" text-anchor="middle">动态构建</text>
+  <rect class="box-svc" x="140" y="328" width="120" height="44" rx="8"/>
+  <text x="200" y="346" class="label-en">anchor_svc</text>
+  <text x="200" y="361" class="label-cn">地点解析</text>
 
-  <rect class="box-svc" x="380" y="336" width="110" height="44"/>
-  <text x="435" y="354" class="box-text-b">adjustment</text>
-  <text x="435" y="368" class="sub" text-anchor="middle">路线调整</text>
+  <rect class="box-svc" x="270" y="328" width="120" height="44" rx="8"/>
+  <text x="330" y="346" class="label-en">route_builder</text>
+  <text x="330" y="361" class="label-cn">动态构建</text>
 
-  <rect class="box-svc" x="500" y="336" width="100" height="44"/>
-  <text x="550" y="354" class="box-text-b">trace</text>
-  <text x="550" y="368" class="sub" text-anchor="middle">Tool Trace</text>
+  <rect class="box-svc" x="400" y="328" width="120" height="44" rx="8"/>
+  <text x="460" y="346" class="label-en">adjustment</text>
+  <text x="460" y="361" class="label-cn">路线调整</text>
 
-  <rect class="box-svc" x="610" y="336" width="100" height="44"/>
-  <text x="660" y="354" class="box-text-b">insight</text>
-  <text x="660" y="368" class="sub" text-anchor="middle">路线分析</text>
+  <rect class="box-svc" x="530" y="328" width="120" height="44" rx="8"/>
+  <text x="590" y="346" class="label-en">trace</text>
+  <text x="590" y="361" class="label-cn">Tool Trace</text>
 
-  <!-- Infrastructure Row -->
-  <rect class="box-core" x="30" y="420" width="140" height="36"/>
-  <text x="100" y="441" class="box-text-b">SQLite 用户画像</text>
+  <rect class="box-svc" x="660" y="328" width="120" height="44" rx="8"/>
+  <text x="720" y="346" class="label-en">insight</text>
+  <text x="720" y="361" class="label-cn">路线分析</text>
 
-  <rect class="box-core" x="180" y="420" width="140" height="36"/>
-  <text x="250" y="441" class="box-text-b">本地 POI 向量索引</text>
+  <!-- ===== INFRASTRUCTURE ===== -->
+  <text x="16" y="440" class="section-label">INFRASTRUCTURE</text>
 
-  <rect class="box-ext" x="330" y="420" width="140" height="36"/>
-  <text x="400" y="441" class="box-text-b">DeepSeek API</text>
+  <rect class="box-core" x="10" y="416" width="150" height="40" rx="8"/>
+  <text x="85" y="441" class="label-cn">SQLite 用户画像</text>
 
-  <rect class="box-ext" x="480" y="420" width="140" height="36"/>
-  <text x="550" y="441" class="box-text-b">高德 Web 服务</text>
+  <rect class="box-core" x="170" y="416" width="170" height="40" rx="8"/>
+  <text x="255" y="441" class="label-cn">本地 POI 向量索引</text>
 
-  <rect class="box-core" x="630" y="420" width="80" height="36"/>
-  <text x="670" y="441" class="box-text-b">Settings</text>
+  <rect class="box-ext" x="350" y="416" width="150" height="40" rx="8"/>
+  <text x="425" y="441" class="label-en">DeepSeek API</text>
+
+  <rect class="box-ext" x="510" y="416" width="170" height="40" rx="8"/>
+  <text x="595" y="441" class="label-cn">高德 Web 服务</text>
+
+  <rect class="box-core" x="690" y="416" width="100" height="40" rx="8"/>
+  <text x="740" y="441" class="label-en">Settings</text>
 
   <!-- Arrows from services to infra -->
-  <line class="arrow" x1="75" y1="380" x2="100" y2="420"/>
-  <line class="arrow" x1="195" y1="380" x2="250" y2="420"/>
-  <line class="arrow" x1="315" y1="380" x2="400" y2="420"/>
-  <line class="arrow" x1="435" y1="380" x2="550" y2="420"/>
+  <line class="arrow" x1="70" y1="372" x2="85" y2="416" marker-end="url(#ah)"/>
+  <line class="arrow" x1="200" y1="372" x2="255" y2="416" marker-end="url(#ah)"/>
+  <line class="arrow" x1="330" y1="372" x2="425" y2="416" marker-end="url(#ah)"/>
+  <line class="arrow" x1="460" y1="372" x2="595" y2="416" marker-end="url(#ah)"/>
 
-  <!-- Color legend -->
-  <rect fill="#e3f2fd" stroke="#1976d2" stroke-width="1" width="12" height="12" x="16" y="498" rx="2"/>
-  <text x="34" y="508" class="sub" font-size="10">入口层</text>
-  <rect fill="#fff8e1" stroke="#f9a825" stroke-width="1" width="12" height="12" x="90" y="498" rx="2"/>
-  <text x="108" y="508" class="sub" font-size="10">Agent</text>
-  <rect fill="#e8f5e9" stroke="#388e3c" stroke-width="1" width="12" height="12" x="160" y="498" rx="2"/>
-  <text x="178" y="508" class="sub" font-size="10">服务层</text>
-  <rect fill="#f3e5f5" stroke="#7b1fa2" stroke-width="1" width="12" height="12" x="230" y="498" rx="2"/>
-  <text x="248" y="508" class="sub" font-size="10">基础设施</text>
-  <rect fill="#fce4ec" stroke="#c2185b" stroke-width="1" width="12" height="12" x="320" y="498" rx="2"/>
-  <text x="338" y="508" class="sub" font-size="10">外部服务</text>
+  <!-- ===== Color Legend ===== -->
+  <line x1="16" y1="486" x2="784" y2="486" stroke="#eee" stroke-width="1"/>
+
+  <rect fill="#e3f2fd" stroke="#1976d2" stroke-width="1" width="14" height="14" x="16" y="502" rx="3"/>
+  <text x="36" y="513" class="label-cn" font-size="10">入口层</text>
+  <rect fill="#fff8e1" stroke="#f9a825" stroke-width="1" width="14" height="14" x="100" y="502" rx="3"/>
+  <text x="120" y="513" class="label-cn" font-size="10">Agent</text>
+  <rect fill="#e8f5e9" stroke="#388e3c" stroke-width="1" width="14" height="14" x="184" y="502" rx="3"/>
+  <text x="204" y="513" class="label-cn" font-size="10">服务层</text>
+  <rect fill="#f3e5f5" stroke="#7b1fa2" stroke-width="1" width="14" height="14" x="268" y="502" rx="3"/>
+  <text x="288" y="513" class="label-cn" font-size="10">基础设施</text>
+  <rect fill="#fce4ec" stroke="#c2185b" stroke-width="1" width="14" height="14" x="352" y="502" rx="3"/>
+  <text x="372" y="513" class="label-cn" font-size="10">外部服务</text>
 </svg>
