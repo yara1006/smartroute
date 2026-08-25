@@ -9,6 +9,12 @@
 
 ### Added
 
+- `docs-site/` VitePress 文档站（导航、指南、API 参考、架构、数据模型）
+- `README_en.md` 英文 README，支持国际化
+- `docs/images/architecture.mmd` Mermaid 架构图
+- `.devcontainer/devcontainer.json` 一键云端开发环境（GitHub Codespaces）
+- `.github/dependabot.yml` 自动依赖更新（Python / npm / GitHub Actions）
+- 新增 `tests/test_config.py`、`tests/test_logging_config.py` 补测低覆盖模块
 - 全量 Python 模块 Docstring 覆盖（14 个模块，49 个类，50+ 公开方法）
 - `core/config.py` 集中配置单例，统一管理环境变量与路径
 - `core/logging_config.py` 结构化日志（`setup_logging()`、`get_logger()`）
@@ -16,10 +22,12 @@
 - `docs/API.md` 完整 API 参考文档
 - `CODE_OF_CONDUCT.md`（Contributor Covenant v2.1）
 - GitHub Release 自动化 workflow
-- 前端 Vitest 测试基础设施
+- 前端 Vitest 测试基础设施（46 个测试）
 
 ### Changed
 
+- 测试覆盖率从 60% 提升至 83%，`fail_under` 阈值同步更新为 80
+- README 新增英文文档入口和文档站引用
 - 重写 `README.md`：新增徽章、Quick Start、项目结构、文档索引
 - 重写 `docs/ARCHITECTURE.md`：反映当前服务层架构（services/ 6 个模块）
 - CORS 来源改为从 `CORS_ORIGINS` 环境变量读取，支持生产环境多域名

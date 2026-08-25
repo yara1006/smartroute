@@ -1,0 +1,105 @@
+# SmartRoute AI — Architecture Diagram
+# Render with: https://mermaid.live or any Mermaid renderer
+
+```mermaid
+flowchart TB
+    subgraph Entry["入口层 (React 19 + Vite)"]
+        Search["搜索页"]
+        XiaoTuan["问小团"]
+        Favorites["收藏夹"]
+        Detail["POI 详情页"]
+    end
+
+    subgraph API["API 层 (FastAPI)"]
+        PlanAPI["/api/plan"]
+        AdjustAPI["/api/adjust"]
+        SearchAPI["/api/search-preview"]
+        IntentAPI["/api/route-intent"]
+    end
+
+    subgraph Agents["Multi-Agent 系统"]
+        Router["RouteIntentRouterAgent\n意图置信度分流"]
+        Parser["IntentParserAgent\nDeepSeek LLM + 规则兜底"]
+        Retriever["POIRetrieverAgent\n本地向量检索"]
+        Planner["RoutePlannerAgent\n贪心 TSP O(n²)"]
+    end
+
+    subgraph Services["业务服务层"]
+        ProfileSvc["profile_service\n画像管理"]
+        AnchorSvc["anchor_service\n地点/锚点解析"]
+        BuilderSvc["route_builder\n动态候选构建"]
+        AdjustSvc["adjustment_service\n路线调整"]
+        InsightSvc["route_insight\n路线分析/指标"]
+        TraceSvc["trace_service\nTool Trace"]
+    end
+
+    subgraph Core["核心基础设施"]
+        AMap["AMapClient\n高德 Web 服务\nTTL 缓存"]
+        VectorStore["POIVectorStore\n中文 bigram 索引"]
+        UserDB["UserProfileManager\nSQLite"]
+        Config["Settings\n集中配置"]
+    end
+
+    subgraph External["外部服务"]
+        DeepSeek["DeepSeek API"]
+        AMapAPI["高德 Web 服务 API"]
+    end
+
+    Search & XiaoTuan & Favorites & Detail --> API
+    API --> Agents
+    Router --> Parser
+    Parser --> Retriever & AMap
+    Retriever --> VectorStore
+    Planner --> BuilderSvc
+    BuilderSvc --> AMap
+    API --> Services
+    ProfileSvc --> UserDB
+    AnchorSvc --> AMap
+    Parser --> DeepSeek
+    AMap --> AMapAPI
+    TraceSvc --> DeepSeek
+    Planner --> InsightSvc
+    AdjustAPI --> AdjustSvc
+    AdjustSvc --> TraceSvc
+    ProfileSvc --> ProfileSvc
+    Config -.-> AMap & DeepSeek
+
+    classDef entry fill:#e1f5fe,stroke:#0288d1
+    classDef agent fill:#fff3e0,stroke:#f57c00
+    classDef service fill:#e8f5e9,stroke:#388e3c
+    classDef core fill:#f3e5f5,stroke:#7b1fa2
+    classDef external fill:#fce4ec,stroke:#c2185b
+
+    class Search,XiaoTuan,Favorites,Detail entry
+    class Router,Parser,Retriever,Planner agent
+    class ProfileSvc,AnchorSvc,BuilderSvc,AdjustSvc,InsightSvc,TraceSvc service
+    class AMap,VectorStore,UserDB,Config core
+    class DeepSeek,AMapAPI external
+```
+
+## 数据流
+
+```mermaid
+sequenceDiagram
+    participant U as 用户
+    participant FE as 前端 React
+    participant API as FastAPI
+    participant Agent as Agents
+    participant AMap as 高德 Web 服务
+    participant LLM as DeepSeek
+    participant DB as SQLite
+
+    U->>FE: 自然语言查询
+    FE->>API: POST /api/plan
+    API->>Agent: IntentParserAgent
+    Agent->>LLM: 意图解析（有 Key 时）
+    LLM-->>Agent: 结构化槽位
+    Agent->>AMap: POI 搜索（有明确地点时）
+    AMap-->>Agent: 真实 POI 列表
+    Agent->>Agent: RoutePlannerAgent（TSP 优化）
+    Agent->>DB: 读取用户画像
+    DB-->>Agent: 画像偏好
+    Agent-->>API: 路线方案 + Tool Trace
+    API-->>FE: PlanResponse
+    FE-->>U: 路线卡片 + 地图
+```
