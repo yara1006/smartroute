@@ -1,4 +1,4 @@
-.PHONY: help install dev test test-cov test-web lint format run run-web build clean
+.PHONY: help install dev test test-cov test-web lint format run run-web build clean cli cli-health cli-eval
 
 help:  ## Show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
@@ -43,3 +43,15 @@ clean:  ## Clean up generated files
 	find . -type d -name .mypy_cache -exec rm -rf {} +
 	find . -type d -name .ruff_cache -exec rm -rf {} +
 	rm -rf web/dist web/node_modules
+
+cli:  ## Show CLI help
+	python cli.py --help
+
+cli-health:  ## Check service health via CLI
+	python cli.py health
+
+cli-eval:  ## Run all 20 eval cases via CLI
+	python cli.py eval
+
+cli-plan:  ## Plan a route via CLI (pass QUERY="...")
+	python cli.py plan "$(QUERY)"
