@@ -40,6 +40,9 @@ class POI(BaseModel):
     source: str = "local"
     external_id: str | None = None
     distance_from_anchor_meters: int | None = None
+    # Uncertainty disclosure — marks data as estimated rather than exact
+    price_range: list[float] | None = None  # [min, max] estimated price range
+    is_estimated: bool = False  # True when business_hours/price are from estimates
 
 
 class UserConstraints(BaseModel):
