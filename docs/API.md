@@ -1,50 +1,74 @@
-# SmartRoute API 参考
+# SmartRoute AI — API Reference
 
-所有接口均以 `/api` 为前缀，返回 JSON 格式。
+> Complete HTTP API documentation for SmartRoute backend.
 
-启动后端后可访问自动生成的交互式文档：http://127.0.0.1:8000/docs
+Base URL: `http://127.0.0.1:8000/api`
+
+Interactive docs: `http://127.0.0.1:8000/docs`
 
 ---
 
-## 基础接口
+## 1. Health Check
 
-### `GET /api/health`
+### GET /api/health
 
-返回服务健康状态。
+Check service health and configuration status.
 
-**响应示例：**
-
+**Response**:
 ```json
 {
   "status": "ok",
   "poi_count": 500,
   "index_count": 500,
-  "deepseek_enabled": true,
-  "amap_enabled": true
+  "amap_web_service": "configured",
+  "deepseek": "configured"
+}
+```
+
+**Fields**:
+| Field | Type | Description |
+|-------|------|-------------|
+| `status` | string | Service status ("ok" or "error") |
+| `poi_count` | int | Number of POIs in database |
+| `index_count` | int | Number of indexed POIs |
+| `amap_web_service` | string | AMap API key status |
+| `deepseek` | string | DeepSeek API key status |
+
+---
+
+## 2. Examples
+
+### GET /api/examples
+
+Get example prompts for frontend demo.
+
+**Response**:
+```json
+{
+  "examples": [
+    "我下午要去深圳大学附近玩 3 个小时，帮我规划一个路线",
+    "深圳大学附近咖啡",
+    ...
+  ]
 }
 ```
 
 ---
 
-### `GET /api/examples`
+## 3. Profile Sources
 
-返回演示用 prompt 列表，供前端快速填充输入框。
+### GET /api/profile-sources
 
----
+Get available profile sources (built-in, imported).
 
-### `GET /api/profile-sources`
-
-返回可用画像来源（内置模拟画像、脱敏导入画像）。
-
-**响应结构：**
-
+**Response**:
 ```json
 {
   "sources": [
     {
       "source": "preset",
       "profiles": [
-        { "profile_id": "...", "display_name": "...", ... }
+        {"profile_id": "...", "display_name": "..."}
       ]
     },
     {
@@ -57,19 +81,18 @@
 
 ---
 
-## 画像管理
+## 4. Profile Import
 
-### `POST /api/profile/import`
+### POST /api/profile/import
 
-导入脱敏用户画像。后端会校验字段，拒绝包含手机号、cookie、token 等敏感信息的数据。
+Import desensitized user profile.
 
-**请求体：**
-
+**Request Body**:
 ```json
 {
   "display_name": "Xiangyue 脱敏样本",
   "recent_searches": ["外滩展览", "咖啡"],
-  "favorite_pois": ["seed by seed 囍得咖啡酒馆"],
+  "favorite_pois": ["seed by seed 得咖啡酒馆"],
   "browsed_pois": ["安静", "有设计感"],
   "favorite_categories": ["咖啡/茶饮", "景点"],
   "favorite_districts": ["黄浦区"],
@@ -80,55 +103,67 @@
 }
 ```
 
-**敏感字段检测：** 请求体中包含以下任意字段时直接拒绝：
-`phone`、`mobile`、`password`、`cookie`、`token`、`session`、`order_id`
+**Validation**:
+- Rejects sensitive fields: phone, password, cookie, token, session, order_id
+- Normalizes to `MeituanUserContext` format
 
----
-
-## 意图识别
-
-### `POST /api/route-intent`
-
-判断小团自然语言提问是否应调起 SmartRoute 插件。
-
-**请求体：**
-
+**Response**:
 ```json
 {
-  "query": "我下午要去深圳大学附近玩3个小时",
-  "source": "xiaotuan",
-  "context": { "city_hint": "深圳" }
+  "profile_id": "import-uuid",
+  "display_name": "Xiangyue 脱敏样本",
+  "signal_count": 8
 }
 ```
 
-**响应结构：**
+---
 
-| 字段 | 类型 | 说明 |
-|------|------|------|
-| `action` | `"open_plugin"` \| `"ask_confirm"` \| `"normal_answer"` | 推荐动作 |
-| `confidence` | `"high"` \| `"medium"` \| `"low"` | 置信度 |
-| `reason` | `string` | 触发理由 |
-| `slots` | `object` | 解析到的意图槽位 |
-| `route_query` | `string` | 可传给 `/api/plan` 的规划 query |
+## 5. Route Intent
 
-**置信度规则：**
+### POST /api/route-intent
 
-| 置信度 | 条件 | 动作 |
-|--------|------|------|
-| `high` | 地点/区域 + 时间窗口 + 串联意图 | `open_plugin` |
-| `medium` | 区域 + 泛化需求，无明确串联 | `ask_confirm` |
-| `low` | 单点推荐、优惠、菜品、营业时间 | `normal_answer` |
+Determine if XiaoTuan query should trigger route planning.
+
+**Request Body**:
+```json
+{
+  "query": "我下午要去深圳大学附近玩 3 个小时",
+  "source": "xiaotuan",
+  "context": {"city_hint": "深圳"}
+}
+```
+
+**Response**:
+```json
+{
+  "action": "open_plugin",
+  "confidence": "high",
+  "reason": "地点 + 时间窗口 + 串联意图",
+  "slots": {
+    "city": "深圳",
+    "duration_hours": 3,
+    "anchor": "深圳大学"
+  },
+  "route_query": "深圳大学附近 3 小时路线"
+}
+```
+
+**Confidence Levels**:
+| Level | Condition | Action |
+|-------|-----------|--------|
+| `high` (≥0.8) | Location + time +串联 intent | `open_plugin` |
+| `medium` (0.5-0.8) | Area + general need | `ask_confirm` |
+| `low` (<0.5) | Single POI query | `normal_answer` |
 
 ---
 
-## 搜索预览
+## 6. Search Preview
 
-### `POST /api/search-preview`
+### POST /api/search-preview
 
-搜索页入口：根据搜索词召回 4-8 个候选 POI，用户勾选后触发路线规划。
+Search page entry: retrieve candidate POIs for user selection.
 
-**请求体：**
-
+**Request Body**:
 ```json
 {
   "query": "深圳大学附近咖啡",
@@ -137,28 +172,32 @@
 }
 ```
 
-**响应结构：**
-
-| 字段 | 类型 | 说明 |
-|------|------|------|
-| `candidates` | `POI[]` | 候选 POI 列表 |
-| `default_selected_ids` | `string[]` | 默认勾选的 POI ID |
-| `route_context` | `RouteContext` | 可直接传给 `/api/plan` 的上下文 |
+**Response**:
+```json
+{
+  "candidates": [...],
+  "default_selected_ids": [...],
+  "route_context": {
+    "source": "search",
+    "city_hint": "深圳",
+    "anchor_text": "深圳大学"
+  }
+}
+```
 
 ---
 
-## 路线规划（核心）
+## 7. Plan Route (Core)
 
-### `POST /api/plan`
+### POST /api/plan
 
-自然语言路线规划，SmartRoute 核心接口。
+Plan routes from natural language query. **Core endpoint**.
 
-**请求体：**
-
+**Request Body**:
 ```json
 {
-  "query": "我下午要去深圳大学附近玩3个小时，帮我规划一个路线",
-  "user_id": "product-demo-user",
+  "query": "我下午要去深圳大学附近玩 3 个小时，帮我规划一个路线",
+  "user_id": "demo-user",
   "num_routes": 2,
   "profile_source": "preset",
   "profile_id": "low-wait-pragmatic",
@@ -174,132 +213,210 @@
 }
 ```
 
-**响应关键字段：**
+**Response**:
+```json
+{
+  "user_id": "demo-user",
+  "query": "...",
+  "intent": {
+    "city": "深圳",
+    "duration_hours": 3,
+    "budget": null,
+    "parser_source": "deepseek",
+    "parser_confidence": 0.92
+  },
+  "profile": {...},
+  "profile_mode": "低排队务实型",
+  "profile_source": "preset",
+  "profile_source_description": "模拟画像 · 低排队务实型",
+  "profile_signal_count": 5,
+  "meituan_user_context": {...},
+  "candidates": [...],
+  "routes": [
+    {
+      "title": "科技 + 咖啡半日游",
+      "description": "...",
+      "stops": [...],
+      "total_duration_minutes": 180,
+      "total_cost": 185,
+      "map_polyline": [...],
+      "transit_segments": [...]
+    }
+  ],
+  "trace": [...],
+  "planning_time_ms": 234,
+  "follow_up_question": "需要加个晚餐吗？",
+  "follow_up": {
+    "question": "需要加个晚餐吗？",
+    "options": [...]
+  },
+  "profile_influence": [...],
+  "constraint_conflicts": [],
+  "route_completeness": {
+    "has_food": true,
+    "has_entertainment": true,
+    "min_stops": 3,
+    "complete": true
+  },
+  "tool_trace": [
+    {"tool": "IntentParser", "source": "deepseek", "duration_ms": 120},
+    {"tool": "AMapSearch", "query": "深圳大学", "results": 8}
+  ],
+  "safety_warnings": [],
+  "refused": false
+}
+```
 
-| 字段 | 说明 |
-|------|------|
-| `intent` | 解析后的结构化意图（城市、时间、预算、人数等）|
-| `routes` | 路线方案列表（每条含 stops、duration、cost、polyline 等）|
-| `candidates` | 候选 POI 完整列表 |
-| `profile_mode` | 生效的画像模式 |
-| `profile_source_description` | 画像来源描述 |
-| `meituan_user_context` | 美团侧用户上下文 |
-| `planning_time_ms` | 规划耗时（毫秒）|
-| `tool_trace` | 工具调用链路（用于前端展示 ReAct 步骤）|
-| `follow_up` | 结构化追问（选项可直接触发 `/api/adjust`）|
-| `route_completeness` | 路线完整性校验 |
-| `constraint_conflicts` | 约束冲突说明 |
-| `profile_influence` | 画像信号如何影响路线 |
+**Key Fields**:
+| Field | Type | Description |
+|-------|------|-------------|
+| `intent` | object | Parsed intent slots |
+| `routes` | array | Generated route options |
+| `planning_time_ms` | int | Planning duration |
+| `tool_trace` | array | Tool invocation trace |
+| `profile_influence` | array | How profile affected routing |
+| `route_completeness` | object | Validation results |
+| `safety_warnings` | array | Safety intercept messages |
+| `refused` | boolean | True if high-risk action blocked |
 
 ---
 
-## 路线调整
+## 8. Adjust Route
 
-### `POST /api/adjust`
+### POST /api/adjust
 
-自然语言局部调整现有路线。
+Adjust existing route with natural language instruction.
 
-**请求体：**
-
+**Request Body**:
 ```json
 {
-  "route": { "...当前路线对象..." },
+  "route": {...},
   "instruction": "少走路，便宜一点",
   "profile_mode": "低排队务实型",
-  "query": "我下午要去深圳大学附近玩3个小时",
-  "route_context": { "..." }
+  "query": "深圳大学附近 3 小时路线",
+  "route_context": {...}
 }
 ```
 
-**响应关键字段：**
-
-| 字段 | 说明 |
-|------|------|
-| `route` | 调整后的路线 |
-| `adjustment_status` | `"applied"` / `"partial"` / `"not_applied"` |
-| `changed_stops` | 被修改的站点列表 |
-| `before_metrics` | 调整前指标 |
-| `after_metrics` | 调整后指标 |
-| `metric_deltas` | 指标变化（时长、费用、等待等）|
-| `adjustment_summary` | 调整说明 |
-| `suggested_relaxations` | 调整失败时的放宽建议 |
-| `tool_trace` | 调整步骤链路 |
-
----
-
-## 同类替换
-
-### `POST /api/replace`
-
-替换路线中某个站点的同类 POI。
-
-**请求体：**
-
+**Response**:
 ```json
 {
-  "route": { "...当前路线对象..." },
-  "stop_index": 1,
-  "query": "换个咖啡馆",
-  "user_id": "product-demo-user",
-  "route_context": { "..." }
+  "route": {...},
+  "adjustment_status": "applied",
+  "changed_stops": [
+    {"index": 2, "old_poi": "...", "new_poi": "..."}
+  ],
+  "before_metrics": {
+    "total_duration_minutes": 180,
+    "total_cost": 185
+  },
+  "after_metrics": {
+    "total_duration_minutes": 150,
+    "total_cost": 120
+  },
+  "metric_deltas": {
+    "duration_minutes": -30,
+    "total_cost": -65
+  },
+  "adjustment_summary": "已替换 2 个站点，减少步行距离",
+  "suggested_relaxations": [],
+  "tool_trace": [...],
+  "safety_warnings": [],
+  "refused": false
 }
 ```
 
-**响应关键字段：**
-
-| 字段 | 说明 |
-|------|------|
-| `alternatives` | 同类替换候选 POI 列表 |
-| `context` | 替换上下文 |
-| `budget_impact` | 预算影响 |
-| `wait_impact` | 等待时间影响 |
-| `distance_impact` | 距离影响 |
+**Adjustment Status**:
+| Status | Meaning |
+|--------|---------|
+| `applied` | All changes applied |
+| `partial` | Some changes applied |
+| `not_applied` | No changes possible |
 
 ---
 
-## 用户反馈
+## 9. Replace POI
 
-### `POST /api/feedback`
+### POST /api/replace
 
-将用户对路线的喜欢/不满意写入 SQLite 画像。
+Replace a route stop with similar POI.
 
-**请求体：**
+**Request Body**:
+```json
+{
+  "route": {...},
+  "stop_index": 1,
+  "query": "换个咖啡馆",
+  "user_id": "demo-user",
+  "route_context": {...}
+}
+```
 
+**Response**:
+```json
+{
+  "alternatives": [...],
+  "context": {...},
+  "budget_impact": -20,
+  "wait_impact": -5,
+  "distance_impact": 200
+}
+```
+
+---
+
+## 10. Feedback
+
+### POST /api/feedback
+
+Record user feedback on route (like/dislike).
+
+**Request Body**:
 ```json
 {
   "route_id": "...",
-  "user_id": "product-demo-user",
+  "user_id": "demo-user",
   "feedback": "like",
   "stop_ids": ["poi-1", "poi-2"]
 }
 ```
 
-`feedback` 取值：`"like"` | `"dislike"`
+**Response**:
+```json
+{
+  "status": "ok",
+  "message": "反馈已记录"
+}
+```
 
 ---
 
-## 错误响应
+## Error Responses
 
-所有错误统一格式：
-
+All errors return:
 ```json
 {
   "detail": "错误描述"
 }
 ```
 
-常见 HTTP 状态码：
-
-| 状态码 | 含义 |
-|--------|------|
-| `400` | 请求参数校验失败 / 敏感字段检测拒绝 |
-| `404` | 路线/画像未找到 |
-| `500` | 服务内部错误 |
+**Common Status Codes**:
+| Code | Meaning |
+|------|---------|
+| 400 | Validation failed / sensitive field detected |
+| 401 | Authentication required |
+| 404 | Route/profile not found |
+| 429 | Rate limited |
+| 500 | Internal server error |
+| 503 | External service unavailable (DeepSeek/AMap) |
 
 ---
 
-## 相关文档
+## Rate Limiting
 
-- [架构说明](ARCHITECTURE.md)
-- [产品需求](PRD.md)
-- [设计规范](DESIGN.md)
+- Default: 60 requests/minute per IP
+- Configurable via environment variables
+
+---
+
+**Last updated**: 2026-08-25

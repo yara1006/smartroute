@@ -2,94 +2,93 @@
 
 ## WHAT
 
-SmartRoute AI 是一个多智能体本地生活路线规划系统，将用户的自然语言出行意图转化为可执行路线。
-技术栈：FastAPI + React 19 + DeepSeek LLM + 高德 Web 服务 + SQLite 用户画像。
+SmartRoute AI is a multi-agent local-life route planning system that converts user's natural language travel intentions into executable itineraries.
 
-## WHY — 不可变约束
+Tech stack: FastAPI + React 19 + DeepSeek LLM + AMap Web Service + SQLite user profiles.
 
-- **安全边界**：系统绝不自动执行预订、付款、保存敏感凭据（身份证/银行卡/密码）等高风险动作。
-  所有高风险操作必须返回 `safety_warnings` 并设置 `refused=true`。
-- **跨城防护**：有明确城市/地标/坐标的请求必须走高德 Web 服务，禁止静默回退到其他城市本地 RAG。
-- **数据隐私**：不提交 `.env`、`web/.env.local`、高德 Key、DeepSeek Key 到 Git。
-  用户画像只存脱敏数据，不含手机号/账号/cookie。
-- **成本上限**：LLM 调用有超时限制（10s），高德 API 有 30 分钟 TTL 缓存防止 QPS 超限。
+## WHY — Immutable Constraints
 
-## HOW — 安装、运行、测试、调试
+- **Safety boundaries**: System must NEVER auto-execute booking, payment, or save sensitive credentials (ID card/bank card/password). All high-risk operations must return `safety_warnings` and set `refused=true`.
+- **Cross-city protection**: Requests with clear city/landmark/coordinates MUST use AMap Web Service; silent fallback to other city's local RAG is PROHIBITED.
+- **Data privacy**: Do NOT commit `.env`, `web/.env.local`, AMap keys, DeepSeek keys to Git. User profiles only store desensitized data, no phone/account/cookie.
+- **Cost limits**: LLM calls have 10s timeout; AMap API has 30-minute TTL cache to prevent QPS limit.
 
-### 安装
+## HOW — Install, Run, Test, Debug
+
+### Install
 ```bash
 pip install -r requirements.txt
 cd web && npm install
 ```
 
-### 运行
+### Run
 ```bash
-# 后端（端口 8000）
+# Backend (port 8000)
 make run
-# 前端（端口 5173）
+# Frontend (port 5173)
 make run-web
 # Docker
 docker-compose up -d
 ```
 
-### 测试
+### Test
 ```bash
-# 后端（200+ 测试，覆盖率 ≥ 80%）
+# Backend (200+ tests, coverage ≥ 80%)
 make test
 make test-cov
-# 前端（48 测试）
+# Frontend (48 tests)
 cd web && npm test
-# 评测（20 条 eval case）
+# Eval (20 eval cases)
 python -c "from core.eval import EVAL_CASES; print(len(EVAL_CASES))"
 ```
 
-### 调试
-- 启动时日志会打印 `deepseek_enabled` / `amap_enabled` / `cors_origins` 状态。
-- `/api/docs` 是 FastAPI 自动生成的交互式 API 文档。
-- `examples/quickstart.py` 包含 5 个端到端 API 调用示例。
+### Debug
+- Startup logs print `deepseek_enabled` / `amap_enabled` / `cors_origins` status
+- `/api/docs` is FastAPI auto-generated interactive API docs
+- `examples/quickstart.py` contains 5 end-to-end API call examples
 
-## TEST — 改代码必须同步验证什么
+## TEST — What Must Be Verified When Changing Code
 
-- 改 `services/` 或 `core/agents/` 后必须跑 `make test`，覆盖率不得低于 80%。
-- 改 `api.py` 路由后必须验证 `/api/health` 返回正常。
-- 改 `web/src/` 后必须跑 `cd web && npm test && npm run build`。
-- 改 `schemas.py` 后必须验证所有测试通过，因为 schema 变更影响前后端。
-- 外部依赖（高德/DeepSeek）用 monkeypatch 模拟，测试不依赖真实 API Key。
+- After changing `services/` or `core/agents/`: MUST run `make test`, coverage must NOT drop below 80%
+- After changing `api.py` routes: MUST verify `/api/health` returns normal
+- After changing `web/src/`: MUST run `cd web && npm test && npm run build`
+- After changing `schemas.py`: MUST verify all tests pass (schema changes affect frontend/backend)
+- External dependencies (AMap/DeepSeek) use monkeypatch mocking; tests do NOT depend on real API keys
 
-## 项目结构速查
+## Project Structure Quick Reference
 
 ```
-api.py                    # FastAPI 路由层（~800 行）
-schemas.py                # Pydantic 请求/响应模型
+api.py                    # FastAPI route layer (~800 lines)
+schemas.py                # Pydantic request/response models
 core/
-  config.py               # Settings 单例，集中配置
-  models.py               # 核心数据模型（POI、Route 等）
-  agents/                 # Multi-Agent 系统（4 个 Agent）
-  services/amap_client.py # 高德 Web 服务客户端（TTL 缓存）
-  rag/vector_store.py     # 本地向量检索
-  memory/user_profile.py  # SQLite 画像
-  eval/eval_cases.py      # 20 条 eval case + 5 个指标
-services/                 # 业务逻辑层（6 个模块）
-  route_service.py        # 统一 re-export facade
-  profile_service.py      # 画像管理
-  anchor_service.py       # 地点/锚点解析
-  route_builder.py        # 动态路线构建
-  adjustment_service.py   # 路线调整
+  config.py               # Settings singleton
+  models.py               # Core data models (POI, Route, etc.)
+  agents/                 # Multi-Agent system (4 agents)
+  services/amap_client.py # AMap Web Service client (TTL cache)
+  rag/vector_store.py     # Local vector retrieval
+  memory/user_profile.py  # SQLite profiles
+  eval/eval_cases.py      # 20 eval cases + 5 metrics
+services/                 # Business logic layer (6 modules)
+  route_service.py        # Unified re-export facade
+  profile_service.py      # Profile management
+  anchor_service.py       # Location/anchor resolution
+  route_builder.py        # Dynamic route construction
+  adjustment_service.py   # Route adjustment
   trace_service.py        # Tool trace
-  safety_reviewer.py      # 安全边界拦截
-  route_insight.py        # 路线分析/指标
-cli.py                    # CLI 入口（L6 通道层）
-web/                      # React 前端
-docs/                     # 项目文档
-  RETROSPECTIVE.md        # 复盘文档（trade-off 决策记录）
-docs-site/                # VitePress 文档站
+  safety_reviewer.py      # Safety boundary intercept
+  route_insight.py        # Route analysis/metrics
+cli.py                    # CLI entry (L6 channel layer)
+web/                      # React frontend
+docs/                     # Project docs
+  RETROSPECTIVE.md        # Retrospective (trade-off decisions)
+docs-site/                # VitePress documentation site
 ```
 
-## 编码规范
+## Coding Standards
 
-- Python 用 ruff 格式化，行宽 120。
-- 所有公开函数和类必须有 docstring。
-- 新服务模块放在 `services/`，通过 `route_service.py` re-export。
-- 新 Agent 放在 `core/agents/`，在 `api.py` 的 `load_agents()` 中初始化。
-- 新 API 路由在 `api.py` 添加，同步更新 `docs/API.md` 和 `docs-site/reference/api.md`。
-- 新 schema 在 `schemas.py` 添加，同步更新前后端。
+- Python uses ruff formatting, line width 120
+- All public functions and classes MUST have docstrings
+- New service modules go in `services/`, re-export via `route_service.py`
+- New agents go in `core/agents/`, initialize in `api.py`'s `load_agents()`
+- New API routes added in `api.py`, sync update `docs/API.md` and `docs-site/reference/api.md`
+- New schemas added in `schemas.py`, sync update frontend/backend
