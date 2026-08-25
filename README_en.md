@@ -13,7 +13,7 @@
 SmartRoute AI is a vertical capability plugin embedded in the Meituan App. It organizes user intentions, Meituan POIs, UGC reviews, budgets, queue times, distances, and historical preferences into executable route plans.
 
 <!-- Feature comparison -->
-![Features](docs/images/features-comparison.svg)
+![Features](docs/images/features-comparison.svg?v=2)
 
 ##  Key Features
 
