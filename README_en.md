@@ -25,6 +25,7 @@ SmartRoute AI is a vertical capability plugin embedded in the Meituan App. It or
 - 👤 **User Profiles**: 3 built-in profiles + desensitized import + judge session profiles
 - 🧩 **Multi-Agent Architecture**: Intent routing → intent parsing → POI retrieval → route planning
 - 📡 **Tool Trace**: ReAct / ToolUse style display of every tool invocation step
+- 🔌 **MCP Protocol Support**: Route planning exposed as standard MCP tools for cross-framework Agent calls (Microsoft Agent Framework, LangGraph, Google ADK)
 
 ## 🏗️ Tech Stack
 
@@ -37,6 +38,7 @@ SmartRoute AI is a vertical capability plugin embedded in the Meituan App. It or
 | Data | Local JSON + SQLite user profiles |
 | Testing | pytest · 200 tests · Vitest |
 | Deployment | Docker · docker-compose · GitHub Actions CI |
+| Protocol | MCP (Model Context Protocol) — Cross-framework Agent interoperability |
 
 ## 🚀 Quick Start
 

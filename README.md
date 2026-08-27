@@ -29,6 +29,7 @@ SmartRoute AI 不是一个独立 App，而是嵌入美团 App 的垂直能力插
 - 👤 **用户画像**：3 种内置画像 + 脱敏导入 + 评委即时画像
 - 🧩 **Multi-Agent 架构**：意图路由 → 意图解析 → POI 检索 → 路线规划
 - 📡 **Tool Trace**：ReAct / ToolUse 风格展示每一步工具调用链路
+- 🔌 **MCP 协议支持**：路线规划功能暴露为标准 MCP 工具，支持跨框架 Agent 调用（Microsoft Agent Framework、LangGraph、Google ADK）
 
 ## 🏗️ 技术栈
 
@@ -41,6 +42,7 @@ SmartRoute AI 不是一个独立 App，而是嵌入美团 App 的垂直能力插
 | 数据 | 本地 JSON + SQLite 用户画像 |
 | 测试 | pytest · 200 测试 · Vitest |
 | 部署 | Docker · docker-compose · GitHub Actions CI |
+| 协议 | MCP (Model Context Protocol) — 跨框架 Agent 互操作 |
 
 ## 🚀 快速开始
 
