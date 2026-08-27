@@ -128,8 +128,13 @@ smartroute/
 │   ├── route_builder.py     # 动态路线构建
 │   ├── adjustment_service.py# 路线调整
 │   ├── trace_service.py     # Tool trace
+│   ├── safety_reviewer.py   # 安全边界拦截
 │   └── route_insight.py     # 路线分析/指标
-├── web/                     # React 前端
+├── scripts/                 # 可执行脚本
+│   ├── cli.py               # CLI 入口（L6 通道层）
+│   ├── mcp_server.py        # MCP 工具服务器
+│   └── deploy.sh            # 部署脚本
+── web/                     # React 前端
 │   └── src/
 │       ├── App.jsx
 │       ├── components/

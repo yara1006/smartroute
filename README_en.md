@@ -121,7 +121,12 @@ smartroute/
 │   ├── route_builder.py     # Dynamic route construction
 │   ├── adjustment_service.py# Route adjustment
 │   ├── trace_service.py     # Tool trace
+│   ├── safety_reviewer.py   # Safety boundary intercept
 │   └── route_insight.py     # Route analysis/metrics
+── scripts/                 # Executable scripts
+│   ├── cli.py               # CLI entry (L6 channel layer)
+│   ├── mcp_server.py        # MCP tool server
+│   └── deploy.sh            # Deployment script
 ├── web/                     # React frontend
 ├── tests/                   # pytest backend tests (200)
 └── docs/                    # Project documentation
